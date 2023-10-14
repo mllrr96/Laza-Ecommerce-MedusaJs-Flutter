@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:laza/home_screen.dart';
 import '../components/bottom_nav_button.dart';
 import '../components/custom_appbar.dart';
 import '../components/custom_text_field.dart';
+import '../dashboard.dart';
 
 class NewPasswordScreen extends StatelessWidget {
   const NewPasswordScreen({super.key});
@@ -17,10 +17,10 @@ class NewPasswordScreen extends StatelessWidget {
         appBar: const CustomAppBar(),
         bottomNavigationBar: BottomNavButton(
           label: 'Reset Password',
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          ),
+          onTap: () =>    Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const Dashboard()),
+                  (Route<dynamic> route) => false)
         ),
         body: SafeArea(
           child: Column(

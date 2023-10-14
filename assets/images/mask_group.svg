@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="566"
+   height="283.00031"
+   viewBox="0 0 566 283.00031"
+   fill="none"
+   version="1.1"
+   id="svg9"
+   sodipodi:docname="Mask Group.svg"
+   inkscape:version="1.2.2 (b0a8486, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs13" />
+  <sodipodi:namedview
+     id="namedview11"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.54947"
+     inkscape:cx="281.06385"
+     inkscape:cy="244.92246"
+     inkscape:window-width="1390"
+     inkscape:window-height="1027"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg9" />
+  <mask
+     id="mask0_1_110"
+     maskUnits="userSpaceOnUse"
+     x="-93"
+     y="0"
+     width="566"
+     height="566">
+    <path
+       fill-rule="evenodd"
+       clip-rule="evenodd"
+       d="M 472,283 C 472,438.744 345.744,565 190,565 34.2557,565 -92,438.744 -92,283 -92,127.256 34.2557,1 190,1 345.744,1 472,127.256 472,283 Z m 1,0 C 473,439.297 346.297,566 190,566 33.7034,566 -93,439.297 -93,283 -93,126.703 33.7034,0 190,0 346.297,0 473,126.703 473,283 Z m -91.253,0 C 381.747,388.899 295.899,474.747 190,474.747 84.101,474.747 -1.74712,388.899 -1.74712,283 -1.74712,177.101 84.101,91.2527 190,91.2527 295.899,91.2527 381.747,177.101 381.747,283 Z m 1,0 C 382.747,389.451 296.451,475.747 190,475.747 83.5488,475.747 -2.74712,389.451 -2.74712,283 -2.74712,176.549 83.5488,90.2527 190,90.2527 296.451,90.2527 382.747,176.549 382.747,283 Z M 190.24,391.215 c 59.633,0 107.975,-48.342 107.975,-107.975 0,-59.633 -48.342,-107.975 -107.975,-107.975 -59.633,0 -107.9755,48.342 -107.9755,107.975 0,59.633 48.3425,107.975 107.9755,107.975 z m 0,1 c 60.185,0 108.975,-48.79 108.975,-108.975 0,-60.185 -48.79,-108.975 -108.975,-108.975 -60.186,0 -108.9755,48.79 -108.9755,108.975 0,60.185 48.7895,108.975 108.9755,108.975 z M 228.126,283 c 0,21.056 -17.07,38.126 -38.126,38.126 -21.056,0 -38.126,-17.07 -38.126,-38.126 0,-21.056 17.07,-38.126 38.126,-38.126 21.056,0 38.126,17.07 38.126,38.126 z m 1,0 c 0,21.608 -17.518,39.126 -39.126,39.126 -21.608,0 -39.126,-17.518 -39.126,-39.126 0,-21.608 17.518,-39.126 39.126,-39.126 21.608,0 39.126,17.518 39.126,39.126 z"
+       fill="#000000"
+       id="path2" />
+  </mask>
+  <g
+     mask="url(#mask0_1_110)"
+     id="g7"
+     transform="translate(93)">
+    <rect
+       x="-93"
+       y="-52.762699"
+       width="566"
+       height="335.763"
+       fill="#ebe4ff"
+       id="rect5" />
+  </g>
+</svg>

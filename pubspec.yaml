@@ -13,6 +13,8 @@ dependencies:
   google_fonts: ^6.1.0
   sign_in_button: ^3.2.0
   flutter_otp_text_field: ^1.1.1
+  sliding_clipped_nav_bar: ^3.1.0+4
+  adaptive_dialog: ^1.9.0+2
 
 dev_dependencies:
   flutter_test:

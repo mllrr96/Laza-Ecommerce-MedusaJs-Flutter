@@ -4,7 +4,7 @@ import 'package:laza/components/colors.dart';
 import 'package:laza/components/custom_text_field.dart';
 import 'components/bottom_nav_button.dart';
 import 'components/custom_appbar.dart';
-import 'home_screen.dart';
+import 'dashboard.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -37,10 +37,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           label: 'Sign Up',
           onTap: () {
             if (!formKey.currentState!.validate()) return;
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-            );
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const Dashboard()),
+                    (Route<dynamic> route) => false);
           },
         ),
         body: SafeArea(

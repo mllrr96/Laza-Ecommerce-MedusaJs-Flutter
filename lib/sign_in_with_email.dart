@@ -1,13 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:laza/components/custom_appbar.dart';
 import 'package:laza/components/custom_text_field.dart';
-import 'package:laza/home_screen.dart';
 import 'package:laza/reset_password/forgot_password_screen.dart';
 
 import 'components/bottom_nav_button.dart';
 import 'components/colors.dart';
+import 'dashboard.dart';
 
 class SignInWithEmail extends StatefulWidget {
   const SignInWithEmail({super.key});
@@ -40,10 +39,10 @@ class _SignInWithEmailState extends State<SignInWithEmail> {
           label: 'Login',
           onTap: () {
             if (!formKey.currentState!.validate()) return;
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-            );
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const Dashboard()),
+                    (Route<dynamic> route) => false);
           },
         ),
         body: SafeArea(
