@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:laza/extensions/context_extension.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -15,8 +16,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Ink(
             width: 45,
             height: 45,
-            decoration: const ShapeDecoration(
-              color: Color(0xffF5F6FA),
+            decoration:  ShapeDecoration(
+              color: context.theme.cardColor,
               shape: CircleBorder(),
             ),
             child: const Icon(Icons.arrow_back_outlined),

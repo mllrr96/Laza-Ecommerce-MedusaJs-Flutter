@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/intro_screen.dart';
+import 'package:laza/theme.dart';
+import 'package:provider/provider.dart';
 import 'colors.dart';
 import 'laza_icons.dart';
 
@@ -14,6 +17,7 @@ class DrawerWidget extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
       child: SafeArea(
+        bottom: false,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -28,9 +32,9 @@ class DrawerWidget extends StatelessWidget {
                     child: Ink(
                       width: 45,
                       height: 45,
-                      decoration: const ShapeDecoration(
-                        color: Color(0xffF5F6FA),
-                        shape: CircleBorder(),
+                      decoration: ShapeDecoration(
+                        color: context.theme.cardColor,
+                        shape: const CircleBorder(),
                       ),
                       child: const Icon(
                         LazaIcons.menu_vertical,
@@ -61,7 +65,11 @@ class DrawerWidget extends StatelessWidget {
                                     children: [
                                       Flexible(child: Text('Verified Profile')),
                                       SizedBox(width: 5.0),
-                                      Icon(LazaIcons.verified_badge, size: 15,color: Colors.green,)
+                                      Icon(
+                                        LazaIcons.verified_badge,
+                                        size: 15,
+                                        color: Colors.green,
+                                      )
                                     ],
                                   ),
                                 ],
@@ -72,66 +80,72 @@ class DrawerWidget extends StatelessWidget {
                       ),
                       Container(
                         padding: const EdgeInsets.all(10.0),
-                        decoration: const BoxDecoration(
-                            color: Color(0xffF5F6FA), borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                        child: const Text(
+                        decoration: BoxDecoration(
+                            color: context.theme.cardColor, borderRadius: const BorderRadius.all(Radius.circular(5.0))),
+                        child: Text(
                           '3 Orders',
-                          style: TextStyle(color: Color(0xff8F959E)),
+                          style: TextStyle(color: ColorConstant.manatee),
                         ),
                       )
                     ],
                   ),
                 ),
                 const SizedBox(height: 30.0),
-                ListTile(
-                  leading: const Icon(LazaIcons.sun),
-                  onTap: () {},
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  title: const Text('Dark Mode', style: TextStyle(fontSize: 15.0)),
-                  trailing: Switch.adaptive(
-                      activeColor: Platform.isIOS ? ColorConstant.primary : null, value: true, onChanged: (val) {}),
-                  horizontalTitleGap: 10.0,
+                Consumer<ThemeNotifier>(
+                  builder: (context, themeNotifier, _) {
+                    return ListTile(
+                      leading: const Icon(LazaIcons.sun),
+                      onTap: () => themeNotifier.toggleTheme(),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      title: const Text('Dark Mode'),
+                      trailing: Switch.adaptive(
+                          activeColor: Platform.isIOS ? ColorConstant.primary : null,
+                          value: themeNotifier.darkTheme,
+                          onChanged: (_) => themeNotifier.toggleTheme()),
+                      horizontalTitleGap: 10.0,
+                    );
+                  },
                 ),
                 ListTile(
                   leading: const Icon(LazaIcons.info_circle),
                   onTap: () {},
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  title: const Text('Account Information', style: TextStyle(fontSize: 15.0)),
+                  title: const Text('Account Information'),
                   horizontalTitleGap: 10.0,
                 ),
                 ListTile(
                   leading: const Icon(LazaIcons.lock),
                   onTap: () {},
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  title: const Text('Password', style: TextStyle(fontSize: 15.0)),
+                  title: const Text('Password'),
                   horizontalTitleGap: 10.0,
                 ),
                 ListTile(
                   leading: const Icon(LazaIcons.bag),
                   onTap: () {},
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  title: const Text('Order', style: TextStyle(fontSize: 15.0)),
+                  title: const Text('Order'),
                   horizontalTitleGap: 10.0,
                 ),
                 ListTile(
                   leading: const Icon(LazaIcons.wallet),
                   onTap: () {},
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  title: const Text('My Cards', style: TextStyle(fontSize: 15.0)),
+                  title: const Text('My Cards'),
                   horizontalTitleGap: 10.0,
                 ),
                 ListTile(
                   leading: const Icon(LazaIcons.heart),
                   onTap: () {},
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  title: const Text('Whislist', style: TextStyle(fontSize: 15.0)),
+                  title: const Text('Whislist'),
                   horizontalTitleGap: 10.0,
                 ),
                 ListTile(
                   leading: const Icon(LazaIcons.settings),
                   onTap: () {},
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  title: const Text('Settings', style: TextStyle(fontSize: 15.0)),
+                  title: const Text('Settings'),
                   horizontalTitleGap: 10.0,
                 ),
               ],
@@ -157,7 +171,7 @@ class DrawerWidget extends StatelessWidget {
                     });
                   },
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  title: const Text('Logout', style: TextStyle(fontSize: 15.0, color: Colors.red)),
+                  title: const Text('Logout'),
                   horizontalTitleGap: 10.0,
                 ),
                 const SizedBox(height: 30.0),

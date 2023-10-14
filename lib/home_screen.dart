@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:laza/components/colors.dart';
 import 'package:laza/dashboard.dart';
+import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/order_confirmed_screen.dart';
 import 'package:laza/search_screen.dart';
 
@@ -32,18 +33,18 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
           child: ListView(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Hello',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+                  style: context.headlineMedium?.copyWith(fontWeight: FontWeight.w600),
                 ),
                 Text(
                   'Welcome to Laza',
-                  style: TextStyle(fontSize: 15, color: Color(0xff8F959E)),
+                  style: context.bodyMedium?.copyWith(color: ColorConstant.manatee),
                 ),
               ],
             ),
@@ -56,16 +57,16 @@ class HomeScreen extends StatelessWidget {
                   child: TextField(
                     onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
                     readOnly: true,
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                         filled: true,
                         hintText: 'Search ...',
                         contentPadding: EdgeInsets.zero,
                         border: inputBorder,
                         enabledBorder: inputBorder,
                         focusedBorder: inputBorder,
-                        hintStyle: TextStyle(color: Color(0xff8F959E)),
-                        fillColor: Color(0xffF5F6FA),
-                        prefixIcon: Hero(tag: 'search', child: Icon(LazaIcons.search, color: Color(0xff8F959E)))),
+                        hintStyle: TextStyle(color: ColorConstant.manatee),
+                        fillColor: context.theme.cardColor,
+                        prefixIcon: Hero(tag: 'search', child: Icon(LazaIcons.search, color: ColorConstant.manatee))),
                   ),
                 ),
                 const SizedBox(width: 10.0),
@@ -84,25 +85,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Choose Brand',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'View All',
-                    style: TextStyle(color: Color(0xff8F959E), fontSize: 13),
-                  ),
-                )
-              ],
-            ),
-          ),
+          const Headline(headline: 'Choose Brand'),
           SizedBox(
             width: double.infinity,
             height: 50,
@@ -154,25 +137,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'New Arrival',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'View All',
-                    style: TextStyle(color: Color(0xff8F959E), fontSize: 13),
-                  ),
-                )
-              ],
-            ),
-          ),
+          const Headline(headline: 'New Arrival'),
           GridView.builder(
               shrinkWrap: true,
               itemCount: products.length,
@@ -204,6 +169,34 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+class Headline extends StatelessWidget {
+  const Headline({super.key, required this.headline, this.onViewAllTap});
+  final String headline;
+  final void Function()? onViewAllTap;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            headline,
+            style: context.bodyLargeW500,
+          ),
+          TextButton(
+            onPressed: onViewAllTap,
+            child: Text(
+              'View All',
+              style: context.bodySmall?.copyWith(color: ColorConstant.manatee),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
 
@@ -226,8 +219,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Ink(
                   width: 45,
                   height: 45,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xffF5F6FA),
+                  decoration:  ShapeDecoration(
+                    color: context.theme.cardColor,
                     shape: CircleBorder(),
                   ),
                   child: const Icon(
@@ -244,8 +237,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Ink(
                   width: 45,
                   height: 45,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xffF5F6FA),
+                  decoration:  ShapeDecoration(
+                    color: context.theme.cardColor,
                     shape: CircleBorder(),
                   ),
                   child: const Icon(

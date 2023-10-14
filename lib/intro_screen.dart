@@ -59,29 +59,27 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Material(
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  isMale = true;
-                                });
-                              },
-                              borderRadius: borderRadius,
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                width: 150,
-                                padding: const EdgeInsets.symmetric(vertical: 20),
-                                decoration: BoxDecoration(
-                                    borderRadius: borderRadius,
-                                    color: isMale != null && isMale == true ? ColorConstant.primary : const Color(0xffF5F6FA)),
-                                child: Text(
-                                  'Men',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 17,
-                                    color: isMale != null && isMale == true ? Colors.white : const Color(0xff8F959E),
-                                  ),
-                                  textAlign: TextAlign.center,
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                isMale = true;
+                              });
+                            },
+                            borderRadius: borderRadius,
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              width: 150,
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              decoration: BoxDecoration(
+                                  borderRadius: borderRadius,
+                                  color: isMale != null && isMale == true ? ColorConstant.primary : const Color(0xffF5F6FA)),
+                              child: Text(
+                                'Men',
+                                style: GoogleFonts.inter(
+                                  fontSize: 17,
+                                  color: isMale != null && isMale == true ? Colors.white : const Color(0xff8F959E),
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),

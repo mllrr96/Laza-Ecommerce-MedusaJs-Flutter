@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:laza/extensions/context_extension.dart';
 
 import 'components/colors.dart';
 import 'components/laza_icons.dart';
@@ -42,9 +43,9 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Ink(
                 width: 45,
                 height: 45,
-                decoration: const ShapeDecoration(
-                  color: Color(0xffF5F6FA),
-                  shape: CircleBorder(),
+                decoration: ShapeDecoration(
+                  color: context.theme.cardColor,
+                  shape: const CircleBorder(),
                 ),
                 child: const Icon(Icons.arrow_back_outlined),
               ),
@@ -54,16 +55,16 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: TextField(
                 controller: TextEditingController(),
                 autofocus: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                     filled: true,
                     hintText: 'Search ...',
                     contentPadding: EdgeInsets.zero,
                     border: inputBorder,
                     enabledBorder: inputBorder,
                     focusedBorder: inputBorder,
-                    hintStyle: TextStyle(color: Color(0xff8F959E)),
-                    fillColor: Color(0xffF5F6FA),
-                    prefixIcon: Hero(tag: 'search', child: Icon(LazaIcons.search, color: Color(0xff8F959E)))),
+                    hintStyle: TextStyle(color: ColorConstant.manatee),
+                    fillColor: context.theme.cardColor,
+                    prefixIcon: Hero(tag: 'search', child: Icon(LazaIcons.search, color: ColorConstant.manatee))),
               ),
             ),
             const SizedBox(width: 12.0),
