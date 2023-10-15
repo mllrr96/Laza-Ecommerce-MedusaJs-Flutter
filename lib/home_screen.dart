@@ -3,10 +3,10 @@ import 'package:laza/cart_screen.dart';
 import 'package:laza/components/colors.dart';
 import 'package:laza/dashboard.dart';
 import 'package:laza/extensions/context_extension.dart';
-import 'package:laza/product_details.dart';
 import 'package:laza/search_screen.dart';
 
 import 'components/laza_icons.dart';
+import 'components/product_card.dart';
 import 'models/index.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -68,31 +68,44 @@ class HomeScreen extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
-                    readOnly: true,
-                    decoration: InputDecoration(
-                        filled: true,
-                        hintText: 'Search ...',
-                        contentPadding: EdgeInsets.zero,
-                        border: inputBorder,
-                        enabledBorder: inputBorder,
-                        focusedBorder: inputBorder,
-                        hintStyle: TextStyle(color: ColorConstant.manatee),
-                        fillColor: context.theme.cardColor,
-                        prefixIcon: Hero(tag: 'search', child: Icon(LazaIcons.search, color: ColorConstant.manatee))),
+                  child: Hero(
+                    tag: 'search',
+                    child: Material(
+                      color: Colors.transparent,
+                      child: TextField(
+                        onTap: () => Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => const SearchScreen(), fullscreenDialog: true)),
+                        readOnly: true,
+                        decoration: InputDecoration(
+                            filled: true,
+                            hintText: 'Search ...',
+                            contentPadding: EdgeInsets.zero,
+                            border: inputBorder,
+                            enabledBorder: inputBorder,
+                            focusedBorder: inputBorder,
+                            hintStyle: TextStyle(color: ColorConstant.manatee),
+                            fillColor: context.theme.cardColor,
+                            prefixIcon: Icon(LazaIcons.search, color: ColorConstant.manatee)),
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10.0),
-                InkWell(
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  onTap: () {},
-                  child: Ink(
-                    width: 45,
-                    height: 45,
-                    decoration: BoxDecoration(
-                        color: ColorConstant.primary, borderRadius: const BorderRadius.all(Radius.circular(10.0))),
-                    child: const Icon(LazaIcons.voice, color: Colors.white, size: 22),
+                Hero(
+                  tag: 'voice',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                      onTap: () {},
+                      child: Ink(
+                        width: 45,
+                        height: 45,
+                        decoration: BoxDecoration(
+                            color: ColorConstant.primary, borderRadius: const BorderRadius.all(Radius.circular(10.0))),
+                        child: const Icon(LazaIcons.voice, color: Colors.white, size: 22),
+                      ),
+                    ),
                   ),
                 )
               ],
@@ -127,34 +140,21 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 0.7, crossAxisSpacing: 15.0, mainAxisSpacing: 15.0),
+                crossAxisCount: 3,
+                mainAxisExtent: 250,
+                crossAxisSpacing: 15.0,
+                // mainAxisSpacing: 15.0,
+              ),
               itemBuilder: (context, index) {
                 final product = products[index];
-                return InkWell(
-                  onTap: () => Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => ProductDetailsScreen(product: product))),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                          child: Image.asset(
-                        product.thumbnailPath,
-                        fit: BoxFit.fitWidth,
-                      )),
-                      Text(
-                        product.title,
-                        style: const TextStyle(fontSize: 11),
-                      ),
-                      Text(product.price),
-                    ],
-                  ),
-                );
+                return ProductCard(product: product);
               }),
         ],
       )),
     );
   }
 }
+
 
 class Headline extends StatelessWidget {
   const Headline({super.key, required this.headline, this.onViewAllTap});
@@ -198,21 +198,27 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              InkWell(
-                borderRadius: const BorderRadius.all(Radius.circular(50)),
-                onTap: () {
-                  dashboardScaffoldKey.currentState?.openDrawer();
-                },
-                child: Ink(
-                  width: 45,
-                  height: 45,
-                  decoration: ShapeDecoration(
-                    color: context.theme.cardColor,
-                    shape: const CircleBorder(),
-                  ),
-                  child: const Icon(
-                    LazaIcons.menu_horizontal,
-                    size: 13,
+              Hero(
+                tag: 'search_back',
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(50)),
+                    onTap: () {
+                      dashboardScaffoldKey.currentState?.openDrawer();
+                    },
+                    child: Ink(
+                      width: 45,
+                      height: 45,
+                      decoration: ShapeDecoration(
+                        color: context.theme.cardColor,
+                        shape: const CircleBorder(),
+                      ),
+                      child: const Icon(
+                        LazaIcons.menu_horizontal,
+                        size: 13,
+                      ),
+                    ),
                   ),
                 ),
               ),

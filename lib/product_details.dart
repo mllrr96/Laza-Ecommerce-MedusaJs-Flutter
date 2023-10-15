@@ -76,8 +76,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             centerTitle: false,
             pinned: true,
             actions: [
+              InkWell(
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                onTap: () {},
+                child: Ink(
+                  width: 45,
+                  height: 45,
+                  decoration: ShapeDecoration(
+                    color: AppTheme.lightTheme.cardColor,
+                    shape: const CircleBorder(),
+                  ),
+                  child: const Icon(LazaIcons.heart),
+                ),
+              ),
               Padding(
-                padding: const EdgeInsets.only(right: 20.0),
+                padding: const EdgeInsets.only(right: 20.0, left: 10.0),
                 child: InkWell(
                   borderRadius: const BorderRadius.all(Radius.circular(50)),
                   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreen())),

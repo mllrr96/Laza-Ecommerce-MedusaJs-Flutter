@@ -11,7 +11,7 @@ import 'package:laza/components/drawer.dart';
 import 'package:laza/components/laza_icons.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/home_screen.dart';
-import 'package:laza/order_confirmed_screen.dart';
+import 'package:laza/wishlist_screen.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
 var dashboardScaffoldKey = GlobalKey<ScaffoldState>();
@@ -63,7 +63,7 @@ class _DashboardState extends State<Dashboard> {
             controller: pageController,
             children: const [
               HomeScreen(),
-              OrderConfirmedScreen(),
+              WishlistScreen(),
               CartScreen(),
               HomeScreen(),
             ],
