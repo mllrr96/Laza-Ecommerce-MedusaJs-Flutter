@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:laza/brand_products_screen.dart';
 import 'package:laza/cart_screen.dart';
 import 'package:laza/components/colors.dart';
 import 'package:laza/dashboard.dart';
@@ -251,12 +252,13 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class BrandTile extends StatelessWidget {
-  const BrandTile({super.key, required this.brand});
+  const BrandTile({super.key, required this.brand, this.onTap});
   final Brand brand;
+  final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> BrandProductsScreen(brand: brand))),
       borderRadius: const BorderRadius.all(Radius.circular(10.0)),
       child: Ink(
         height: 50,
