@@ -3,8 +3,10 @@ import 'package:laza/components/bottom_nav_button.dart';
 import 'package:laza/components/colors.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/models/index.dart';
+import 'package:laza/reviews_screen.dart';
 import 'package:laza/theme.dart';
 
+import 'cart_screen.dart';
 import 'components/laza_icons.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -26,7 +28,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
-    final bottomPadding = context.viewPadding.bottom == 0.0 ? 30.0 : context.viewPadding.bottom;
+    final bottomPadding = context.bottomViewPadding == 0.0 ? 30.0 : context.bottomViewPadding;
     return Scaffold(
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
@@ -78,7 +80,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 padding: const EdgeInsets.only(right: 20.0),
                 child: InkWell(
                   borderRadius: const BorderRadius.all(Radius.circular(50)),
-                  onTap: () {},
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreen())),
                   child: Ink(
                     width: 45,
                     height: 45,
@@ -252,7 +254,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         'Reviews',
                         style: context.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
                       ),
-                      TextButton(onPressed: () {}, child: const Text('View All')),
+                      TextButton(
+                          onPressed: () =>
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ReviewsScreen())),
+                          child: const Text('View All')),
                     ],
                   ),
                 ),

@@ -106,7 +106,7 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
+                padding: EdgeInsets.only(bottom: context.bottomViewPadding),
                 color: bottomBarBgColor,
               )
             ],
