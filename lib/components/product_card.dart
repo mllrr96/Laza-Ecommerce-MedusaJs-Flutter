@@ -18,8 +18,9 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ProductDetailsScreen(product: product))),
+      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+      onTap: () =>
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailsScreen(product: product))),
       child: Ink(
         height: 250,
         child: Column(
@@ -28,26 +29,29 @@ class ProductCard extends StatelessWidget {
             Container(
               height: 150,
               decoration: BoxDecoration(
-                image: DecorationImage(image: AssetImage(product.thumbnailPath), fit: BoxFit.fitWidth),
+                image: DecorationImage(image: AssetImage(product.thumbnailPath), fit: BoxFit.fitHeight),
               ),
               child: Align(
                 alignment: Alignment.topRight,
                 child: Material(
                   color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(50)),
-                    onTap: (){},
-                    child: Ink(
-                      width: 35,
-                      height: 35,
-                      decoration: ShapeDecoration(
-                        color: AppTheme.lightTheme.cardColor,
-                        shape: const CircleBorder(),
-                      ),
-                      child: Icon(
-                        LazaIcons.heart,
-                        color: ColorConstant.manatee,
-                        size: 16,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 4, top: 4),
+                    child: InkWell(
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                      onTap: () {},
+                      child: Ink(
+                        width: 35,
+                        height: 35,
+                        decoration: ShapeDecoration(
+                          color: AppTheme.lightTheme.cardColor,
+                          shape: const CircleBorder(),
+                        ),
+                        child: Icon(
+                          LazaIcons.heart,
+                          color: ColorConstant.manatee,
+                          size: 16,
+                        ),
                       ),
                     ),
                   ),

@@ -85,23 +85,22 @@ class WishlistScreen extends StatelessWidget {
                     const SizedBox(height: 5.0),
                   ],
                 ),
-                FilledButton(
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.symmetric(horizontal: 10.0)),
-                    backgroundColor: MaterialStateProperty.all<Color>(context.theme.cardColor),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
+                InkWell(
+                  onTap: () {},
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                      color: context.theme.cardColor,
                     ),
-                  ),
-                  onPressed: () {},
-                  child: const Row(
-                    children: [
-                      Icon(LazaIcons.edit, size: 18),
-                      SizedBox(width: 5.0),
-                      Text('Edit'),
-                    ],
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      children: [
+                        Icon(LazaIcons.edit, size: 14, color: context.bodyMediumW500?.color),
+                        const SizedBox(width: 5.0),
+                        Text('Edit', style: context.bodyMediumW500),
+                      ],
+                    ),
                   ),
                 ),
               ],

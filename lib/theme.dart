@@ -102,7 +102,7 @@ class ThemeNotifier extends ChangeNotifier {
   SharedPreferences? prefs;
   late bool _darkTheme;
 
-  bool get darkTheme => _darkTheme; //Getter
+  bool get darkTheme => _darkTheme;
 
   ThemeNotifier() {
     _darkTheme = true;

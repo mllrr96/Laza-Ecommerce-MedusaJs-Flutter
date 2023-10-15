@@ -97,7 +97,7 @@ class DrawerWidget extends StatelessWidget {
                       leading: const Icon(LazaIcons.sun),
                       onTap: () => themeNotifier.toggleTheme(),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      title: const Text('Dark Mode'),
+                      title: const Text('Appearance'),
                       trailing: Switch.adaptive(
                           activeColor: Platform.isIOS ? ColorConstant.primary : null,
                           value: themeNotifier.darkTheme,
