@@ -3,6 +3,7 @@ import 'package:laza/cart_screen.dart';
 import 'package:laza/components/colors.dart';
 import 'package:laza/dashboard.dart';
 import 'package:laza/extensions/context_extension.dart';
+import 'package:laza/product_details.dart';
 import 'package:laza/search_screen.dart';
 
 import 'components/laza_icons.dart';
@@ -20,10 +21,22 @@ class HomeScreen extends StatelessWidget {
     ];
 
     const products = [
-      Product('Nike Sportswear Club Fleece', 'assets/images/img2.png', '\$99'),
-      Product('Trail Running Jacket Nike Windrunner', 'assets/images/img3.png', '\$99'),
-      Product('Training Top Nike Sport Clash', 'assets/images/img2.png', '\$99'),
-      Product('Trail Running Jacket Nike Windrunner', 'assets/images/img3.png', '\$99'),
+      Product(
+        title: 'Nike Sportswear Club Fleece',
+        thumbnailPath: 'assets/images/img2.png',
+        price: '\$99',
+        description:
+            'The Nike Throwback Pullover Hoodie is made from premium French terry fabric that blends a performance feel with',
+        images: [
+          'assets/images/product-img1.png',
+          'assets/images/product-img2.png',
+          'assets/images/product-img3.png',
+          'assets/images/product-img4.png',
+        ],
+      ),
+      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
     ];
 
     const inputBorder = OutlineInputBorder(
@@ -86,7 +99,10 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10.0),
-          const Headline(headline: 'Choose Brand'),
+          Headline(
+            headline: 'Choose Brand',
+            onViewAllTap: () {},
+          ),
           SizedBox(
             width: double.infinity,
             height: 50,
@@ -104,7 +120,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10.0),
-          const Headline(headline: 'New Arrival'),
+          Headline(headline: 'New Arrival', onViewAllTap: () {}),
           GridView.builder(
               shrinkWrap: true,
               itemCount: products.length,
@@ -114,20 +130,24 @@ class HomeScreen extends StatelessWidget {
                   crossAxisCount: 2, childAspectRatio: 0.7, crossAxisSpacing: 15.0, mainAxisSpacing: 15.0),
               itemBuilder: (context, index) {
                 final product = products[index];
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                        child: Image.asset(
-                      product.imagePath,
-                      fit: BoxFit.fitWidth,
-                    )),
-                    Text(
-                      product.title,
-                      style: const TextStyle(fontSize: 11),
-                    ),
-                    Text(product.price),
-                  ],
+                return InkWell(
+                  onTap: () => Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => ProductDetailsScreen(product: product))),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                          child: Image.asset(
+                        product.thumbnailPath,
+                        fit: BoxFit.fitWidth,
+                      )),
+                      Text(
+                        product.title,
+                        style: const TextStyle(fontSize: 11),
+                      ),
+                      Text(product.price),
+                    ],
+                  ),
                 );
               }),
         ],
