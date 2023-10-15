@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:laza/cart_screen.dart';
 import 'package:laza/components/colors.dart';
 import 'package:laza/dashboard.dart';
 import 'package:laza/extensions/context_extension.dart';
-import 'package:laza/order_confirmed_screen.dart';
 import 'package:laza/search_screen.dart';
 
 import 'components/laza_icons.dart';
+import 'models/index.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -57,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                   child: TextField(
                     onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
                     readOnly: true,
-                    decoration:  InputDecoration(
+                    decoration: InputDecoration(
                         filled: true,
                         hintText: 'Search ...',
                         contentPadding: EdgeInsets.zero,
@@ -74,8 +75,8 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   onTap: () {},
                   child: Ink(
-                    width: 50,
-                    height: 50,
+                    width: 45,
+                    height: 45,
                     decoration: BoxDecoration(
                         color: ColorConstant.primary, borderRadius: const BorderRadius.all(Radius.circular(10.0))),
                     child: const Icon(LazaIcons.voice, color: Colors.white, size: 22),
@@ -98,41 +99,7 @@ class HomeScreen extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 final brand = brands[index];
-                return InkWell(
-                  onTap: () {},
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  child: Ink(
-                    height: 50,
-                    width: 115,
-                    decoration: const BoxDecoration(
-                      color: Color(0xffF5F6FA),
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 40,
-                          width: 40,
-                          margin: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: Color(0xffFEFEFE),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          ),
-                          child: Icon(
-                            brand.iconData,
-                            size: brand.name == 'Fila' ? 12 : 18,
-                          ),
-                        ),
-                        Expanded(
-                            child: Text(
-                          brand.name,
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
-                        )),
-                      ],
-                    ),
-                  ),
-                );
+                return BrandTile(brand: brand);
               },
             ),
           ),
@@ -219,9 +186,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Ink(
                   width: 45,
                   height: 45,
-                  decoration:  ShapeDecoration(
+                  decoration: ShapeDecoration(
                     color: context.theme.cardColor,
-                    shape: CircleBorder(),
+                    shape: const CircleBorder(),
                   ),
                   child: const Icon(
                     LazaIcons.menu_horizontal,
@@ -232,14 +199,14 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               InkWell(
                 borderRadius: const BorderRadius.all(Radius.circular(50)),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderConfirmedScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreen()));
                 },
                 child: Ink(
                   width: 45,
                   height: 45,
-                  decoration:  ShapeDecoration(
+                  decoration: ShapeDecoration(
                     color: context.theme.cardColor,
-                    shape: CircleBorder(),
+                    shape: const CircleBorder(),
                   ),
                   child: const Icon(
                     LazaIcons.bag,
@@ -257,15 +224,45 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class Brand {
-  final String name;
-  final IconData iconData;
-  const Brand(this.name, this.iconData);
-}
-
-class Product {
-  final String title;
-  final String imagePath;
-  final String price;
-  const Product(this.title, this.imagePath, this.price);
+class BrandTile extends StatelessWidget {
+  const BrandTile({super.key, required this.brand});
+  final Brand brand;
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+      child: Ink(
+        height: 50,
+        width: 115,
+        decoration: BoxDecoration(
+          color: context.theme.cardColor,
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 40,
+              width: 40,
+              margin: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: context.theme.scaffoldBackgroundColor,
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+              ),
+              child: Icon(
+                brand.iconData,
+                size: brand.name == 'Fila' ? 12 : 18,
+              ),
+            ),
+            Expanded(
+                child: Text(
+              brand.name,
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            )),
+          ],
+        ),
+      ),
+    );
+  }
 }

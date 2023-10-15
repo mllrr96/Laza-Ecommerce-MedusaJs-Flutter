@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:laza/components/custom_appbar.dart';
 import 'package:laza/components/custom_text_field.dart';
+import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/reset_password/forgot_password_screen.dart';
 
 import 'components/bottom_nav_button.dart';
@@ -40,9 +41,7 @@ class _SignInWithEmailState extends State<SignInWithEmail> {
           onTap: () {
             if (!formKey.currentState!.validate()) return;
             Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const Dashboard()),
-                    (Route<dynamic> route) => false);
+                context, MaterialPageRoute(builder: (context) => const Dashboard()), (Route<dynamic> route) => false);
           },
         ),
         body: SafeArea(
@@ -51,17 +50,17 @@ class _SignInWithEmailState extends State<SignInWithEmail> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(
+              SizedBox(
                 width: double.maxFinite,
                 child: Column(
                   children: [
                     Text(
                       'Welcome',
-                      style: TextStyle(color: Color(0xff1D1E20), fontSize: 28, fontWeight: FontWeight.w600),
+                      style: context.headlineMedium,
                     ),
                     Text(
                       'Please enter your data to continue',
-                      style: TextStyle(color: Color(0xff8F959E), fontSize: 15),
+                      style: context.bodyMedium?.copyWith(color: ColorConstant.manatee),
                     ),
                   ],
                 ),
@@ -127,16 +126,15 @@ class _SignInWithEmailState extends State<SignInWithEmail> {
                   child: InkWell(
                     onTap: () {},
                     child: Ink(
-                      child: const Text.rich(
+                      child: Text.rich(
                         TextSpan(
                             text: 'By connecting your account confirm that you agree with our',
-                            style: TextStyle(
-                              color: Color(0xff8F959E),
-                            ),
+                            style: context.bodySmall?.copyWith(color: ColorConstant.manatee),
                             children: [
                               TextSpan(
-                                  text: ' Term and Condition',
-                                  style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black))
+                                text: ' Term and Condition',
+                                style: context.bodySmallW500,
+                              )
                             ]),
                         textAlign: TextAlign.center,
                       ),

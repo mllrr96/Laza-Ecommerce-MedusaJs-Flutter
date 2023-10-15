@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:laza/components/bottom_nav_button.dart';
 import 'package:laza/components/custom_appbar.dart';
 import 'package:laza/dashboard.dart';
+import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/sign_in_with_email.dart';
 import 'package:laza/sign_up_screen.dart';
 import 'package:sign_in_button/sign_in_button.dart';
@@ -29,12 +30,12 @@ class SignInScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(
+              SizedBox(
                 width: double.infinity,
                 child: Center(
                   child: Text(
                     'Let’s Get Started',
-                    style: TextStyle(color: Color(0xff1D1E20), fontSize: 28, fontWeight: FontWeight.w600),
+                    style: context.headlineMedium,
                   ),
                 ),
               ),

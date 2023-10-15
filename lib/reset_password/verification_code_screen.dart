@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/reset_password/new_password_screen.dart';
 
 import '../components/bottom_nav_button.dart';
+import '../components/colors.dart';
 import '../components/custom_appbar.dart';
 
 class VerificationCodeScreen extends StatelessWidget {
@@ -27,12 +29,12 @@ class VerificationCodeScreen extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: double.infinity,
                     child: Center(
                       child: Text(
-                        'Forgot Password',
-                        style: TextStyle(color: Color(0xff1D1E20), fontSize: 28, fontWeight: FontWeight.w600),
+                        'Verification Code',
+                        style: context.headlineMedium,
                       ),
                     ),
                   ),
@@ -47,25 +49,21 @@ class VerificationCodeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const Column(
+              Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
                     child: Text.rich(
-                      TextSpan(
-                          text: '00:20',
-                          style: TextStyle(
-                            color: Color(0xff8F959E),
-                          ),
-                          children: [
-                            TextSpan(
-                                text: ' resend confirmation code.',
-                                style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black))
-                          ]),
+                      TextSpan(text: '00:20', style: context.bodySmallW500, children: [
+                        TextSpan(
+                          text: ' resend confirmation code.',
+                          style: context.bodySmall?.copyWith(color: ColorConstant.manatee),
+                        )
+                      ]),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                 ],
               ),
             ],

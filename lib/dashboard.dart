@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:laza/cart_screen.dart';
 import 'package:laza/components/colors.dart';
 import 'package:laza/components/drawer.dart';
 import 'package:laza/components/laza_icons.dart';
@@ -63,7 +64,7 @@ class _DashboardState extends State<Dashboard> {
             children: const [
               HomeScreen(),
               OrderConfirmedScreen(),
-              HomeScreen(),
+              CartScreen(),
               HomeScreen(),
             ],
           ),
@@ -105,8 +106,8 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
               Container(
-                height: context.viewInsets.bottom,
-                color: Colors.red,
+                padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
+                color: bottomBarBgColor,
               )
             ],
           ),

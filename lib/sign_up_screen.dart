@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:laza/components/colors.dart';
 import 'package:laza/components/custom_text_field.dart';
+import 'package:laza/extensions/context_extension.dart';
 import 'components/bottom_nav_button.dart';
 import 'components/custom_appbar.dart';
 import 'dashboard.dart';
@@ -38,9 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           onTap: () {
             if (!formKey.currentState!.validate()) return;
             Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const Dashboard()),
-                    (Route<dynamic> route) => false);
+                context, MaterialPageRoute(builder: (context) => const Dashboard()), (Route<dynamic> route) => false);
           },
         ),
         body: SafeArea(
@@ -49,12 +48,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(
+              SizedBox(
                 width: double.maxFinite,
                 child: Center(
                   child: Text(
                     'Sign Up',
-                    style: TextStyle(color: Color(0xff1D1E20), fontSize: 28, fontWeight: FontWeight.w600),
+                    style: context.headlineMedium,
                   ),
                 ),
               ),
@@ -124,14 +123,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   onTap: () => Navigator.pop(context),
                   child: Ink(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                    child: const Text.rich(TextSpan(
-                        text: 'Already have an account?',
-                        style: TextStyle(
-                          color: Color(0xff8F959E),
-                        ),
-                        children: [
-                          TextSpan(text: ' Signin', style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black))
-                        ])),
+                    child: Text.rich(
+                      TextSpan(
+                          text: 'Already have an account?',
+                          style: context.bodyMedium?.copyWith(color: ColorConstant.manatee),
+                          children: [
+                            TextSpan(
+                              text: ' Signin',
+                              style: context.bodyMediumW500,
+                            )
+                          ]),
+                    ),
                   ),
                 ),
               ),

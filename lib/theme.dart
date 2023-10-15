@@ -24,13 +24,14 @@ class AppTheme {
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.light,
-        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.white,
       ),
     ),
     dialogTheme: const DialogTheme(surfaceTintColor: Colors.white, backgroundColor: Colors.white),
     listTileTheme: ListTileThemeData(
       titleTextStyle: bodyMedium.copyWith(fontWeight: FontWeight.normal),
     ),
+    // card color is used here to for icon button bg color
     cardColor: const Color(0xffF5F6FA),
   );
 
@@ -64,9 +65,13 @@ class AppTheme {
       titleTextStyle: bodyMedium.dark().copyWith(fontWeight: FontWeight.normal),
       iconColor: Colors.white,
     ),
+    // card color is used here to for icon button bg color
     cardColor: const Color(0xff222E34),
     iconTheme: const IconThemeData(color: Colors.white),
   );
+
+  // ========================================================================================== //
+
   // Headline 1
   // 34px Bold
   static const headlineLarge = TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: Colors.black);
@@ -91,6 +96,7 @@ class AppTheme {
   static const bodySmall = TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.black);
 }
 
+// A theme notifier to change and save theme mode (light/dark)
 class ThemeNotifier extends ChangeNotifier {
   final String key = "theme";
   SharedPreferences? prefs;
