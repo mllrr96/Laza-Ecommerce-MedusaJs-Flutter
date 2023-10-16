@@ -56,6 +56,6 @@ Laza is open-source and licensed under the MIT License. You can find the full li
 
 ## Contact
 
-If you have any questions, feedback, or need assistance, please don't hesitate to get in touch. You can contact us via [email@example.com](mailto:email@example.com) or open an issue on our GitHub repository.
+If you have any questions, feedback, or need assistance, please don't hesitate to get in touch by opening an issue on my GitHub repository.
 
 Enjoy using Laza, the Figma-inspired e-commerce app, and happy shopping!
