@@ -22,12 +22,12 @@ To get started with Laza, follow these steps:
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/laza.git
+   git clone https://github.com/mllrr96/Laza-Ecommerce-Mobile-App-UI/
    ```
 
 2. **Navigate to the Project Directory:**
    ```bash
-   cd laza
+   cd Laza-Ecommerce-Mobile-App-UI
    ```
 
 3. **Install Dependencies:**
