@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Laza',
             debugShowCheckedModeBanner: false,
-            themeMode: themeNotifier.darkTheme ? ThemeMode.dark : ThemeMode.light,
+            themeMode: themeNotifier.themeMode,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             home: const SplashScreen(),

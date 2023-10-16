@@ -20,6 +20,7 @@ class AppTheme {
       bodySmall: bodySmall,
     ),
     appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
@@ -50,6 +51,7 @@ class AppTheme {
       bodySmall: bodySmall.dark(),
     ),
     appBarTheme: AppBarTheme(
+      backgroundColor: ColorConstant.scaffoldDark,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
@@ -98,20 +100,21 @@ class AppTheme {
 
 // A theme notifier to change and save theme mode (light/dark)
 class ThemeNotifier extends ChangeNotifier {
-  final String key = "theme";
+  final String key = "themeMode";
   SharedPreferences? prefs;
-  late bool _darkTheme;
+  late ThemeMode _themeMode;
 
-  bool get darkTheme => _darkTheme;
+  ThemeMode get themeMode => _themeMode;
 
   ThemeNotifier() {
-    _darkTheme = true;
+    _themeMode = ThemeMode.system;
     loadFromPrefs();
   }
 
-  toggleTheme() {
-    _darkTheme = !_darkTheme;
-    saveToPrefs();
+  toggleTheme(ThemeMode themeMode) async {
+    await _initPrefs();
+    prefs?.setString(key, themeMode.name);
+    _themeMode = themeMode;
     notifyListeners();
   }
 
@@ -121,12 +124,17 @@ class ThemeNotifier extends ChangeNotifier {
 
   loadFromPrefs() async {
     await _initPrefs();
-    _darkTheme = prefs?.getBool(key) ?? true;
-    notifyListeners();
-  }
 
-  saveToPrefs() async {
-    await _initPrefs();
-    prefs?.setBool(key, darkTheme);
+    switch (prefs?.getString(key)) {
+      case 'system':
+        _themeMode = ThemeMode.system;
+      case 'light':
+        _themeMode = ThemeMode.light;
+      case 'dark':
+        _themeMode = ThemeMode.light;
+      default:
+        _themeMode = ThemeMode.system;
+    }
+    notifyListeners();
   }
 }

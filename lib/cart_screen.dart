@@ -5,6 +5,7 @@ import 'package:laza/components/colors.dart';
 import 'package:laza/components/custom_appbar.dart';
 import 'package:laza/components/laza_icons.dart';
 import 'package:laza/extensions/context_extension.dart';
+import 'package:laza/order_confirmed_screen.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -14,10 +15,10 @@ class CartScreen extends StatelessWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: context.theme.appBarTheme.systemOverlayStyle!,
       child: Scaffold(
-        appBar: const CustomAppBar(
-          title: 'Cart',
-        ),
-        bottomNavigationBar: BottomNavButton(label: 'Checkout', onTap: () {}),
+        appBar: const CustomAppBar(title: 'Cart'),
+        bottomNavigationBar: BottomNavButton(
+            label: 'Checkout',
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const OrderConfirmedScreen()))),
         body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
           children: [
@@ -37,7 +38,8 @@ class CartScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: context.theme.scaffoldBackgroundColor,
                         borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                        image: const DecorationImage(image: AssetImage('assets/images/img3.png'), fit: BoxFit.fitWidth)),
+                        image:
+                            const DecorationImage(image: AssetImage('assets/images/img3.png'), fit: BoxFit.fitWidth)),
                   ),
                   const SizedBox(width: 10.0),
                   Flexible(
@@ -143,7 +145,8 @@ class CartScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: context.theme.scaffoldBackgroundColor,
                         borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                        image: const DecorationImage(image: AssetImage('assets/images/img3.png'), fit: BoxFit.fitWidth)),
+                        image:
+                            const DecorationImage(image: AssetImage('assets/images/img3.png'), fit: BoxFit.fitWidth)),
                   ),
                   const SizedBox(width: 10.0),
                   Flexible(

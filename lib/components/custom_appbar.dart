@@ -15,7 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: canPop  || actions != null ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+          mainAxisAlignment: canPop || actions != null ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
           children: [
             if (canPop)
               InkWell(

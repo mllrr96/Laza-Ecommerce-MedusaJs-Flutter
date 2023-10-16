@@ -11,6 +11,7 @@ import 'package:laza/components/drawer.dart';
 import 'package:laza/components/laza_icons.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/home_screen.dart';
+import 'package:laza/my_cards_screen.dart';
 import 'package:laza/wishlist_screen.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
@@ -65,7 +66,7 @@ class _DashboardState extends State<Dashboard> {
               HomeScreen(),
               WishlistScreen(),
               CartScreen(),
-              HomeScreen(),
+              MyCardsScreen(),
             ],
           ),
           bottomNavigationBar: Column(

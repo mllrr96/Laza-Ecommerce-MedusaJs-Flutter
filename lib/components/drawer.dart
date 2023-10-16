@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:laza/extensions/context_extension.dart';
@@ -36,9 +35,7 @@ class DrawerWidget extends StatelessWidget {
                         color: context.theme.cardColor,
                         shape: const CircleBorder(),
                       ),
-                      child: const Icon(
-                        LazaIcons.menu_vertical,
-                      ),
+                      child: const Icon(LazaIcons.menu_vertical),
                     ),
                   ),
                 ),
@@ -48,24 +45,31 @@ class DrawerWidget extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Flexible(
+                      Flexible(
                         child: Row(
                           children: [
-                            CircleAvatar(
+                            const CircleAvatar(
                               maxRadius: 24,
                               child: Text('M'),
                             ),
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 10.0),
                             Flexible(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Mrh Raju'),
+                                  Text(
+                                    'Mrh Raju',
+                                    style: context.bodyLargeW500,
+                                  ),
                                   Row(
                                     children: [
-                                      Flexible(child: Text('Verified Profile')),
-                                      SizedBox(width: 5.0),
-                                      Icon(
+                                      Flexible(
+                                          child: Text(
+                                        'Verified Profile',
+                                        style: context.bodySmall?.copyWith(color: ColorConstant.manatee),
+                                      )),
+                                      const SizedBox(width: 5.0),
+                                      const Icon(
                                         LazaIcons.verified_badge,
                                         size: 15,
                                         color: Colors.green,
@@ -93,15 +97,33 @@ class DrawerWidget extends StatelessWidget {
                 const SizedBox(height: 30.0),
                 Consumer<ThemeNotifier>(
                   builder: (context, themeNotifier, _) {
+                    IconData iconData = Icons.brightness_auto;
+                    switch (themeNotifier.themeMode) {
+                      case ThemeMode.system:
+                        iconData = Icons.brightness_auto_outlined;
+                      case ThemeMode.light:
+                        iconData = LazaIcons.sun;
+                      case ThemeMode.dark:
+                        iconData = Icons.dark_mode_outlined;
+                    }
                     return ListTile(
-                      leading: const Icon(LazaIcons.sun),
-                      onTap: () => themeNotifier.toggleTheme(),
+                      leading: Icon(iconData),
+                      onTap: () async {
+                        await showModalActionSheet(
+                            context: context,
+                            title: 'Choose app appearance',
+                            actions: <SheetAction<ThemeMode>>[
+                              const SheetAction(label: 'Automatic (follow system)', key: ThemeMode.system),
+                              const SheetAction(label: 'Light', key: ThemeMode.light),
+                              const SheetAction(label: 'Dark', key: ThemeMode.dark),
+                            ]).then((result) {
+                          if (result == null) return;
+
+                          themeNotifier.toggleTheme(result);
+                        });
+                      },
                       contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
                       title: const Text('Appearance'),
-                      trailing: Switch.adaptive(
-                          activeColor: Platform.isIOS ? ColorConstant.primary : null,
-                          value: themeNotifier.darkTheme,
-                          onChanged: (_) => themeNotifier.toggleTheme()),
                       horizontalTitleGap: 10.0,
                     );
                   },

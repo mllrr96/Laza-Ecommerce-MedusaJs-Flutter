@@ -14,7 +14,7 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: Theme.of(context).appBarTheme.systemOverlayStyle!,
+      value: context.theme.appBarTheme.systemOverlayStyle!,
       child: Scaffold(
         appBar: const CustomAppBar(),
         bottomNavigationBar: BottomNavButton(
