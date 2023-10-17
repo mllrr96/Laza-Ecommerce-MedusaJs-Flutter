@@ -29,7 +29,7 @@ To get started with Laza, follow these steps:
 
 2. **Navigate to the Project Directory:**
    ```bash
-   cd Laza-Ecommerce-Mobile-App-UI
+   cd Laza-Ecommerce-Mobile-App-UI-Flutter
    ```
 
 3. **Install Dependencies:**
