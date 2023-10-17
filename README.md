@@ -1,6 +1,8 @@
-# Laza - Figma-Inspired E-Commerce App
+# Laza - Figma-Inspired E-Commerce App - Flutter
 
 Welcome to Laza, the stylish e-commerce app built using Flutter that draws inspiration from [Abid Akram](https://www.figma.com/@abidakram01) Figma desgin [link](https://www.figma.com/community/file/1245385141730558466). Laza combines the aesthetics of Figma's design principles with the functionality of a powerful e-commerce platform. This readme will provide an overview of the app, its features, and how to get started.
+
+![Alt text](/screenshots/laza-screenshot.png?raw=true)
 
 ## Features
 
@@ -54,6 +56,6 @@ Laza is open-source and licensed under the MIT License. You can find the full li
 
 ## Contact
 
-If you have any questions, feedback, or need assistance, please don't hesitate to get in touch. You can contact us via [email@example.com](mailto:email@example.com) or open an issue on our GitHub repository.
+If you have any questions, feedback, or need assistance, please don't hesitate to get in touch by opening an issue on my GitHub repository.
 
 Enjoy using Laza, the Figma-inspired e-commerce app, and happy shopping!
