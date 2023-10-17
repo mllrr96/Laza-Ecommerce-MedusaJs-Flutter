@@ -24,7 +24,7 @@ To get started with Laza, follow these steps:
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/mllrr96/Laza-Ecommerce-Mobile-App-UI/
+   git clone https://github.com/mllrr96/Laza-Ecommerce-Mobile-App-UI-Flutter/
    ```
 
 2. **Navigate to the Project Directory:**
