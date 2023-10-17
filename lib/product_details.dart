@@ -43,11 +43,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Total Price', style: context.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+                    Text('Total Price', style: context.bodyMediumW600),
                     Text('with VAT,SD', style: context.bodyExtraSmall?.copyWith(color: ColorConstant.manatee)),
                   ],
                 ),
-                Text('\$125', style: context.bodyLarge?.copyWith(fontWeight: FontWeight.w600))
+                Text('\$125', style: context.bodyLargeW600)
               ],
             ),
           ),
@@ -198,7 +198,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     children: [
                       Text(
                         'Size',
-                        style: context.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                        style: context.bodyLargeW600,
                       ),
                       TextButton(
                           onPressed: () {},
@@ -228,7 +228,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                           child: Text(
                             text,
-                            style: context.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                            style: context.bodyLargeW600,
                           ),
                         );
                       }),
@@ -246,7 +246,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Description', style: context.bodyLarge?.copyWith(fontWeight: FontWeight.w600)),
+                  Text('Description', style: context.bodyLargeW600),
                   const SizedBox(height: 10.0),
                   Text(product.description!, style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
                   const SizedBox(height: 20.0),
@@ -265,7 +265,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     children: [
                       Text(
                         'Reviews',
-                        style: context.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                        style: context.bodyLargeW600,
                       ),
                       TextButton(
                           onPressed: () =>

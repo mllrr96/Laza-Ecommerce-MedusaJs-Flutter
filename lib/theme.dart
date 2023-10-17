@@ -87,15 +87,15 @@ class AppTheme {
 
   // Body 1
   // 17px Medium
-  static const bodyLarge = TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.black);
+  static const bodyLarge = TextStyle(fontSize: 17, fontWeight: FontWeight.normal, color: Colors.black);
 
   // Body 2
   // 15px Medium
-  static const bodyMedium = TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black);
+  static const bodyMedium = TextStyle(fontSize: 15, fontWeight: FontWeight.normal, color: Colors.black);
 
   // Body 3
   // 13px Medium
-  static const bodySmall = TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.black);
+  static const bodySmall = TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black);
 }
 
 // A theme notifier to change and save theme mode (light/dark)

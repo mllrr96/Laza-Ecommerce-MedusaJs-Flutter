@@ -29,14 +29,14 @@ class OrderConfirmedScreen extends StatelessWidget {
                 ),
                 Center(child: SvgPicture.asset('assets/images/order_confirmed.svg')),
                 const SizedBox(height: 40.0),
-                const Column(
+                 Column(
                   children: [
                     Text(
                       'Order Confirmed!',
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+                      style: context.headlineMedium,
                     ),
-                    SizedBox(height: 10.0),
-                    Padding(
+                    const SizedBox(height: 10.0),
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25.0),
                       child: Text(
                         'Your order has been confirmed, we will send you confirmation email shortly.',

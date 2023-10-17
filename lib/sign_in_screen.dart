@@ -59,7 +59,7 @@ class SignInScreen extends StatelessWidget {
                           width: double.infinity, height: 50, child: SignInButton(Buttons.twitter, onPressed: () {})),
                       const SizedBox(height: 10),
                       SizedBox(
-                          width: double.infinity, height: 50, child: SignInButton(Buttons.google, onPressed: () {})),
+                          width: double.infinity, height: 50, child: SignInButton(Buttons.googleDark, onPressed: () {})),
                       const SizedBox(height: 10),
                       SizedBox(
                           width: double.infinity,

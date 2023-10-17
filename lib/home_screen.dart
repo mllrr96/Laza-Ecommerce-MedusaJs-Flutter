@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text(
                   'Hello',
-                  style: context.headlineMedium?.copyWith(fontWeight: FontWeight.w600),
+                  style: context.headlineMedium,
                 ),
                 Text(
                   'Welcome to Laza',
