@@ -1,15 +1,18 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:laza/brand_products_screen.dart';
 import 'package:laza/cart_screen.dart';
 import 'package:laza/components/colors.dart';
-import 'package:laza/dashboard.dart';
+import 'package:laza/dashboard_screen.dart';
 import 'package:laza/extensions/context_extension.dart';
+import 'package:laza/routes/app_router.dart';
 import 'package:laza/search_screen.dart';
 
 import 'components/laza_icons.dart';
 import 'components/product_card.dart';
 import 'models/index.dart';
 
+@RoutePage()
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   @override
@@ -74,8 +77,7 @@ class HomeScreen extends StatelessWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: TextField(
-                        onTap: () => Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => const SearchScreen(), fullscreenDialog: true)),
+                        onTap: () => context.router.push(const SearchRoute()),
                         readOnly: true,
                         decoration: InputDecoration(
                             filled: true,
@@ -225,9 +227,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               InkWell(
                 borderRadius: const BorderRadius.all(Radius.circular(50)),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreen()));
-                },
+                onTap: () =>
+                  context.router.push(const CartRoute()),
                 child: Ink(
                   width: 45,
                   height: 45,
@@ -258,7 +259,7 @@ class BrandTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> BrandProductsScreen(brand: brand))),
+      onTap: () => context.router.push(BrandProductsRoute(brand: brand)),
       borderRadius: const BorderRadius.all(Radius.circular(10.0)),
       child: Ink(
         height: 50,

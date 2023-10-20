@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -6,7 +7,7 @@ import 'package:laza/components/custom_appbar.dart';
 import 'package:laza/extensions/context_extension.dart';
 
 import 'components/colors.dart';
-
+@RoutePage()
 class AddReviewScreen extends StatelessWidget {
   const AddReviewScreen({super.key});
 
@@ -21,7 +22,7 @@ class AddReviewScreen extends StatelessWidget {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           appBar: const CustomAppBar(title: 'Add Review'),
-          bottomNavigationBar: BottomNavButton(label: 'Submit Review', onTap: () => Navigator.pop(context)),
+          bottomNavigationBar: BottomNavButton(label: 'Submit Review', onTap: () => context.router.pop()),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Padding(

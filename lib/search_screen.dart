@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:laza/extensions/context_extension.dart';
 
 import 'components/colors.dart';
 import 'components/laza_icons.dart';
+@RoutePage()
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -46,7 +48,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: const BorderRadius.all(Radius.circular(50)),
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.router.pop(),
                     child: Ink(
                       width: 45,
                       height: 45,

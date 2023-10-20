@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:laza/components/colors.dart';
-import 'package:laza/intro_screen.dart';
+import 'package:laza/routes/app_router.dart';
 
+@RoutePage()
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -15,10 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2)).then((value) => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const IntroductionScreen()),
-        ));
+    Future.delayed(const Duration(seconds: 2)).then((value) => context.router.replace(const SignInRoute()));
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:laza/add_review_screen.dart';
@@ -5,8 +6,10 @@ import 'package:laza/components/custom_appbar.dart';
 import 'package:laza/components/laza_icons.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/product_details.dart';
+import 'package:laza/routes/app_router.dart';
 
 import 'components/colors.dart';
+@RoutePage()
 
 class ReviewsScreen extends StatelessWidget {
   const ReviewsScreen({super.key});
@@ -64,7 +67,7 @@ class ReviewsScreen extends StatelessWidget {
                               ),
                             ),
                             onPressed: () =>
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const AddReviewScreen())),
+                            context.router.push(const AddReviewRoute()),
                             child: const Row(
                               children: [
                                 Icon(LazaIcons.edit_square, size: 18),

@@ -1,14 +1,16 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:laza/components/bottom_nav_button.dart';
 import 'package:laza/components/colors.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/models/index.dart';
-import 'package:laza/reviews_screen.dart';
+import 'package:laza/routes/app_router.dart';
 import 'package:laza/theme.dart';
 
 import 'cart_screen.dart';
 import 'components/laza_icons.dart';
 
+@RoutePage()
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({super.key, required this.product});
   final Product product;
@@ -62,7 +64,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             title: InkWell(
               borderRadius: BorderRadius.circular(56),
               radius: 56,
-              onTap: () => Navigator.pop(context),
+              onTap: () => context.router.pop(),
               child: Ink(
                 width: 45,
                 height: 45,
@@ -93,7 +95,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 padding: const EdgeInsets.only(right: 20.0, left: 10.0),
                 child: InkWell(
                   borderRadius: const BorderRadius.all(Radius.circular(50)),
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreen())),
+                  onTap: () => context.router.push(const CartRoute()),
                   child: Ink(
                     width: 45,
                     height: 45,
@@ -268,9 +270,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         style: context.bodyLargeW600,
                       ),
                       TextButton(
-                          onPressed: () =>
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ReviewsScreen())),
-                          child: const Text('View All')),
+                          onPressed: () => context.router.push(const ReviewsRoute()), child: const Text('View All')),
                     ],
                   ),
                 ),

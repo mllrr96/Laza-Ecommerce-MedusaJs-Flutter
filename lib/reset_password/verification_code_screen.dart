@@ -1,14 +1,17 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/reset_password/new_password_screen.dart';
+import 'package:laza/routes/app_router.dart';
 
 import '../components/bottom_nav_button.dart';
 import '../components/colors.dart';
 import '../components/custom_appbar.dart';
 
+@RoutePage()
 class VerificationCodeScreen extends StatelessWidget {
   const VerificationCodeScreen({super.key});
 
@@ -22,10 +25,7 @@ class VerificationCodeScreen extends StatelessWidget {
           appBar: const CustomAppBar(),
           bottomNavigationBar: BottomNavButton(
               label: 'Confirm Code',
-              onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const NewPasswordScreen()),
-                  )),
+              onTap: () => context.router.push(const NewPasswordRoute())),
           body: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

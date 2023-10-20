@@ -1,14 +1,16 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:laza/components/custom_text_field.dart';
 import 'package:laza/extensions/context_extension.dart';
-import 'package:laza/reset_password/verification_code_screen.dart';
+import 'package:laza/routes/app_router.dart';
 
 import '../components/bottom_nav_button.dart';
 import '../components/colors.dart';
 import '../components/custom_appbar.dart';
 
+@RoutePage()
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
 
@@ -23,10 +25,7 @@ class ForgotPasswordScreen extends StatelessWidget {
           appBar: const CustomAppBar(),
           bottomNavigationBar: BottomNavButton(
               label: 'Confirm Email',
-              onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const VerificationCodeScreen()),
-                  )),
+              onTap: () => context.router.push(const VerificationCodeRoute())),
           body: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,7 +48,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                 Column(
+                Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 56.0),

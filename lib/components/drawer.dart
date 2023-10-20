@@ -1,7 +1,9 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:laza/extensions/context_extension.dart';
-import 'package:laza/intro_screen.dart';
+import 'package:laza/routes/app_router.dart';
+import 'package:laza/sign_in_screen.dart';
 import 'package:laza/theme.dart';
 import 'package:provider/provider.dart';
 import 'colors.dart';
@@ -185,10 +187,7 @@ class DrawerWidget extends StatelessWidget {
                       okLabel: 'Logout',
                     ).then((result) {
                       if (result == OkCancelResult.ok) {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => const IntroductionScreen()),
-                            (Route<dynamic> route) => false);
+                        context.router.replaceAll([const SignInRoute()]);
                       }
                     });
                   },

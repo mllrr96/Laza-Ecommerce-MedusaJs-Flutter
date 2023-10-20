@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/models/brand.dart';
+import 'package:laza/routes/app_router.dart';
 
 import 'cart_screen.dart';
 import 'components/colors.dart';
@@ -8,6 +10,7 @@ import 'components/laza_icons.dart';
 import 'components/product_card.dart';
 import 'models/product.dart';
 
+@RoutePage()
 class BrandProductsScreen extends StatelessWidget {
   const BrandProductsScreen({super.key, required this.brand});
   final Brand brand;
@@ -46,9 +49,7 @@ class BrandProductsScreen extends StatelessWidget {
         actions: [
           InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(50)),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreen()));
-            },
+            onTap: () => context.router.push(const CartRoute()),
             child: Ink(
               width: 45,
               height: 45,
@@ -136,7 +137,7 @@ class BrandAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   @override
   Widget build(BuildContext context) {
-    final canPop = Navigator.canPop(context);
+    final canPop = context.router.canPop();
     return Container(
       height: kToolbarHeight,
       margin: EdgeInsets.only(top: context.viewPadding.top),
@@ -149,7 +150,7 @@ class BrandAppBar extends StatelessWidget implements PreferredSizeWidget {
             if (canPop)
               InkWell(
                 borderRadius: const BorderRadius.all(Radius.circular(50)),
-                onTap: () => Navigator.pop(context),
+                onTap: () => context.router.pop(),
                 child: Ink(
                   width: 45,
                   height: 45,

@@ -1,13 +1,16 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:laza/extensions/context_extension.dart';
+import 'package:laza/routes/app_router.dart';
 import '../components/bottom_nav_button.dart';
 import '../components/colors.dart';
 import '../components/custom_appbar.dart';
 import '../components/custom_text_field.dart';
-import '../dashboard.dart';
+import '../dashboard_screen.dart';
 
+@RoutePage()
 class NewPasswordScreen extends StatelessWidget {
   const NewPasswordScreen({super.key});
 
@@ -21,19 +24,15 @@ class NewPasswordScreen extends StatelessWidget {
           resizeToAvoidBottomInset: false,
           appBar: const CustomAppBar(),
           bottomNavigationBar: BottomNavButton(
-            label: 'Reset Password',
-            onTap: () =>    Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const Dashboard()),
-                    (Route<dynamic> route) => false)
-          ),
+              label: 'Reset Password',
+              onTap: () => context.router.replaceAll([const DashboardRoute()])),
           body: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   children: [
-                     SizedBox(
+                    SizedBox(
                       width: double.infinity,
                       child: Center(
                         child: Text(

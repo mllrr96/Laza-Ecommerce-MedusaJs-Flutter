@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:laza/extensions/context_extension.dart';
 
@@ -7,7 +8,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   @override
   Widget build(BuildContext context) {
-    final canPop = Navigator.canPop(context);
+    final canPop = context.router.canPop();
     return Container(
       height: kToolbarHeight,
       margin: EdgeInsets.only(top: context.viewPadding.top),
@@ -20,7 +21,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             if (canPop)
               InkWell(
                 borderRadius: const BorderRadius.all(Radius.circular(50)),
-                onTap: () => Navigator.pop(context),
+                onTap: () => context.router.pop(),
                 child: Ink(
                   width: 45,
                   height: 45,

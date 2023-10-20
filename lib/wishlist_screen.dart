@@ -1,14 +1,17 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:laza/components/colors.dart';
 import 'package:laza/components/custom_appbar.dart';
 import 'package:laza/extensions/context_extension.dart';
+import 'package:laza/routes/app_router.dart';
 
 import 'cart_screen.dart';
 import 'components/laza_icons.dart';
 import 'components/product_card.dart';
 import 'models/product.dart';
 
+@RoutePage()
 class WishlistScreen extends StatelessWidget {
   const WishlistScreen({super.key});
 
@@ -49,9 +52,7 @@ class WishlistScreen extends StatelessWidget {
           actions: [
             InkWell(
               borderRadius: const BorderRadius.all(Radius.circular(50)),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreen()));
-              },
+              onTap: () => context.router.push(const CartRoute()),
               child: Ink(
                 width: 45,
                 height: 45,

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:laza/components/bottom_nav_button.dart';
@@ -6,7 +7,9 @@ import 'package:laza/components/custom_appbar.dart';
 import 'package:laza/components/laza_icons.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/order_confirmed_screen.dart';
+import 'package:laza/routes/app_router.dart';
 
+@RoutePage()
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
 
@@ -18,7 +21,7 @@ class CartScreen extends StatelessWidget {
         appBar: const CustomAppBar(title: 'Cart'),
         bottomNavigationBar: BottomNavButton(
             label: 'Checkout',
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const OrderConfirmedScreen()))),
+            onTap: () => context.router.push(const OrderConfirmedRoute())),
         body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
           children: [

@@ -1,8 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:laza/extensions/context_extension.dart';
+import 'package:laza/routes/app_router.dart';
 
 import '../models/product.dart';
-import '../product_details.dart';
 import '../theme.dart';
 import 'colors.dart';
 import 'laza_icons.dart';
@@ -19,8 +20,9 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-      onTap: () =>
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailsScreen(product: product))),
+      onTap: () {
+        context.router.push(ProductDetailsRoute(product: product));
+      },
       child: Ink(
         height: 250,
         child: Column(

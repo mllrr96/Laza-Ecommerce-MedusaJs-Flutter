@@ -1,23 +1,25 @@
 import 'dart:io';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:laza/components/custom_appbar.dart';
 import 'package:laza/components/custom_text_field.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/reset_password/forgot_password_screen.dart';
+import 'package:laza/routes/app_router.dart';
 
 import 'components/bottom_nav_button.dart';
 import 'components/colors.dart';
-import 'dashboard.dart';
 
-class SignInWithEmail extends StatefulWidget {
-  const SignInWithEmail({super.key});
+@RoutePage()
+class SignInWithEmailScreen extends StatefulWidget {
+  const SignInWithEmailScreen({super.key});
 
   @override
-  State<SignInWithEmail> createState() => _SignInWithEmailState();
+  State<SignInWithEmailScreen> createState() => _SignInWithEmailScreenState();
 }
 
-class _SignInWithEmailState extends State<SignInWithEmail> {
+class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
   bool rememberMe = false;
   final formKey = GlobalKey<FormState>();
   final emailCtrl = TextEditingController();
@@ -43,8 +45,7 @@ class _SignInWithEmailState extends State<SignInWithEmail> {
             label: 'Login',
             onTap: () {
               if (!formKey.currentState!.validate()) return;
-              Navigator.pushAndRemoveUntil(
-                  context, MaterialPageRoute(builder: (context) => const Dashboard()), (Route<dynamic> route) => false);
+              context.router.replaceAll([const DashboardRoute()]);
             },
           ),
           body: SafeArea(
@@ -104,10 +105,7 @@ class _SignInWithEmailState extends State<SignInWithEmail> {
                         Align(
                             alignment: Alignment.centerRight,
                             child: TextButton(
-                                onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
-                                    ),
+                                onPressed: () => context.router.push(const ForgotPasswordRoute()),
                                 child: const Text(
                                   'Forget Password?',
                                   style: TextStyle(color: Colors.red),
