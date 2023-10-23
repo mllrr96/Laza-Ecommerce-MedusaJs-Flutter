@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:laza/extensions/context_extension.dart';
-import 'package:laza/reset_password/new_password_screen.dart';
 import 'package:laza/routes/app_router.dart';
 
 import '../components/bottom_nav_button.dart';

@@ -2,15 +2,14 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:laza/components/colors.dart';
-import 'package:laza/components/custom_text_field.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/routes/app_router.dart';
 import 'components/bottom_nav_button.dart';
+import 'components/colors.dart';
 import 'components/custom_appbar.dart';
-import 'dashboard_screen.dart';
-@RoutePage()
+import 'components/custom_text_field.dart';
 
+@RoutePage()
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 

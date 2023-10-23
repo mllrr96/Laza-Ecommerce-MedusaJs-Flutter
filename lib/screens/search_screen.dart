@@ -5,8 +5,8 @@ import 'package:laza/extensions/context_extension.dart';
 
 import 'components/colors.dart';
 import 'components/laza_icons.dart';
-@RoutePage()
 
+@RoutePage()
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 

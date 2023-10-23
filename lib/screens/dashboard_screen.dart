@@ -6,12 +6,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:laza/components/colors.dart';
-import 'package:laza/components/drawer.dart';
-import 'package:laza/components/laza_icons.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/routes/app_router.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
+
+import 'components/colors.dart';
+import 'components/drawer.dart';
+import 'components/laza_icons.dart';
 
 var dashboardScaffoldKey = GlobalKey<ScaffoldState>();
 

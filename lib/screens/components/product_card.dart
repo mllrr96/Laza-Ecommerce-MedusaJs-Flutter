@@ -1,10 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/routes/app_router.dart';
+import 'package:laza/styles/theme.dart';
+import 'package:medusa_store_flutter/store_models/products/product.dart';
 
-import '../models/product.dart';
-import '../theme.dart';
 import 'colors.dart';
 import 'laza_icons.dart';
 
@@ -31,7 +32,7 @@ class ProductCard extends StatelessWidget {
             Container(
               height: 150,
               decoration: BoxDecoration(
-                image: DecorationImage(image: AssetImage(product.thumbnailPath), fit: BoxFit.fitHeight),
+                image: DecorationImage(image: CachedNetworkImageProvider(product.thumbnail!), fit: BoxFit.fitHeight),
               ),
               child: Align(
                 alignment: Alignment.topRight,
@@ -68,12 +69,12 @@ class ProductCard extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      product.title,
+                      product.title ?? '',
                       style: context.bodyExtraSmallW500?.copyWith(overflow: TextOverflow.ellipsis),
                       maxLines: 4,
                     ),
                   ),
-                  Text(product.price),
+                  Text('99'),
                 ],
               ),
             ),

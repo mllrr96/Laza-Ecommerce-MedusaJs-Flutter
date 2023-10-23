@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:laza/components/bottom_nav_button.dart';
-import 'package:laza/components/colors.dart';
 import 'package:laza/extensions/context_extension.dart';
-import 'package:laza/models/index.dart';
 import 'package:laza/routes/app_router.dart';
-import 'package:laza/theme.dart';
+import 'package:laza/styles/theme.dart';
+import 'package:medusa_store_flutter/store_models/products/product.dart';
 
-import 'cart_screen.dart';
+import 'components/bottom_nav_button.dart';
+import 'components/colors.dart';
 import 'components/laza_icons.dart';
 
 @RoutePage()
@@ -20,10 +20,10 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  late String selectedImage;
+  late String? selectedImage;
   @override
   void initState() {
-    selectedImage = widget.product.thumbnailPath;
+    selectedImage = widget.product.thumbnail;
     super.initState();
   }
 
@@ -103,9 +103,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       color: AppTheme.lightTheme.cardColor,
                       shape: const CircleBorder(),
                     ),
-                    child: const Icon(
-                      LazaIcons.bag,
-                    ),
+                    child: const Icon(LazaIcons.bag),
                   ),
                 ),
               ),
@@ -116,10 +114,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             expandedHeight: 400,
             flexibleSpace: FlexibleSpaceBar(
               background: SafeArea(
-                  child: Image.asset(
-                selectedImage,
-                fit: BoxFit.fitHeight,
-              )),
+                child: CachedNetworkImage(
+                  imageUrl: product.thumbnail!,
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
             ),
             systemOverlayStyle: context.theme.appBarTheme.systemOverlayStyle!.copyWith(
               statusBarIconBrightness: Brightness.dark,
@@ -137,10 +136,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(product.category ?? 'Men\'s Printed Pullover Hoodie', style: context.bodySmall),
+                      Text(product.collection?.title ?? 'Men\'s Printed Pullover Hoodie', style: context.bodySmall),
                       const SizedBox(height: 5.0),
                       Text(
-                        product.title,
+                        product.title ?? '',
                         style: context.headlineSmall,
                       ),
                     ],
@@ -152,7 +151,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Text('Price', style: context.bodySmall),
                     const SizedBox(height: 5.0),
                     Text(
-                      product.price,
+                      '99',
                       style: context.headlineSmall,
                     ),
                   ],
@@ -173,12 +172,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     itemBuilder: (context, index) {
                       final image = widget.product.images![index];
                       return InkWell(
-                        onTap: () => setState(() => selectedImage = image),
+                        onTap: () => setState(() => selectedImage = image.url),
                         child: Ink(
                           height: double.infinity,
                           width: 80,
                           decoration: BoxDecoration(
-                            image: DecorationImage(image: AssetImage(image)),
+                            image: DecorationImage(image: CachedNetworkImageProvider(image.url!)),
                           ),
                         ),
                       );

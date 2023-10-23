@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:laza/components/bottom_nav_button.dart';
-import 'package:laza/components/colors.dart';
-import 'package:laza/components/custom_appbar.dart';
-import 'package:laza/components/laza_icons.dart';
 import 'package:laza/extensions/context_extension.dart';
-import 'package:laza/order_confirmed_screen.dart';
 import 'package:laza/routes/app_router.dart';
+
+import 'components/bottom_nav_button.dart';
+import 'components/colors.dart';
+import 'components/custom_appbar.dart';
+import 'components/laza_icons.dart';
 
 @RoutePage()
 class CartScreen extends StatelessWidget {

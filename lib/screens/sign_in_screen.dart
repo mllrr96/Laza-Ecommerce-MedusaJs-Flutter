@@ -1,15 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:laza/components/bottom_nav_button.dart';
-import 'package:laza/components/colors.dart';
-import 'package:laza/components/custom_appbar.dart';
-import 'package:laza/dashboard_screen.dart';
+import 'package:laza/config/locator.dart';
 import 'package:laza/extensions/context_extension.dart';
+import 'package:laza/repositories/preference_repository.dart';
 import 'package:laza/routes/app_router.dart';
-import 'package:laza/sign_in_with_email.dart';
-import 'package:laza/sign_up_screen.dart';
 import 'package:sign_in_button/sign_in_button.dart';
+
+import 'components/bottom_nav_button.dart';
+import 'components/colors.dart';
+import 'components/custom_appbar.dart';
 
 @RoutePage()
 class SignInScreen extends StatelessWidget {
@@ -74,7 +74,10 @@ class SignInScreen extends StatelessWidget {
                           width: double.infinity,
                           height: 50,
                           child: SignInButtonBuilder(
-                            onPressed: () => context.router.replaceAll([const DashboardRoute()]),
+                            onPressed: () {
+                              locator.get<PreferenceRepository>().setGuest();
+                              context.router.replaceAll([const DashboardRoute()]);
+                            },
                             backgroundColor: ColorConstant.manatee,
                             text: 'Continue as guest',
                             icon: Icons.person,

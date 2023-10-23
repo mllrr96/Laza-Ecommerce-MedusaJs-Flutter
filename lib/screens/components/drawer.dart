@@ -1,10 +1,11 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:laza/config/locator.dart';
 import 'package:laza/extensions/context_extension.dart';
+import 'package:laza/repositories/preference_repository.dart';
 import 'package:laza/routes/app_router.dart';
-import 'package:laza/sign_in_screen.dart';
-import 'package:laza/theme.dart';
+import 'package:laza/styles/theme.dart';
 import 'package:provider/provider.dart';
 import 'colors.dart';
 import 'laza_icons.dart';
@@ -176,25 +177,36 @@ class DrawerWidget extends StatelessWidget {
             ),
             Column(
               children: [
-                ListTile(
-                  leading: const Icon(LazaIcons.logout, color: Colors.red),
-                  onTap: () async {
-                    await showOkCancelAlertDialog(
-                      context: context,
-                      title: 'Confirm Logout',
-                      message: 'Are you sure you want to logout?',
-                      isDestructiveAction: true,
-                      okLabel: 'Logout',
-                    ).then((result) {
-                      if (result == OkCancelResult.ok) {
-                        context.router.replaceAll([const SignInRoute()]);
-                      }
-                    });
-                  },
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  title: const Text('Logout'),
-                  horizontalTitleGap: 10.0,
-                ),
+                if (!locator.get<PreferenceRepository>().isGuest)
+                  ListTile(
+                    leading: const Icon(LazaIcons.logout, color: Colors.red),
+                    onTap: () async {
+                      await showOkCancelAlertDialog(
+                        context: context,
+                        title: 'Confirm Logout',
+                        message: 'Are you sure you want to logout?',
+                        isDestructiveAction: true,
+                        okLabel: 'Logout',
+                      ).then((result) {
+                        if (result == OkCancelResult.ok) {
+                          context.router.replaceAll([const SignInRoute()]);
+                        }
+                      });
+                    },
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    title: const Text('Logout'),
+                    horizontalTitleGap: 10.0,
+                  ),
+                if (locator.get<PreferenceRepository>().isGuest)
+                  ListTile(
+                    leading: const Icon(Icons.login),
+                    onTap: () async {
+                      context.pushRoute(const SignInRoute());
+                    },
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    title: const Text('Sign in'),
+                    horizontalTitleGap: 10.0,
+                  ),
                 const SizedBox(height: 30.0),
               ],
             ),

@@ -4,11 +4,9 @@ import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/models/brand.dart';
 import 'package:laza/routes/app_router.dart';
 
-import 'cart_screen.dart';
 import 'components/colors.dart';
 import 'components/laza_icons.dart';
 import 'components/product_card.dart';
-import 'models/product.dart';
 
 @RoutePage()
 class BrandProductsScreen extends StatelessWidget {
@@ -16,32 +14,34 @@ class BrandProductsScreen extends StatelessWidget {
   final Brand brand;
   @override
   Widget build(BuildContext context) {
-    const products = [
-      Product(
-          title: 'Nike Sportswear Club Fleece',
-          thumbnailPath: 'assets/images/img2.png',
-          price: '\$99',
-          description:
-              'The Nike Throwback Pullover Hoodie is made from premium French terry fabric that blends a performance feel with',
-          images: [
-            'assets/images/product-img1.png',
-            'assets/images/product-img2.png',
-            'assets/images/product-img3.png',
-            'assets/images/product-img4.png',
-          ]),
-      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-    ];
+    const products = [];
+
+    // const products = [
+    //   Product(
+    //       title: 'Nike Sportswear Club Fleece',
+    //       thumbnailPath: 'assets/images/img2.png',
+    //       price: '\$99',
+    //       description:
+    //           'The Nike Throwback Pullover Hoodie is made from premium French terry fabric that blends a performance feel with',
+    //       images: [
+    //         'assets/images/product-img1.png',
+    //         'assets/images/product-img2.png',
+    //         'assets/images/product-img3.png',
+    //         'assets/images/product-img4.png',
+    //       ]),
+    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+    // ];
 
     return Scaffold(
       appBar: BrandAppBar(

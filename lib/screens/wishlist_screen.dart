@@ -1,15 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:laza/components/colors.dart';
-import 'package:laza/components/custom_appbar.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/routes/app_router.dart';
 
-import 'cart_screen.dart';
+import 'components/colors.dart';
+import 'components/custom_appbar.dart';
 import 'components/laza_icons.dart';
 import 'components/product_card.dart';
-import 'models/product.dart';
 
 @RoutePage()
 class WishlistScreen extends StatelessWidget {
@@ -17,32 +15,32 @@ class WishlistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const products = [
-      Product(
-          title: 'Nike Sportswear Club Fleece',
-          thumbnailPath: 'assets/images/img2.png',
-          price: '\$99',
-          description:
-              'The Nike Throwback Pullover Hoodie is made from premium French terry fabric that blends a performance feel with',
-          images: [
-            'assets/images/product-img1.png',
-            'assets/images/product-img2.png',
-            'assets/images/product-img3.png',
-            'assets/images/product-img4.png',
-          ]),
-      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-      Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-      Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-    ];
+    const products = [];
+    //   Product(
+    //       title: 'Nike Sportswear Club Fleece',
+    //       thumbnailPath: 'assets/images/img2.png',
+    //       price: '\$99',
+    //       description:
+    //           'The Nike Throwback Pullover Hoodie is made from premium French terry fabric that blends a performance feel with',
+    //       images: [
+    //         'assets/images/product-img1.png',
+    //         'assets/images/product-img2.png',
+    //         'assets/images/product-img3.png',
+    //         'assets/images/product-img4.png',
+    //       ]),
+    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
+    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
+    // ];
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: context.theme.appBarTheme.systemOverlayStyle!,

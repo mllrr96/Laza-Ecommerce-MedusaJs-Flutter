@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:laza/components/colors.dart';
+
+import 'colors.dart';
 
 class BottomNavButton extends StatelessWidget {
   const BottomNavButton({super.key, required this.label, required this.onTap});

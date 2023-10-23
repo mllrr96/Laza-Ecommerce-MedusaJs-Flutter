@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:laza/extensions/context_extension.dart';
+import 'package:laza/screens/components/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'components/colors.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
