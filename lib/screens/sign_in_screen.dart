@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:laza/config/locator.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/repositories/preference_repository.dart';
 import 'package:laza/routes/app_router.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
+import '../di/di.dart';
 import 'components/bottom_nav_button.dart';
 import 'components/colors.dart';
 import 'components/custom_appbar.dart';
@@ -75,7 +75,7 @@ class SignInScreen extends StatelessWidget {
                           height: 50,
                           child: SignInButtonBuilder(
                             onPressed: () {
-                              locator.get<PreferenceRepository>().setGuest();
+                              getIt.get<PreferenceRepository>().setGuest();
                               context.router.replaceAll([const DashboardRoute()]);
                             },
                             backgroundColor: ColorConstant.manatee,

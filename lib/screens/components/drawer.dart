@@ -1,7 +1,7 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:laza/config/locator.dart';
+import 'package:laza/di/di.dart';
 import 'package:laza/extensions/context_extension.dart';
 import 'package:laza/repositories/preference_repository.dart';
 import 'package:laza/routes/app_router.dart';
@@ -177,7 +177,7 @@ class DrawerWidget extends StatelessWidget {
             ),
             Column(
               children: [
-                if (!locator.get<PreferenceRepository>().isGuest)
+                if (!getIt.get<PreferenceRepository>().isGuest)
                   ListTile(
                     leading: const Icon(LazaIcons.logout, color: Colors.red),
                     onTap: () async {
@@ -197,7 +197,7 @@ class DrawerWidget extends StatelessWidget {
                     title: const Text('Logout'),
                     horizontalTitleGap: 10.0,
                   ),
-                if (locator.get<PreferenceRepository>().isGuest)
+                if (getIt.get<PreferenceRepository>().isGuest)
                   ListTile(
                     leading: const Icon(Icons.login),
                     onTap: () async {

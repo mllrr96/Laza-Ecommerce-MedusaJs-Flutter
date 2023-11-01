@@ -1,11 +1,10 @@
+import 'package:injectable/injectable.dart';
+import 'package:laza/di/di.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+@injectable
 class PreferenceRepository {
-  PreferenceRepository({
-    required SharedPreferences prefs,
-  }) : _prefs = prefs;
-
-  final SharedPreferences _prefs;
+  final SharedPreferences _prefs = getIt.get<SharedPreferences>();
 
   static const String _guestKey = 'guest';
 

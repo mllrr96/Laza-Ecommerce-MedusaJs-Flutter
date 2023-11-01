@@ -8,7 +8,6 @@ import '../components/bottom_nav_button.dart';
 import '../components/colors.dart';
 import '../components/custom_appbar.dart';
 import '../components/custom_text_field.dart';
-import '../dashboard_screen.dart';
 
 @RoutePage()
 class NewPasswordScreen extends StatelessWidget {
