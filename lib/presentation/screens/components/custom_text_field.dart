@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:laza/extensions/context_extension.dart';
+import 'package:laza/common/extensions/context_extension.dart';
 
 import 'colors.dart';
 

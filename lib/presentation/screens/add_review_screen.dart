@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:laza/extensions/context_extension.dart';
+import 'package:laza/common/extensions/context_extension.dart';
 
 import 'components/bottom_nav_button.dart';
 import 'components/colors.dart';

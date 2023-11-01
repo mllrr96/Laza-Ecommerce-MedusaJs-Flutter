@@ -1,11 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:laza/extensions/context_extension.dart';
-import 'package:laza/routes/app_router.dart';
-import 'package:laza/styles/theme.dart';
+import 'package:laza/common/extensions/context_extension.dart';
 import 'package:medusa_store_flutter/store_models/products/product.dart';
-
+import '../routes/app_router.dart';
+import '../theme/theme.dart';
 import 'components/bottom_nav_button.dart';
 import 'components/colors.dart';
 import 'components/laza_icons.dart';

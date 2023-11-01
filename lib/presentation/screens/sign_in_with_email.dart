@@ -2,13 +2,12 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:laza/extensions/context_extension.dart';
-import 'package:laza/routes/app_router.dart';
-import 'package:laza/screens/components/custom_text_field.dart';
-
+import 'package:laza/common/extensions/context_extension.dart';
+import '../routes/app_router.dart';
 import 'components/bottom_nav_button.dart';
 import 'components/colors.dart';
 import 'components/custom_appbar.dart';
+import 'components/custom_text_field.dart';
 
 
 @RoutePage()

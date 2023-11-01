@@ -2,10 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:laza/repositories/preference_repository.dart';
-import 'package:laza/routes/app_router.dart';
+import '../../di/di.dart';
+import '../../domain/repository/preference_repository.dart';
+import '../routes/app_router.dart';
 
-import '../di/di.dart';
 import 'components/colors.dart';
 
 @RoutePage()

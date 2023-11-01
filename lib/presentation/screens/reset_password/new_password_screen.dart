@@ -1,18 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:laza/extensions/context_extension.dart';
-import 'package:laza/routes/app_router.dart';
-
+import 'package:flutter_svg/svg.dart';
+import 'package:laza/common/extensions/context_extension.dart';
+import '../../routes/app_router.dart';
 import '../components/bottom_nav_button.dart';
 import '../components/colors.dart';
 import '../components/custom_appbar.dart';
 import '../components/custom_text_field.dart';
 
 @RoutePage()
-class ForgotPasswordScreen extends StatelessWidget {
-  const ForgotPasswordScreen({super.key});
+class NewPasswordScreen extends StatelessWidget {
+  const NewPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +23,8 @@ class ForgotPasswordScreen extends StatelessWidget {
           resizeToAvoidBottomInset: false,
           appBar: const CustomAppBar(),
           bottomNavigationBar: BottomNavButton(
-              label: 'Confirm Email',
-              onTap: () => context.router.push(const VerificationCodeRoute())),
+              label: 'Reset Password',
+              onTap: () => context.router.replaceAll([const DashboardRoute()])),
           body: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,7 +35,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                       width: double.infinity,
                       child: Center(
                         child: Text(
-                          'Forgot Password',
+                          'New Password',
                           style: context.headlineMedium,
                         ),
                       ),
@@ -44,19 +43,21 @@ class ForgotPasswordScreen extends StatelessWidget {
                     SvgPicture.asset('assets/images/forgot_password.svg'),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: CustomTextField(labelText: 'Email Address', textInputAction: TextInputAction.done),
+                      child: Column(
+                        children: [
+                          CustomTextField(labelText: 'Password'),
+                          CustomTextField(labelText: 'Confirm Password', textInputAction: TextInputAction.done),
+                        ],
+                      ),
                     ),
                   ],
                 ),
                 Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 56.0),
-                      child: Text(
-                        'Please write your email to receive a confirmation code to set a new password.',
-                        style: context.bodySmall?.copyWith(color: ColorConstant.manatee),
-                        textAlign: TextAlign.center,
-                      ),
+                    Text(
+                      'Please write your new password.',
+                      style: context.bodySmall?.copyWith(color: ColorConstant.manatee),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20),
                   ],

@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:medusa_store_flutter/config.dart';
 import 'package:medusa_store_flutter/medusa_store_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../routes/app_router.dart';
+import '../presentation/routes/app_router.dart';
 
 @module
 abstract class RegisterCoreDependencies {

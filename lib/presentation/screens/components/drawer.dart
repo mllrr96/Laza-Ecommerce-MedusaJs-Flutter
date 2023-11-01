@@ -2,11 +2,12 @@ import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:laza/di/di.dart';
-import 'package:laza/extensions/context_extension.dart';
-import 'package:laza/repositories/preference_repository.dart';
-import 'package:laza/routes/app_router.dart';
-import 'package:laza/styles/theme.dart';
+import 'package:laza/common/extensions/context_extension.dart';
+
 import 'package:provider/provider.dart';
+import '../../../domain/repository/preference_repository.dart';
+import '../../routes/app_router.dart';
+import '../../theme/theme.dart';
 import 'colors.dart';
 import 'laza_icons.dart';
 

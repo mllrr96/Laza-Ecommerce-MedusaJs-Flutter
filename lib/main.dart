@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:laza/blocs/auth/auth_bloc.dart';
-import 'package:laza/styles/theme.dart';
+import 'package:laza/presentation/routes/app_router.dart';
+import 'package:laza/presentation/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'di/di.dart';
 import 'observer.dart';
-import 'routes/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

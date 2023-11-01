@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:laza/extensions/context_extension.dart';
-import 'package:laza/routes/app_router.dart';
+import 'package:laza/common/extensions/context_extension.dart';
 
+import '../routes/app_router.dart';
 import 'components/colors.dart';
 import 'components/custom_appbar.dart';
 import 'components/laza_icons.dart';

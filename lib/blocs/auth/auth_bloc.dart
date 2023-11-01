@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:laza/blocs/status.dart';
-import 'package:laza/repositories/preference_repository.dart';
 import 'package:medusa_store_flutter/medusa_store_flutter.dart';
 import 'package:medusa_store_flutter/request_models/index.dart';
 import 'package:medusa_store_flutter/services/index.dart';
 import 'package:medusa_store_flutter/store_models/store/index.dart';
 
 import '../../di/di.dart';
+import '../../domain/repository/preference_repository.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
