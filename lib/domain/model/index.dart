@@ -1,2 +1,2 @@
 export 'brand.dart';
-export 'product.dart';
+export 'failure.dart';

@@ -29,38 +29,44 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              height: 150,
-              decoration: BoxDecoration(
-                image: DecorationImage(image: CachedNetworkImageProvider(product.thumbnail!), fit: BoxFit.fitHeight),
+            if (product.thumbnail == null)
+              const SizedBox(
+                height: 150,
+                child: Placeholder(),
               ),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 4, top: 4),
-                    child: InkWell(
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      onTap: () {},
-                      child: Ink(
-                        width: 35,
-                        height: 35,
-                        decoration: ShapeDecoration(
-                          color: AppTheme.lightTheme.cardColor,
-                          shape: const CircleBorder(),
-                        ),
-                        child: Icon(
-                          LazaIcons.heart,
-                          color: ColorConstant.manatee,
-                          size: 16,
+            if (product.thumbnail != null)
+              Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: CachedNetworkImageProvider(product.thumbnail!), fit: BoxFit.fitHeight),
+                ),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 4, top: 4),
+                      child: InkWell(
+                        borderRadius: const BorderRadius.all(Radius.circular(50)),
+                        onTap: () {},
+                        child: Ink(
+                          width: 35,
+                          height: 35,
+                          decoration: ShapeDecoration(
+                            color: AppTheme.lightTheme.cardColor,
+                            shape: const CircleBorder(),
+                          ),
+                          child: Icon(
+                            LazaIcons.heart,
+                            color: ColorConstant.manatee,
+                            size: 16,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
             const SizedBox(height: 10.0),
             SizedBox(
               height: 90,
@@ -74,7 +80,7 @@ class ProductCard extends StatelessWidget {
                       maxLines: 4,
                     ),
                   ),
-                  Text('99'),
+                  const Text('99'),
                 ],
               ),
             ),

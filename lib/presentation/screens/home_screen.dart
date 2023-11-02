@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:laza/blocs/home_bloc.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import '../../domain/model/index.dart';
 import '../routes/app_router.dart';
@@ -19,25 +21,6 @@ class HomeScreen extends StatelessWidget {
       Brand('Puma', LazaIcons.puma_logo),
       Brand('Fila', LazaIcons.fila_logo),
     ];
-
-    const products = [];
-    //   Product(
-    //     title: 'Nike Sportswear Club Fleece',
-    //     thumbnailPath: 'assets/images/img2.png',
-    //     price: '\$99',
-    //     description:
-    //         'The Nike Throwback Pullover Hoodie is made from premium French terry fabric that blends a performance feel with',
-    //     images: [
-    //       'assets/images/product-img1.png',
-    //       'assets/images/product-img2.png',
-    //       'assets/images/product-img3.png',
-    //       'assets/images/product-img4.png',
-    //     ],
-    //   ),
-    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-    //   Product(title: 'Training Top Nike Sport Clash', thumbnailPath: 'assets/images/img2.png', price: '\$99'),
-    //   Product(title: 'Trail Running Jacket Nike Windrunner', thumbnailPath: 'assets/images/img3.png', price: '\$99'),
-    // ];
 
     const inputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -133,27 +116,34 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 10.0),
           Headline(headline: 'New Arrival', onViewAllTap: () {}),
-          GridView.builder(
-              shrinkWrap: true,
-              itemCount: products.length,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisExtent: 250,
-                crossAxisSpacing: 15.0,
-                mainAxisSpacing: 15.0,
-              ),
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return ProductCard(product: product);
-              }),
+          BlocBuilder<HomeBloc, HomeState>(
+            builder: (context, state) {
+              return state.maybeMap(
+                  orElse: () => const Text('Loading..'),
+                  error: (error) => Text(error.message ?? ''),
+                  loading: (_) => const CircularProgressIndicator.adaptive(),
+                  loaded: (data) => GridView.builder(
+                      shrinkWrap: true,
+                      itemCount: data.products.length,
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisExtent: 250,
+                        crossAxisSpacing: 15.0,
+                        mainAxisSpacing: 15.0,
+                      ),
+                      itemBuilder: (context, index) {
+                        final product = data.products[index];
+                        return ProductCard(product: product);
+                      }));
+            },
+          ),
         ],
       )),
     );
   }
 }
-
 
 class Headline extends StatelessWidget {
   const Headline({super.key, required this.headline, this.onViewAllTap});
@@ -223,8 +213,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               InkWell(
                 borderRadius: const BorderRadius.all(Radius.circular(50)),
-                onTap: () =>
-                  context.router.push(const CartRoute()),
+                onTap: () => context.router.push(const CartRoute()),
                 child: Ink(
                   width: 45,
                   height: 45,

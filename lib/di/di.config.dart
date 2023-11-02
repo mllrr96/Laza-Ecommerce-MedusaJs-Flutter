@@ -10,11 +10,13 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
-import 'package:laza/di/module.dart' as _i7;
-import 'package:laza/domain/repository/preference_repository.dart' as _i5;
+import 'package:laza/blocs/home_bloc.dart' as _i5;
+import 'package:laza/di/module.dart' as _i9;
+import 'package:laza/domain/repository/preference_repository.dart' as _i7;
+import 'package:laza/domain/usecase/get_home_product_usecase.dart' as _i4;
 import 'package:laza/presentation/routes/app_router.dart' as _i3;
-import 'package:medusa_store_flutter/medusa_store_flutter.dart' as _i4;
-import 'package:shared_preferences/shared_preferences.dart' as _i6;
+import 'package:medusa_store_flutter/medusa_store_flutter.dart' as _i6;
+import 'package:shared_preferences/shared_preferences.dart' as _i8;
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -29,9 +31,12 @@ extension GetItInjectableX on _i1.GetIt {
     );
     final registerCoreDependencies = _$RegisterCoreDependencies();
     gh.factory<_i3.AppRouter>(() => registerCoreDependencies.appRouter);
-    gh.factory<_i4.MedusaStore>(() => registerCoreDependencies.medusaStore);
-    gh.factory<_i5.PreferenceRepository>(() => _i5.PreferenceRepository());
-    await gh.factoryAsync<_i6.SharedPreferences>(
+    gh.factory<_i4.GetHomeProductUsecase>(() => _i4.GetHomeProductUsecase());
+    gh.factory<_i5.HomeBloc>(
+        () => _i5.HomeBloc(gh<_i4.GetHomeProductUsecase>()));
+    gh.factory<_i6.MedusaStore>(() => registerCoreDependencies.medusaStore);
+    gh.factory<_i7.PreferenceRepository>(() => _i7.PreferenceRepository());
+    await gh.factoryAsync<_i8.SharedPreferences>(
       () => registerCoreDependencies.prefs,
       preResolve: true,
     );
@@ -39,4 +44,4 @@ extension GetItInjectableX on _i1.GetIt {
   }
 }
 
-class _$RegisterCoreDependencies extends _i7.RegisterCoreDependencies {}
+class _$RegisterCoreDependencies extends _i9.RegisterCoreDependencies {}

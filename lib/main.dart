@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:laza/blocs/auth/auth_bloc.dart';
+import 'package:laza/blocs/home_bloc.dart';
 import 'package:laza/presentation/routes/app_router.dart';
 import 'package:laza/presentation/theme/theme.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthBloc>(
           lazy: false,
           create: (BuildContext context) => AuthBloc(),
+        ),
+        BlocProvider<HomeBloc>(
+          create: (BuildContext context) => getIt<HomeBloc>()..add(const HomeEvent.getProducts()),
         )
       ],
       child: ChangeNotifierProvider(
