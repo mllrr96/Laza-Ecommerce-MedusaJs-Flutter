@@ -16,7 +16,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final result = await _usecase();
 
       result.when(
-        (success) => emit(HomeState.loaded(success)),
+        (products) {
+          if(products.isEmpty){
+            emit(const HomeState.empty());
+          } else {
+            emit(HomeState.loaded(products));
+          }
+        },
         (error) => emit(HomeState.error(error.message)),
       );
     });

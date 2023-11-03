@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:laza/blocs/home_bloc.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import '../../domain/model/index.dart';
@@ -72,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 10.0),
+                const Gap(10),
                 Hero(
                   tag: 'voice',
                   child: Material(
@@ -93,7 +94,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 10.0),
+          const Gap(10),
           Headline(
             headline: 'Choose Brand',
             onViewAllTap: () {},
@@ -103,7 +104,7 @@ class HomeScreen extends StatelessWidget {
             height: 50,
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              separatorBuilder: (_, __) => const SizedBox(width: 10.0),
+              separatorBuilder: (_, __) => const Gap(10),
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
               itemCount: brands.length,
@@ -114,13 +115,24 @@ class HomeScreen extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(height: 10.0),
+          const Gap(10),
           Headline(headline: 'New Arrival', onViewAllTap: () {}),
           BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
               return state.maybeMap(
+                  empty: (_) => const SizedBox.shrink(),
                   orElse: () => const Text('Loading..'),
-                  error: (error) => Text(error.message ?? ''),
+                  error: (error) => Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(error.message ?? ''),
+                          OutlinedButton(
+                              onPressed: () {
+                                context.read<HomeBloc>().add(const HomeEvent.getProducts());
+                              },
+                              child: const Text('Retry'))
+                        ],
+                      ),
                   loading: (_) => const CircularProgressIndicator.adaptive(),
                   loaded: (data) => GridView.builder(
                       shrinkWrap: true,

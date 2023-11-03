@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import 'package:medusa_store_flutter/store_models/products/product.dart';
 
@@ -19,6 +23,40 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    num? lowestPrice;
+    num? highestPrice;
+
+    if (product.variants?.isNotEmpty ?? false) {
+      lowestPrice = product.variants
+          ?.map((e) => e.prices)
+          .map((b) => b?.map((e) => e.amount).reduce((curr, next) => curr! < next! ? curr : next))
+          .first;
+      highestPrice = product.variants
+          ?.map((e) => e.prices)
+          .map((b) => b?.map((e) => e.amount).reduce((curr, next) => curr! > next! ? curr : next))
+          .first;
+    }
+
+    String getPriceText() {
+      final formatCurrency = NumberFormat.simpleCurrency(name: 'USD');
+
+      num lowestPriceNum = lowestPrice ?? 0;
+      num highestPriceNum = highestPrice ?? 0;
+      if (formatCurrency.decimalDigits! > 0) {
+        lowestPriceNum /= pow(10, formatCurrency.decimalDigits!);
+        highestPriceNum /= pow(10, formatCurrency.decimalDigits!);
+      }
+
+      if (lowestPrice == null && highestPrice == null) {
+        return '';
+      }
+      if (lowestPrice == highestPrice) {
+        return formatCurrency.format(lowestPriceNum);
+      }
+
+      return '${formatCurrency.format(lowestPriceNum)} - ${formatCurrency.format(highestPriceNum)}';
+    }
+
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(10.0)),
       onTap: () {
@@ -67,7 +105,7 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
               ),
-            const SizedBox(height: 10.0),
+            const Gap(10),
             SizedBox(
               height: 90,
               child: Column(
@@ -80,7 +118,7 @@ class ProductCard extends StatelessWidget {
                       maxLines: 4,
                     ),
                   ),
-                  const Text('99'),
+                  Text(getPriceText()),
                 ],
               ),
             ),

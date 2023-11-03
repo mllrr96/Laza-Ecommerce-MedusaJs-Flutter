@@ -1,13 +1,12 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:laza/cubits/theme/theme_cubit.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/common/extensions/context_extension.dart';
-
-import 'package:provider/provider.dart';
 import '../../../domain/repository/preference_repository.dart';
 import '../../routes/app_router.dart';
-import '../../theme/theme.dart';
 import 'colors.dart';
 import 'laza_icons.dart';
 
@@ -99,10 +98,10 @@ class DrawerWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30.0),
-                Consumer<ThemeNotifier>(
-                  builder: (context, themeNotifier, _) {
+                BlocBuilder<ThemeCubit, ThemeState>(
+                  builder: (context, state) {
                     IconData iconData = Icons.brightness_auto;
-                    switch (themeNotifier.themeMode) {
+                    switch (state.themeMode) {
                       case ThemeMode.system:
                         iconData = Icons.brightness_auto_outlined;
                       case ThemeMode.light:
@@ -122,8 +121,8 @@ class DrawerWidget extends StatelessWidget {
                               const SheetAction(label: 'Dark', key: ThemeMode.dark),
                             ]).then((result) {
                           if (result == null) return;
-
-                          themeNotifier.toggleTheme(result);
+                          context.read<ThemeCubit>().updateTheme(result);
+                          // themeNotifier.toggleTheme(result);
                         });
                       },
                       contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),

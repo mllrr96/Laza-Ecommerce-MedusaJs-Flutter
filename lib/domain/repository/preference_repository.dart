@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 @injectable
 class PreferenceRepository {
-  final SharedPreferences _prefs = getIt.get<SharedPreferences>();
+  final SharedPreferences _prefs = getIt<SharedPreferences>();
 
   static const String _guestKey = 'guest';
 

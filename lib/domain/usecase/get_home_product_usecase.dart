@@ -11,21 +11,19 @@ import '../model/failure.dart';
 class GetHomeProductUsecase {
   Future<Result<List<Product>, Failure>> call() async {
     try {
-      final storeApi = getIt.get<MedusaStore>();
+      final storeApi = getIt<MedusaStore>();
 
       final result = await storeApi.products.list(queryParams: {'is_giftcard': false});
 
       if (result?.products?.isEmpty ?? true) {
-        return Error(
-          Failure(message: 'No products found'),
-        );
+        throw NoRecordsException;
       } else {
         return Success(result!.products!);
       }
     } on Exception catch (e) {
       if (e is NoRecordsException) {
         return Error(
-          Failure(message: 'No notes found..\nclick + to add new one.'),
+          Failure(message: 'No products found.'),
         );
       }
       return Error(

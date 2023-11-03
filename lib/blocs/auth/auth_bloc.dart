@@ -15,7 +15,7 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({AuthResource? authResource})
-      : _authResource = authResource ?? getIt.get<MedusaStore>().auth,
+      : _authResource = authResource ?? getIt<MedusaStore>().auth,
         super(AuthState.init()) {
     on<AuthInitialize>(onInitialize);
     on<AuthLogin>(onLogin);
@@ -30,7 +30,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(state.copyWith(status: Status.inProgress));
-    final isGuest = getIt.get<PreferenceRepository>().isGuest;
+    final isGuest = getIt<PreferenceRepository>().isGuest;
     if (isGuest) {
       emit(
         state.copyWith(isLoggedIn: false, status: Status.success, isGuest: true),

@@ -17,7 +17,6 @@ dependencies:
   adaptive_dialog: ^1.9.0+2
   fluttertoast: ^8.2.2
   shared_preferences: ^2.2.2
-  provider: ^6.0.5
   flutter_rating_bar: ^4.0.1
   auto_route: ^7.8.4
   medusa_store_flutter:
@@ -32,6 +31,8 @@ dependencies:
   injectable: ^2.3.2
   freezed_annotation: ^2.4.1
   multiple_result: ^5.1.0
+  gap: ^3.0.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

@@ -74,7 +74,7 @@ class SignInScreen extends StatelessWidget {
                           height: 50,
                           child: SignInButtonBuilder(
                             onPressed: () {
-                              getIt.get<PreferenceRepository>().setGuest();
+                              getIt<PreferenceRepository>().setGuest();
                               context.router.replaceAll([const DashboardRoute()]);
                             },
                             backgroundColor: ColorConstant.manatee,

@@ -11,8 +11,10 @@
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:laza/blocs/home_bloc.dart' as _i5;
-import 'package:laza/di/module.dart' as _i9;
+import 'package:laza/cubits/theme/theme_cubit.dart' as _i9;
+import 'package:laza/di/module.dart' as _i11;
 import 'package:laza/domain/repository/preference_repository.dart' as _i7;
+import 'package:laza/domain/repository/theme_repository.dart' as _i10;
 import 'package:laza/domain/usecase/get_home_product_usecase.dart' as _i4;
 import 'package:laza/presentation/routes/app_router.dart' as _i3;
 import 'package:medusa_store_flutter/medusa_store_flutter.dart' as _i6;
@@ -40,8 +42,11 @@ extension GetItInjectableX on _i1.GetIt {
       () => registerCoreDependencies.prefs,
       preResolve: true,
     );
+    gh.factory<_i9.ThemeCubit>(() => _i9.ThemeCubit());
+    gh.factory<_i10.ThemeRepository>(() =>
+        _i10.ThemeRepository(sharedPreferences: gh<_i8.SharedPreferences>()));
     return this;
   }
 }
 
-class _$RegisterCoreDependencies extends _i9.RegisterCoreDependencies {}
+class _$RegisterCoreDependencies extends _i11.RegisterCoreDependencies {}

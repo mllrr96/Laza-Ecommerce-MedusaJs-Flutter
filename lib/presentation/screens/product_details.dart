@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import 'package:medusa_store_flutter/store_models/products/product.dart';
 import '../routes/app_router.dart';
@@ -127,7 +128,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               statusBarBrightness: Brightness.light,
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+          const SliverGap(20),
           SliverToBoxAdapter(
               child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -139,7 +140,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(product.collection?.title ?? 'Men\'s Printed Pullover Hoodie', style: context.bodySmall),
-                      const SizedBox(height: 5.0),
+                      const Gap(5.0),
                       Text(
                         product.title ?? '',
                         style: context.headlineSmall,
@@ -151,7 +152,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Price', style: context.bodySmall),
-                    const SizedBox(height: 5.0),
+                    const Gap(5.0),
                     Text(
                       '99',
                       style: context.headlineSmall,
@@ -161,7 +162,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ],
             ),
           )),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+          const SliverGap(20),
           if (widget.product.images?.isNotEmpty ?? false)
             SliverToBoxAdapter(
               child: SizedBox(
@@ -188,7 +189,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     itemCount: widget.product.images!.length),
               ),
             ),
-          const SliverToBoxAdapter(child: SizedBox(height: 5)),
+          const SliverGap(5),
           // ============================================================
           // Size Guide
           if (product.options?.isNotEmpty ?? false)
@@ -235,7 +236,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     child: Ink(
                                       height: 70,
                                       // width: 70,
-                                      padding: const EdgeInsets.symmetric(horizontal: 70/2),
+                                      padding: const EdgeInsets.symmetric(horizontal: 70 / 2),
                                       decoration: BoxDecoration(
                                         color: context.theme.cardColor,
                                         borderRadius: const BorderRadius.all(Radius.circular(10.0)),
@@ -253,9 +254,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ],
                       );
                     },
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    separatorBuilder: (_, __) => const Gap(10),
                     itemCount: product.options!.length)),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+          const SliverGap(20),
           // ============================================================
           // Size Guide
           if (product.description != null)
@@ -266,9 +267,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Description', style: context.bodyLargeW600),
-                  const SizedBox(height: 10.0),
+                  const Gap(10),
                   Text(product.description!, style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
-                  const SizedBox(height: 20.0),
+                  const Gap(20),
                 ],
               ),
             )),
@@ -301,7 +302,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
           // ============================================================
           // Bottom padding
-          SliverToBoxAdapter(child: SizedBox(height: bottomPadding)),
+          SliverGap(bottomPadding),
         ],
       ),
     );
@@ -321,12 +322,12 @@ class ReviewCard extends StatelessWidget {
             Row(
               children: [
                 const CircleAvatar(),
-                const SizedBox(width: 10.0),
+                const Gap(10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Ronald Richards', style: context.bodyMediumW500),
-                    const SizedBox(height: 5.0),
+                    const Gap(5),
                     Row(
                       children: [
                         Icon(
@@ -334,7 +335,7 @@ class ReviewCard extends StatelessWidget {
                           color: ColorConstant.manatee,
                           size: 18,
                         ),
-                        const SizedBox(width: 5.0),
+                        const Gap(5),
                         Text(
                           '13 Sep, 2020',
                           style: context.bodyExtraSmall?.copyWith(color: ColorConstant.manatee),
@@ -359,7 +360,7 @@ class ReviewCard extends StatelessWidget {
                     )
                   ],
                 ),
-                const SizedBox(height: 5.0),
+                const Gap(5),
                 Row(
                   children: [
                     const Icon(Icons.star, size: 14, color: Color(0xffFF981F)),
@@ -373,7 +374,7 @@ class ReviewCard extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 10.0),
+        const Gap(10),
         const Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque malesuada eget vitae amet...')
       ],
     );

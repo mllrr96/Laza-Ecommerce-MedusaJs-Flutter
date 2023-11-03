@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:laza/blocs/auth/auth_bloc.dart';
 import 'package:laza/blocs/home_bloc.dart';
+import 'package:laza/cubits/theme/theme_cubit.dart';
 import 'package:laza/presentation/routes/app_router.dart';
 import 'package:laza/presentation/theme/theme.dart';
-import 'package:provider/provider.dart';
 import 'di/di.dart';
 import 'observer.dart';
 
@@ -21,6 +21,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   AppRouter get _router => getIt<AppRouter>();
 
   @override
@@ -29,26 +30,27 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>(
           lazy: false,
-          create: (BuildContext context) => AuthBloc(),
+          create: (_) => AuthBloc(),
         ),
         BlocProvider<HomeBloc>(
-          create: (BuildContext context) => getIt<HomeBloc>()..add(const HomeEvent.getProducts()),
+          create: (_) => getIt<HomeBloc>()..add(const HomeEvent.getProducts()),
+        ),
+        BlocProvider<ThemeCubit>(
+          create: (_) => getIt<ThemeCubit>()..loadTheme(),
+          lazy: false,
         )
       ],
-      child: ChangeNotifierProvider(
-        create: (_) => ThemeNotifier(),
-        child: Consumer<ThemeNotifier>(
-          builder: (context, themeNotifier, child) {
-            return MaterialApp.router(
-              title: 'Laza',
-              debugShowCheckedModeBanner: false,
-              themeMode: themeNotifier.themeMode,
-              theme: AppTheme.lightTheme,
-              darkTheme: AppTheme.darkTheme,
-              routerConfig: _router.config(),
-            );
-          },
-        ),
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp.router(
+            title: 'Laza',
+            debugShowCheckedModeBanner: false,
+            themeMode: state.themeMode,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            routerConfig: _router.config(),
+          );
+        },
       ),
     );
   }
