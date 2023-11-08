@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:laza/blocs/home_bloc.dart';
+import 'package:laza/blocs/region/region_bloc.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import '../../domain/model/index.dart';
 import '../routes/app_router.dart';
@@ -137,7 +138,7 @@ class HomeScreen extends StatelessWidget {
                   loaded: (data) => GridView.builder(
                       shrinkWrap: true,
                       itemCount: data.products.length,
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
@@ -223,20 +224,51 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               ),
-              InkWell(
-                borderRadius: const BorderRadius.all(Radius.circular(50)),
-                onTap: () => context.router.push(const CartRoute()),
-                child: Ink(
-                  width: 45,
-                  height: 45,
-                  decoration: ShapeDecoration(
-                    color: context.theme.cardColor,
-                    shape: const CircleBorder(),
+              Row(
+                children: [
+                  BlocBuilder<RegionBloc, RegionState>(
+                    builder: (context, state) {
+                      return state.maybeMap(
+                          orElse: () => const SizedBox(),
+                          loaded: (regions) => FilledButton(
+                                style: ButtonStyle(
+                                  padding: MaterialStateProperty.all<EdgeInsets>(
+                                      const EdgeInsets.symmetric(horizontal: 10.0)),
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                    ),
+                                  ),
+                                  backgroundColor: MaterialStateProperty.all<Color>(context.theme.cardColor),
+                                ),
+                                onPressed: () {
+                                  context.read<RegionBloc>().add(const RegionEvent.retrieveRegions());
+                                },
+                                child: const Row(
+                                  children: [],
+                                ),
+                              ),
+                      loading: (_) => const CircularProgressIndicator.adaptive()
+                      );
+                    },
                   ),
-                  child: const Icon(
-                    LazaIcons.bag,
+                  const Gap(10),
+                  InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(50)),
+                    onTap: () => context.router.push(const CartRoute()),
+                    child: Ink(
+                      width: 45,
+                      height: 45,
+                      decoration: ShapeDecoration(
+                        color: context.theme.cardColor,
+                        shape: const CircleBorder(),
+                      ),
+                      child: const Icon(
+                        LazaIcons.bag,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),

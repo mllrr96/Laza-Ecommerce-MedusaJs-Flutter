@@ -8,30 +8,25 @@ import '../../di/di.dart';
 class ThemeRepository {
   ThemeRepository({
     required SharedPreferences? sharedPreferences,
-  }) : _sharedPreferences = sharedPreferences ?? getIt<SharedPreferences>();
+  }) : _sharedPreferences = sharedPreferences ?? getIt.get<SharedPreferences>();
 
   final SharedPreferences _sharedPreferences;
-  ThemeMode _themeMode = ThemeMode.system;
-
-  ThemeMode get themeMode => _themeMode;
   static const _kThemePersistenceKey = 'themeMode';
 
   saveTheme(ThemeMode themeMode) async {
     await _sharedPreferences.setString(_kThemePersistenceKey, themeMode.name);
-    _themeMode = themeMode;
   }
 
-  Future<ThemeMode> loadFromPrefs() async {
+  ThemeMode loadFromPrefs() {
     switch (_sharedPreferences.getString(_kThemePersistenceKey)) {
       case 'system':
-        _themeMode = ThemeMode.system;
+        return ThemeMode.system;
       case 'light':
-        _themeMode = ThemeMode.light;
+        return ThemeMode.light;
       case 'dark':
-        _themeMode = ThemeMode.light;
+        return ThemeMode.dark;
       default:
-        _themeMode = ThemeMode.system;
+        return ThemeMode.system;
     }
-    return _themeMode;
   }
 }

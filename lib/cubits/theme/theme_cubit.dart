@@ -10,18 +10,15 @@ part 'theme_cubit.freezed.dart';
 
 @injectable
 class ThemeCubit extends Cubit<ThemeState> {
-  ThemeCubit() : super(const ThemeState(ThemeMode.system)) {
-    loadTheme();
-  }
-
+  ThemeCubit() : super(const ThemeState(ThemeMode.system)) ;
   void updateTheme(ThemeMode themeMode) {
     final themeRepo = getIt.get<ThemeRepository>();
     themeRepo.saveTheme(themeMode);
     emit(ThemeState(themeMode));
   }
 
-  Future<void> loadTheme() async {
-    final themeRepo = getIt.get<ThemeRepository>();
-    emit(ThemeState(await themeRepo.loadFromPrefs()));
+  void loadTheme() {
+    final themeRepo = getIt<ThemeRepository>();
+    emit(ThemeState(themeRepo.loadFromPrefs()));
   }
 }

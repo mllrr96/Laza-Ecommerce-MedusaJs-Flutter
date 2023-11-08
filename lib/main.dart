@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:laza/blocs/auth/auth_bloc.dart';
 import 'package:laza/blocs/home_bloc.dart';
+import 'package:laza/blocs/region/region_bloc.dart';
 import 'package:laza/cubits/theme/theme_cubit.dart';
 import 'package:laza/presentation/routes/app_router.dart';
 import 'package:laza/presentation/theme/theme.dart';
@@ -38,7 +39,10 @@ class MyApp extends StatelessWidget {
         BlocProvider<ThemeCubit>(
           create: (_) => getIt<ThemeCubit>()..loadTheme(),
           lazy: false,
-        )
+        ),
+        BlocProvider<RegionBloc>(
+          create: (_) => getIt<RegionBloc>()..add(const RegionEvent.retrieveRegions()),
+        ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {

@@ -23,38 +23,28 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    num? lowestPrice;
-    num? highestPrice;
 
-    if (product.variants?.isNotEmpty ?? false) {
-      lowestPrice = product.variants
-          ?.map((e) => e.prices)
-          .map((b) => b?.map((e) => e.amount).reduce((curr, next) => curr! < next! ? curr : next))
-          .first;
-      highestPrice = product.variants
-          ?.map((e) => e.prices)
-          .map((b) => b?.map((e) => e.amount).reduce((curr, next) => curr! > next! ? curr : next))
-          .first;
-    }
+
 
     String getPriceText() {
+      num? price;
+      if (product.variants?.isNotEmpty ?? false) {
+        price = product.variants
+            ?.map((e) => e.prices)
+            .map((b) => b?.map((e) => e.amount).reduce((curr, next) => curr! < next! ? curr : next))
+            .first;
+      }
+
       final formatCurrency = NumberFormat.simpleCurrency(name: 'USD');
 
-      num lowestPriceNum = lowestPrice ?? 0;
-      num highestPriceNum = highestPrice ?? 0;
+      num lowestPriceNum = price ?? 0;
       if (formatCurrency.decimalDigits! > 0) {
         lowestPriceNum /= pow(10, formatCurrency.decimalDigits!);
-        highestPriceNum /= pow(10, formatCurrency.decimalDigits!);
       }
-
-      if (lowestPrice == null && highestPrice == null) {
-        return '';
+      if(price == null){
+        return'';
       }
-      if (lowestPrice == highestPrice) {
-        return formatCurrency.format(lowestPriceNum);
-      }
-
-      return '${formatCurrency.format(lowestPriceNum)} - ${formatCurrency.format(highestPriceNum)}';
+      return formatCurrency.format(lowestPriceNum);
     }
 
     return InkWell(
@@ -65,7 +55,7 @@ class ProductCard extends StatelessWidget {
       child: Ink(
         height: 250,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             if (product.thumbnail == null)
               const SizedBox(
@@ -106,8 +96,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
             const Gap(10),
-            SizedBox(
-              height: 90,
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -118,7 +107,8 @@ class ProductCard extends StatelessWidget {
                       maxLines: 4,
                     ),
                   ),
-                  Text(getPriceText()),
+                  const Spacer(),
+                  Text(getPriceText(), style: context.bodyMedium),
                 ],
               ),
             ),

@@ -12,20 +12,22 @@ final void Function() onTap;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        InkWell(
-          onTap: onTap,
-          child: Ink(
-            color: ColorConstant.primary,
-            height: 50,
-            width: double.maxFinite,
-            child: Center(
-              child: Text(label, style: const TextStyle(
-                color: Colors.white, fontSize: 17,fontWeight: FontWeight.w500
+        Material(
+          child: InkWell(
+            onTap: onTap,
+            child: Ink(
+              color: ColorConstant.primary,
+              height: 50,
+              width: double.maxFinite,
+              child: Center(
+                child: Text(label, style: const TextStyle(
+                  color: Colors.white, fontSize: 17,fontWeight: FontWeight.w500
+                ),
+                textAlign: TextAlign.center,
+                ),
               ),
-              textAlign: TextAlign.center,
-              ),
-            ),
 
+            ),
           ),
         ),
         Container(

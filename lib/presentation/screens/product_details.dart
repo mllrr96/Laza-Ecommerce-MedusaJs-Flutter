@@ -1,9 +1,13 @@
+import 'dart:math';
+import 'package:animated_digit/animated_digit.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import 'package:medusa_store_flutter/store_models/products/product.dart';
+import 'package:medusa_store_flutter/store_models/store/index.dart';
 import '../routes/app_router.dart';
 import '../theme/theme.dart';
 import 'components/bottom_nav_button.dart';
@@ -21,9 +25,26 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   late String? selectedImage;
+  late num? price;
+  Map<String, String> optionsSelected = {};
+  ProductOption? selectedOption;
+  ProductOptionValue? selectedOptionValue;
+  ProductVariant? selectedVariant;
   @override
   void initState() {
     selectedImage = widget.product.thumbnail;
+    if (widget.product.options?.length == 1 && widget.product.options?.first.values?.length == 1) {
+      optionsSelected.addAll({widget.product.options!.first.id!: widget.product.options!.first.values!.first.value!});
+    }
+
+    if (widget.product.variants?.isNotEmpty ?? false) {
+      price = widget.product.variants
+              ?.map((e) => e.prices)
+              .map((b) => b?.map((e) => e.amount).reduce((curr, next) => curr! < next! ? curr : next))
+              .first ??
+          0.0;
+    }
+
     super.initState();
   }
 
@@ -31,6 +52,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
     final product = widget.product;
     final bottomPadding = context.bottomViewPadding == 0.0 ? 30.0 : context.bottomViewPadding;
+
+    num getPrice() {
+      final formatCurrency = NumberFormat.simpleCurrency(name: 'USD');
+      selectedOption = product.options?.where((option) => option.id == optionsSelected.keys.firstOrNull).firstOrNull;
+      selectedOptionValue =
+          selectedOption?.values?.where((value) => value.value == optionsSelected.values.firstOrNull).firstOrNull;
+      selectedVariant = product.variants?.where((element) => element.id == selectedOptionValue?.variantId).firstOrNull;
+      final amount = selectedVariant?.prices?.firstOrNull?.amount;
+      if (amount != null) {
+        price = amount;
+      }
+
+      num priceFormatted = price ?? 0;
+      if (formatCurrency.decimalDigits! > 0) {
+        priceFormatted /= pow(10, formatCurrency.decimalDigits!);
+      }
+      if (price == null) {
+        return 0.0;
+      }
+      return formatCurrency.parse(formatCurrency.format(priceFormatted));
+    }
 
     return Scaffold(
       bottomNavigationBar: Column(
@@ -109,17 +151,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
               ),
             ],
+            foregroundColor: ColorConstant.primary,
             backgroundColor: const Color(0xffF2F2F2),
             surfaceTintColor: Colors.transparent,
-            // backgroundColor: context.theme.scaffoldBackgroundColor,
             expandedHeight: 400,
             flexibleSpace: FlexibleSpaceBar(
               background: selectedImage != null
                   ? SafeArea(
-                      child: CachedNetworkImage(
-                        imageUrl: selectedImage!,
-                        fit: BoxFit.fitHeight,
-                      ),
+                      child: CachedNetworkImage(imageUrl: selectedImage!, fit: BoxFit.fitHeight),
                     )
                   : null,
             ),
@@ -130,43 +169,58 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
           const SliverGap(20),
           SliverToBoxAdapter(
-              child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Column(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (product.collection?.title != null)
+                          Text(product.collection!.title!, style: context.bodySmall),
+                        if (product.collection?.title != null) const Gap(5.0),
+                        Text(product.title ?? '', style: context.headlineSmall),
+                      ],
+                    ),
+                  ),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(product.collection?.title ?? 'Men\'s Printed Pullover Hoodie', style: context.bodySmall),
+                      Text('Price', style: context.bodySmall),
                       const Gap(5.0),
-                      Text(
-                        product.title ?? '',
-                        style: context.headlineSmall,
-                      ),
+                      AnimatedDigitWidget(
+                          value: getPrice(),
+                          prefix: NumberFormat.simpleCurrency(name: 'USD').currencySymbol,
+                          textStyle: context.headlineSmall,
+                          fractionDigits: NumberFormat.simpleCurrency(name: 'USD').decimalDigits ?? 0),
+                      // Text(getPriceText(), style: context.headlineSmall),
                     ],
                   ),
-                ),
-                Column(
+                ],
+              ),
+            ),
+          ),
+          const SliverGap(10),
+          if (product.description != null)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Price', style: context.bodySmall),
-                    const Gap(5.0),
-                    Text(
-                      '99',
-                      style: context.headlineSmall,
-                    ),
+                    // const Gap(10),
+                    Text(product.description!, style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
+                    const Gap(20),
                   ],
                 ),
-              ],
+              ),
             ),
-          )),
-          const SliverGap(20),
           if (widget.product.images?.isNotEmpty ?? false)
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 80,
+                height: 90,
                 width: double.infinity,
                 child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -174,15 +228,32 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       final image = widget.product.images![index];
-                      return InkWell(
-                        onTap: () => setState(() => selectedImage = image.url),
-                        child: Ink(
-                          height: double.infinity,
-                          width: 80,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(image: CachedNetworkImageProvider(image.url!)),
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          InkWell(
+                            onTap: () => setState(() => selectedImage = image.url),
+                            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                            child: Ink(
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                                image: DecorationImage(
+                                    image: CachedNetworkImageProvider(image.url!), fit: BoxFit.fitWidth),
+                              ),
+                            ),
                           ),
-                        ),
+                          const Gap(5),
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            height: selectedImage == image.url ? 5 : 0,
+                            width: 80,
+                            decoration: BoxDecoration(
+                                color: ColorConstant.primary,
+                                borderRadius: const BorderRadius.all(Radius.circular(10.0))),
+                          )
+                        ],
                       );
                     },
                     separatorBuilder: (_, __) => const SizedBox(width: 10.0),
@@ -191,88 +262,68 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
           const SliverGap(5),
           // ============================================================
-          // Size Guide
+          // Options
           if (product.options?.isNotEmpty ?? false)
             SliverToBoxAdapter(
-                child: ListView.separated(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final options = product.options![index];
-                      product.options;
-                      return Column(
-                        children: [
-                          Padding(
+              child: ListView.separated(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: product.options!.length,
+                physics: const NeverScrollableScrollPhysics(),
+                separatorBuilder: (_, __) => const Gap(10),
+                itemBuilder: (context, index) {
+                  final options = product.options![index];
+                  // final values = options.values.;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Text(options.title ?? '', style: context.bodyLargeW600),
+                      ),
+                      const Gap(10),
+                      SizedBox(
+                        height: 70,
+                        width: double.infinity,
+                        child: ListView.separated(
+                            separatorBuilder: (_, __) => const SizedBox(width: 10.0),
                             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  options.title ?? '',
-                                  style: context.bodyLargeW600,
-                                ),
-                                TextButton(
-                                    onPressed: () {},
-                                    child: Text('Size Guide',
-                                        style: context.bodyMedium?.copyWith(color: context.theme.primaryColor))),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 70,
-                            width: double.infinity,
-                            child: ListView.separated(
-                                separatorBuilder: (_, __) => const SizedBox(width: 10.0),
-                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                itemCount: options.values!.length,
-                                itemBuilder: (context, index) {
-                                  final option = options.values![index];
-                                  return InkWell(
-                                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                                    onTap: () {},
-                                    child: Ink(
-                                      height: 70,
-                                      // width: 70,
-                                      padding: const EdgeInsets.symmetric(horizontal: 70 / 2),
-                                      decoration: BoxDecoration(
-                                        color: context.theme.cardColor,
-                                        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          option.value ?? '',
-                                          style: context.bodyLargeW600,
-                                        ),
-                                      ),
+                            physics: const BouncingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: options.values!.map((e) => e.value).toSet().toList().length,
+                            itemBuilder: (context, index) {
+                              final option = options.values!.map((e) => e.value).toSet().toList()[index];
+                              // final option2 = product.variants?.where((element) => element.);
+                              final bool isSelected =
+                                  optionsSelected.containsKey(options.id) && optionsSelected.containsValue(option);
+                              return InkWell(
+                                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                                onTap: () => setState(() => optionsSelected.addAll({options.id!: option!})),
+                                child: Ink(
+                                  height: 70,
+                                  // width: 70,
+                                  padding: const EdgeInsets.symmetric(horizontal: 70 / 2),
+                                  decoration: BoxDecoration(
+                                      color: context.theme.cardColor,
+                                      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                                      border:
+                                          Border.all(color: isSelected ? ColorConstant.manatee : Colors.transparent)),
+                                  child: Center(
+                                    child: Text(
+                                      option ?? '',
+                                      style: context.bodyLargeW600,
                                     ),
-                                  );
-                                }),
-                          )
-                        ],
-                      );
-                    },
-                    separatorBuilder: (_, __) => const Gap(10),
-                    itemCount: product.options!.length)),
-          const SliverGap(20),
-          // ============================================================
-          // Size Guide
-          if (product.description != null)
-            SliverToBoxAdapter(
-                child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Description', style: context.bodyLargeW600),
-                  const Gap(10),
-                  Text(product.description!, style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
-                  const Gap(20),
-                ],
+                                  ),
+                                ),
+                              );
+                            }),
+                      )
+                    ],
+                  );
+                },
               ),
-            )),
+            ),
+          const SliverGap(20),
           // ============================================================
           // Reviews
           SliverToBoxAdapter(
