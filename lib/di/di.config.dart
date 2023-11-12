@@ -10,18 +10,20 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
+import 'package:laza/blocs/cart/cart_bloc.dart' as _i14;
 import 'package:laza/blocs/home_bloc.dart' as _i6;
-import 'package:laza/blocs/region/region_bloc.dart' as _i13;
-import 'package:laza/cubits/theme/theme_cubit.dart' as _i11;
-import 'package:laza/di/module.dart' as _i14;
+import 'package:laza/blocs/region/region_bloc.dart' as _i15;
+import 'package:laza/cubits/theme/theme_cubit.dart' as _i12;
+import 'package:laza/di/module.dart' as _i16;
 import 'package:laza/domain/repository/preference_repository.dart' as _i8;
-import 'package:laza/domain/repository/theme_repository.dart' as _i12;
+import 'package:laza/domain/repository/theme_repository.dart' as _i13;
 import 'package:laza/domain/usecase/get_home_category_usecase.dart' as _i4;
 import 'package:laza/domain/usecase/get_home_product_usecase.dart' as _i5;
-import 'package:laza/domain/usecase/retrieve_regions_usecase.dart' as _i9;
+import 'package:laza/domain/usecase/retrieve_cart_usecase.dart' as _i9;
+import 'package:laza/domain/usecase/retrieve_regions_usecase.dart' as _i10;
 import 'package:laza/presentation/routes/app_router.dart' as _i3;
 import 'package:medusa_store_flutter/medusa_store_flutter.dart' as _i7;
-import 'package:shared_preferences/shared_preferences.dart' as _i10;
+import 'package:shared_preferences/shared_preferences.dart' as _i11;
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -42,18 +44,21 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i6.HomeBloc(gh<_i5.GetHomeProductUsecase>()));
     gh.factory<_i7.MedusaStore>(() => registerCoreDependencies.medusaStore);
     gh.factory<_i8.PreferenceRepository>(() => _i8.PreferenceRepository());
-    gh.factory<_i9.RetrieveRegionsUsecase>(() => _i9.RetrieveRegionsUsecase());
-    await gh.factoryAsync<_i10.SharedPreferences>(
+    gh.factory<_i9.RetrieveCartUsecase>(() => _i9.RetrieveCartUsecase());
+    gh.factory<_i10.RetrieveRegionsUsecase>(
+        () => _i10.RetrieveRegionsUsecase());
+    await gh.factoryAsync<_i11.SharedPreferences>(
       () => registerCoreDependencies.prefs,
       preResolve: true,
     );
-    gh.factory<_i11.ThemeCubit>(() => _i11.ThemeCubit());
-    gh.factory<_i12.ThemeRepository>(() =>
-        _i12.ThemeRepository(sharedPreferences: gh<_i10.SharedPreferences>()));
-    gh.factory<_i13.RegionBloc>(
-        () => _i13.RegionBloc(gh<_i9.RetrieveRegionsUsecase>()));
+    gh.factory<_i12.ThemeCubit>(() => _i12.ThemeCubit());
+    gh.factory<_i13.ThemeRepository>(() => _i13.ThemeRepository());
+    gh.factory<_i14.CartBloc>(
+        () => _i14.CartBloc(gh<_i9.RetrieveCartUsecase>()));
+    gh.factory<_i15.RegionBloc>(
+        () => _i15.RegionBloc(gh<_i10.RetrieveRegionsUsecase>()));
     return this;
   }
 }
 
-class _$RegisterCoreDependencies extends _i14.RegisterCoreDependencies {}
+class _$RegisterCoreDependencies extends _i16.RegisterCoreDependencies {}

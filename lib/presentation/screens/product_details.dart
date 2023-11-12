@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:laza/common/extensions/context_extension.dart';
-import 'package:medusa_store_flutter/store_models/products/product.dart';
 import 'package:medusa_store_flutter/store_models/store/index.dart';
 import '../routes/app_router.dart';
 import '../theme/theme.dart';
@@ -96,7 +95,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ],
             ),
           ),
-          BottomNavButton(label: 'Add to Cart', onTap: () {}),
+          BottomNavButton(label: 'Add to Cart', onTap: optionsSelected.isEmpty ? null : () {}),
         ],
       ),
       body: CustomScrollView(
@@ -210,7 +209,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // const Gap(10),
                     Text(product.description!, style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
                     const Gap(20),
                   ],
@@ -247,8 +245,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           const Gap(5),
                           AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
-                            height: selectedImage == image.url ? 5 : 0,
-                            width: 80,
+                            height: 5,
+                            width: selectedImage == image.url ? 40 : 0,
                             decoration: BoxDecoration(
                                 color: ColorConstant.primary,
                                 borderRadius: const BorderRadius.all(Radius.circular(10.0))),

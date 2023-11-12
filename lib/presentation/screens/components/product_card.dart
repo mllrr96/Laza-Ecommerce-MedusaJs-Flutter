@@ -23,9 +23,6 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     String getPriceText() {
       num? price;
       if (product.variants?.isNotEmpty ?? false) {
@@ -41,17 +38,15 @@ class ProductCard extends StatelessWidget {
       if (formatCurrency.decimalDigits! > 0) {
         lowestPriceNum /= pow(10, formatCurrency.decimalDigits!);
       }
-      if(price == null){
-        return'';
+      if (price == null) {
+        return '';
       }
       return formatCurrency.format(lowestPriceNum);
     }
 
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-      onTap: () {
-        context.router.push(ProductDetailsRoute(product: product));
-      },
+      onTap: () => context.router.push(ProductDetailsRoute(product: product)),
       child: Ink(
         height: 250,
         child: Column(

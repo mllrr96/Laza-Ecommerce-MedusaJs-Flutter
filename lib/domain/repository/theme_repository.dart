@@ -6,9 +6,7 @@ import '../../di/di.dart';
 
 @injectable
 class ThemeRepository {
-  ThemeRepository({
-    required SharedPreferences? sharedPreferences,
-  }) : _sharedPreferences = sharedPreferences ?? getIt.get<SharedPreferences>();
+  ThemeRepository() : _sharedPreferences = getIt.get<SharedPreferences>();
 
   final SharedPreferences _sharedPreferences;
   static const _kThemePersistenceKey = 'themeMode';

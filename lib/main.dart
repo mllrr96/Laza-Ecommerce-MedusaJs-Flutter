@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:laza/blocs/auth/auth_bloc.dart';
+import 'package:laza/blocs/cart/cart_bloc.dart';
 import 'package:laza/blocs/home_bloc.dart';
 import 'package:laza/blocs/region/region_bloc.dart';
 import 'package:laza/cubits/theme/theme_cubit.dart';
@@ -42,6 +43,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<RegionBloc>(
           create: (_) => getIt<RegionBloc>()..add(const RegionEvent.retrieveRegions()),
+        ),
+        BlocProvider<CartBloc>(
+          create: (_) => getIt<CartBloc>()..add(const CartEvent.loadCart()),
+          lazy: false,
         ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
