@@ -20,6 +20,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(CartState.error(error.message));
       });
     });
+    on<_RefreshCart>((event, emit) async {
+      emit(CartState.loaded(event.cart));
+    });
   }
+
   final RetrieveCartUsecase _usecase;
 }

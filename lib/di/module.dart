@@ -13,6 +13,5 @@ abstract class RegisterCoreDependencies {
   Future<SharedPreferences> get prefs => SharedPreferences.getInstance();
 
   @singleton
-  final MedusaStore medusaStore = MedusaStore(Config(baseUrl: 'http://localhost:9000/'));
-
+  final MedusaStore medusaStore = MedusaStore(Config(baseUrl: 'http://localhost:9000/', enableDebugging: false));
 }
