@@ -3,10 +3,16 @@ import 'package:animated_digit/animated_digit.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:laza/blocs/line_item/line_item_bloc.dart';
 import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/di/di.dart';
 import 'package:medusa_store_flutter/store_models/store/index.dart';
+import '../../blocs/cart/cart_bloc.dart';
+import '../../domain/repository/preference_repository.dart';
 import '../routes/app_router.dart';
 import '../theme/theme.dart';
 import 'components/bottom_nav_button.dart';
@@ -26,8 +32,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   late String? selectedImage;
   late num? price;
   Map<String, String> optionsSelected = {};
-  ProductOption? selectedOption;
-  ProductOptionValue? selectedOptionValue;
   ProductVariant? selectedVariant;
   @override
   void initState() {
@@ -47,18 +51,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     super.initState();
   }
 
+  void selectVariant() {
+    if (optionsSelected.length != widget.product.options!.length) {
+      return;
+    }
+    final values = optionsSelected.values.toList();
+    widget.product.variants?.forEach((variant) {
+      List<String>? titleList = variant.title?.split('/').toList().map((e) => e.replaceAll(' ', '')).toList();
+      if (titleList != null && titleList.toSet().containsAll(values.toSet())) {
+        selectedVariant = variant;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
     final bottomPadding = context.bottomViewPadding == 0.0 ? 30.0 : context.bottomViewPadding;
-
     num getPrice() {
       final formatCurrency = NumberFormat.simpleCurrency(name: 'USD');
-      selectedOption = product.options?.where((option) => option.id == optionsSelected.keys.firstOrNull).firstOrNull;
-      selectedOptionValue =
-          selectedOption?.values?.where((value) => value.value == optionsSelected.values.firstOrNull).firstOrNull;
-      selectedVariant = product.variants?.where((element) => element.id == selectedOptionValue?.variantId).firstOrNull;
-      final amount = selectedVariant?.prices?.firstOrNull?.amount;
+      final amount = selectedVariant?.prices?.where((price) => price.currencyCode == 'USD').firstOrNull?.amount;
       if (amount != null) {
         price = amount;
       }
@@ -73,30 +85,115 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       return formatCurrency.parse(formatCurrency.format(priceFormatted));
     }
 
+    String getPriceText(int? price) {
+      final formatCurrency = NumberFormat.simpleCurrency(name: 'USD');
+      num priceFormatted = price ?? 0;
+      final symbol = formatCurrency.currencySymbol;
+      if (formatCurrency.decimalDigits! > 0) {
+        priceFormatted /= pow(10, formatCurrency.decimalDigits!);
+      }
+      if (price == null) {
+        return '$symbol 0.0';
+      }
+      return formatCurrency.format(priceFormatted);
+    }
+
     return Scaffold(
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Divider(height: 0),
-          Container(
-            color: context.theme.scaffoldBackgroundColor,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Total Price', style: context.bodyMediumW600),
-                    Text('with VAT,SD', style: context.bodyExtraSmall?.copyWith(color: ColorConstant.manatee)),
-                  ],
-                ),
-                Text('\$125', style: context.bodyLargeW600)
-              ],
-            ),
-          ),
-          BottomNavButton(label: 'Add to Cart', onTap: optionsSelected.isEmpty ? null : () {}),
-        ],
+      bottomNavigationBar: BlocListener<LineItemBloc, LineItemState>(
+        listener: (context, state) {
+          state.whenOrNull(
+            success: (_) => context.read<CartBloc>().add(CartEvent.refreshCart(_)),
+            failure: (message) => Fluttertoast.showToast(msg: message),
+          );
+        },
+        child: BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            return state.maybeMap(
+                loaded: (loaded) {
+                  final inCart =
+                      loaded.cart.items?.map((e) => e.variantId).toList().contains(selectedVariant?.id) ?? false;
+                  final lineItem =
+                      loaded.cart.items?.where((element) => element.variantId == selectedVariant?.id).firstOrNull;
+                  if (inCart) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Divider(height: 0),
+                        Container(
+                          color: context.theme.scaffoldBackgroundColor,
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Total Price', style: context.bodyMediumW600),
+                                  Text('with VAT,SD',
+                                      style: context.bodyExtraSmall?.copyWith(color: ColorConstant.manatee)),
+                                ],
+                              ),
+                              Text(getPriceText(lineItem?.total), style: context.bodyLargeW600)
+                            ],
+                          ),
+                        ),
+                        Container(
+                          color: ColorConstant.primary,
+                          height: 50,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Material(
+                                  child: InkWell(
+                                    onTap: () {
+                                      context.read<LineItemBloc>().add(
+                                          LineItemEvent.update(loaded.cart.id!, lineItem!.id!, lineItem.quantity! - 1));
+                                    },
+                                    child: Ink(
+                                      height: 50,
+                                      color: ColorConstant.primary,
+                                      child: const Center(child: Icon(Icons.remove)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(child: Center(child: Text(lineItem?.quantity?.toString() ?? ''))),
+                              Expanded(
+                                flex: 2,
+                                child: Material(
+                                  child: InkWell(
+                                    onTap: () {
+                                      context.read<LineItemBloc>().add(
+                                          LineItemEvent.update(loaded.cart.id!, lineItem!.id!, lineItem.quantity! + 1));
+                                    },
+                                    child: Ink(
+                                      height: 50,
+                                      color: ColorConstant.primary,
+                                      child: const Center(child: Icon(Icons.add)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  return BottomNavButton(
+                      label: 'Add to Cart',
+                      onTap: optionsSelected.length != product.options!.length && selectedVariant == null
+                          ? null
+                          : () {
+                              context.read<LineItemBloc>().add(
+                                  LineItemEvent.add(getIt<PreferenceRepository>().cartId!, selectedVariant!.id!, 1));
+                            });
+                },
+                orElse: () => const SizedBox.shrink());
+          },
+        ),
       ),
       body: CustomScrollView(
         slivers: [
@@ -270,14 +367,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 separatorBuilder: (_, __) => const Gap(10),
                 itemBuilder: (context, index) {
-                  final options = product.options![index];
+                  final productOption = product.options![index];
                   // final values = options.values.;
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Text(options.title ?? '', style: context.bodyLargeW600),
+                        child: Text(productOption.title ?? '', style: context.bodyLargeW600),
                       ),
                       const Gap(10),
                       SizedBox(
@@ -288,15 +385,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 20.0),
                             physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
-                            itemCount: options.values!.map((e) => e.value).toSet().toList().length,
+                            itemCount: productOption.values!.map((e) => e.value).toSet().toList().length,
                             itemBuilder: (context, index) {
-                              final option = options.values!.map((e) => e.value).toSet().toList()[index];
-                              // final option2 = product.variants?.where((element) => element.);
-                              final bool isSelected =
-                                  optionsSelected.containsKey(options.id) && optionsSelected.containsValue(option);
+                              final productOptionValue =
+                                  productOption.values!.map((e) => e.value).toSet().toList()[index];
+                              final bool isSelected = optionsSelected.containsKey(productOption.id) &&
+                                  optionsSelected.containsValue(productOptionValue);
                               return InkWell(
                                 borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                                onTap: () => setState(() => optionsSelected.addAll({options.id!: option!})),
+                                onTap: () => setState(() {
+                                  optionsSelected.addAll({productOption.id!: productOptionValue!});
+                                  selectVariant();
+                                }),
                                 child: Ink(
                                   height: 70,
                                   // width: 70,
@@ -308,7 +408,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                           Border.all(color: isSelected ? ColorConstant.manatee : Colors.transparent)),
                                   child: Center(
                                     child: Text(
-                                      option ?? '',
+                                      productOptionValue ?? '',
                                       style: context.bodyLargeW600,
                                     ),
                                   ),

@@ -25,7 +25,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String getPrice(int? total, {bool includeSymbol = true}) {
+    String getPrice(int? total) {
       final formatCurrency = NumberFormat.simpleCurrency(name: 'USD');
 
       if (total == null) {
@@ -36,12 +36,7 @@ class CartScreen extends StatelessWidget {
       if (formatCurrency.decimalDigits! > 0) {
         priceFormatted /= pow(10, formatCurrency.decimalDigits!);
       }
-      final result = formatCurrency.parse(formatCurrency.format(priceFormatted));
-
-      if (includeSymbol) {
-        return formatCurrency.currencySymbol + result.toString();
-      }
-      return result.toString();
+      return formatCurrency.format(priceFormatted).toString();
     }
 
     num getPriceInt(int? total) {
@@ -84,6 +79,10 @@ class CartScreen extends StatelessWidget {
                             separatorBuilder: (_, __) => const Gap(10),
                             itemBuilder: (context, index) {
                               final item = cart.cart.items?[index];
+                              final invQuantity = item?.variant?.inventoryQuantity;
+
+                              final shouldAdd = (invQuantity ?? 1) > (item?.quantity?.toInt() ?? 0) ||
+                                  (item?.variant?.allowBackorder ?? false);
                               return Container(
                                 height: 120,
                                 padding: const EdgeInsets.all(10.0),
@@ -168,11 +167,12 @@ class CartScreen extends StatelessWidget {
                                                       color: Colors.transparent,
                                                       child: InkWell(
                                                         borderRadius: const BorderRadius.all(Radius.circular(50)),
-                                                        onTap: () {
-                                                          final lineItemBloc = context.read<LineItemBloc>();
-                                                          lineItemBloc.add(LineItemEvent.update(
-                                                              cart.cart.id!, item!.id!, item.quantity! + 1));
-                                                        },
+                                                        onTap: shouldAdd
+                                                            ? () {
+                                                                context.read<LineItemBloc>().add(LineItemEvent.update(
+                                                                    cart.cart.id!, item!.id!, item.quantity! + 1));
+                                                              }
+                                                            : null,
                                                         child: Ink(
                                                           width: 30,
                                                           height: 30,
@@ -180,7 +180,9 @@ class CartScreen extends StatelessWidget {
                                                             color: context.theme.scaffoldBackgroundColor,
                                                             shape: const CircleBorder(),
                                                           ),
-                                                          child: const Icon(Icons.arrow_drop_up),
+                                                          child: shouldAdd
+                                                              ? const Icon(Icons.arrow_drop_up)
+                                                              : Icon(Icons.arrow_drop_up, color: ColorConstant.manatee),
                                                         ),
                                                       ),
                                                     ),
@@ -192,8 +194,9 @@ class CartScreen extends StatelessWidget {
                                                   child: InkWell(
                                                     borderRadius: const BorderRadius.all(Radius.circular(50)),
                                                     onTap: () {
-                                                      final lineItemBloc = context.read<LineItemBloc>();
-                                                      lineItemBloc.add(LineItemEvent.delete(cart.cart.id!, item!.id!));
+                                                      context
+                                                          .read<LineItemBloc>()
+                                                          .add(LineItemEvent.delete(cart.cart.id!, item!.id!));
                                                     },
                                                     child: Ink(
                                                       width: 30,
@@ -368,6 +371,7 @@ class CartScreen extends StatelessWidget {
                               children: [
                                 Text('Total', style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
                                 AnimatedDigitWidget(
+                                  prefix: NumberFormat.simpleCurrency(name: 'USD').currencySymbol,
                                   value: getPriceInt(cart.cart.total),
                                   textStyle: context.bodyMediumW500,
                                   fractionDigits: NumberFormat.simpleCurrency(name: 'USD').decimalDigits ?? 0,
