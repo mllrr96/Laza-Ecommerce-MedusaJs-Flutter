@@ -36,8 +36,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     selectedImage = widget.product.thumbnail;
-    if (widget.product.options?.length == 1 && widget.product.options?.first.values?.length == 1) {
+    if (widget.product.options?.length == 1 &&
+        widget.product.options?.first.values?.length == 1 &&
+        widget.product.variants?.length == 1) {
       optionsSelected.addAll({widget.product.options!.first.id!: widget.product.options!.first.values!.first.value!});
+      selectedVariant = widget.product.variants?.first;
     }
 
     if (widget.product.variants?.isNotEmpty ?? false) {

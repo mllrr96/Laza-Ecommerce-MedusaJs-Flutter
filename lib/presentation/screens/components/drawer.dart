@@ -1,18 +1,30 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
+import 'package:laza/blocs/cart/cart_bloc.dart';
+import 'package:laza/blocs/products/products_bloc.dart';
+import 'package:laza/blocs/region/region_bloc.dart';
 import 'package:laza/cubits/theme/theme_cubit.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/common/extensions/context_extension.dart';
+import 'package:medusa_store_flutter/request_models/index.dart';
+import 'package:medusa_store_flutter/store_models/store/index.dart';
 import '../../../domain/repository/preference_repository.dart';
 import '../../routes/app_router.dart';
 import 'colors.dart';
 import 'laza_icons.dart';
 
-class DrawerWidget extends StatelessWidget {
+class DrawerWidget extends StatefulWidget {
   const DrawerWidget({super.key});
 
+  @override
+  State<DrawerWidget> createState() => _DrawerWidgetState();
+}
+
+class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -177,6 +189,69 @@ class DrawerWidget extends StatelessWidget {
             ),
             Column(
               children: [
+                BlocBuilder<RegionBloc, RegionState>(
+                  builder: (context, state) {
+                    return state.maybeMap(
+                      loaded: (loaded) {
+                        List<Country> countries = [];
+                        for (var region in loaded.regions) {
+                          if (region.countries?.isNotEmpty ?? false) {
+                            countries.addAll(region.countries!);
+                          }
+                        }
+                        return ListTile(
+                          leading: const Icon(Icons.local_shipping_outlined),
+                          onTap: () async {
+                            final prefRepo = getIt<PreferenceRepository>();
+                            final savedCountry = getIt<PreferenceRepository>().country;
+                            final countryId = await showConfirmationDialog<int?>(
+                                context: context,
+                                title: 'Shipping to',
+                                initialSelectedActionKey: savedCountry?.id,
+                                actions: countries
+                                    .map((e) => AlertDialogAction<int?>(key: e.id, label: e.name ?? ''))
+                                    .toList());
+                            if (countryId != null) {
+                              final country = countries.where((element) => element.id == countryId).first;
+                              final region = loaded.regions.firstWhere((element) => element.id == country.regionId);
+                              if (country.id != savedCountry?.id) {
+                                await prefRepo.setCountry(country);
+                                await prefRepo.setRegion(region).then((_) {
+                                  context.read<ProductsBloc>().add(const ProductsEvent.getProducts());
+                                  context.read<CartBloc>().add(CartEvent.updateCart(
+                                      cartId: prefRepo.cartId!, req: StorePostCartsCartReq(regionId: region.id)));
+                                });
+                              }
+                              setState(() {});
+                            }
+                          },
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          title: const Text('Shipping to:'),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (getIt<PreferenceRepository>().country != null)
+                                Row(
+                                  children: [
+                                    Flag.fromString(getIt<PreferenceRepository>().country!.iso2!,
+                                        height: 15, width: 20),
+                                    const Gap(10),
+                                    Text(
+                                      getIt<PreferenceRepository>().country?.iso2?.toUpperCase() ?? '',
+                                      style: context.bodyMedium,
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                          horizontalTitleGap: 10.0,
+                        );
+                      },
+                      loading: (_) => const SizedBox.shrink(),
+                      orElse: () => const SizedBox.shrink(),
+                    );
+                  },
+                ),
                 if (!getIt.get<PreferenceRepository>().isGuest)
                   ListTile(
                     leading: const Icon(LazaIcons.logout, color: Colors.red),

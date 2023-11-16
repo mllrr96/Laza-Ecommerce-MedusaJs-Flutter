@@ -1,17 +1,9 @@
-import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:laza/blocs/products/products_bloc.dart';
-import 'package:laza/blocs/region/region_bloc.dart';
 import 'package:laza/common/extensions/context_extension.dart';
-import 'package:laza/di/di.dart';
-import 'package:laza/domain/repository/preference_repository.dart';
-import 'package:medusa_store_flutter/request_models/index.dart';
-import 'package:medusa_store_flutter/store_models/store/index.dart';
-import '../../blocs/cart/cart_bloc.dart';
 import '../../domain/model/index.dart';
 import '../routes/app_router.dart';
 import 'components/colors.dart';
@@ -193,17 +185,12 @@ class Headline extends StatelessWidget {
   }
 }
 
-class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
 
   @override
-  State<HomeAppBar> createState() => _HomeAppBarState();
-
-  @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-}
 
-class _HomeAppBarState extends State<HomeAppBar> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -241,72 +228,6 @@ class _HomeAppBarState extends State<HomeAppBar> {
               ),
               Row(
                 children: [
-                  BlocBuilder<RegionBloc, RegionState>(
-                    builder: (context, state) {
-                      return state.maybeMap(
-                          orElse: () => const SizedBox(),
-                          loaded: (loaded) {
-                            List<Country> countries = [];
-                            for (var region in loaded.regions) {
-                              if (region.countries?.isNotEmpty ?? false) {
-                                countries.addAll(region.countries!);
-                              }
-                            }
-                            return FilledButton(
-                              style: ButtonStyle(
-                                padding:
-                                    MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.symmetric(horizontal: 10.0)),
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                  ),
-                                ),
-                                backgroundColor: MaterialStateProperty.all<Color>(context.theme.cardColor),
-                              ),
-                              onPressed: () async {
-                                final prefRepo = getIt<PreferenceRepository>();
-                                final savedCountry = getIt<PreferenceRepository>().country;
-                                // context.read<RegionBloc>().add(const RegionEvent.retrieveRegions());
-                                final countryId = await showConfirmationDialog<int?>(
-                                    context: context,
-                                    title: 'Shipping to',
-                                    initialSelectedActionKey: savedCountry?.id,
-                                    actions: countries
-                                        .map((e) => AlertDialogAction<int?>(key: e.id, label: e.name ?? ''))
-                                        .toList());
-                                if (countryId != null) {
-                                  final country = countries.where((element) => element.id == countryId).first;
-                                  final region = loaded.regions.firstWhere((element) => element.id == country.regionId);
-                                  if (country.id != savedCountry?.id) {
-                                    await prefRepo.setCountry(country);
-                                    await prefRepo.setRegion(region);
-                                    context.read<ProductsBloc>().add(const ProductsEvent.getProducts());
-                                    context.read<CartBloc>().add(CartEvent.updateCart(
-                                        cartId: prefRepo.cartId!, req: StorePostCartsCartReq(regionId: region.id)));
-                                  }
-
-                                  setState(() {});
-                                }
-                              },
-                              child: Row(
-                                children: [
-                                  if (getIt<PreferenceRepository>().country != null)
-                                    Row(
-                                      children: [
-                                        Flag.fromString(getIt<PreferenceRepository>().country!.iso2!,
-                                            height: 15, width: 15),
-                                        const Gap(10),
-                                        Text(getIt<PreferenceRepository>().country!.name ?? ''),
-                                      ],
-                                    ),
-                                ],
-                              ),
-                            );
-                          },
-                          loading: (_) => const CircularProgressIndicator.adaptive());
-                    },
-                  ),
-                  const Gap(10),
                   InkWell(
                     borderRadius: const BorderRadius.all(Radius.circular(50)),
                     onTap: () => context.router.push(const CartRoute()),

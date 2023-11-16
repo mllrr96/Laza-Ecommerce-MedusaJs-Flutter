@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:laza/blocs/auth/auth_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:laza/blocs/auth/authentication_bloc.dart';
 import 'package:laza/blocs/cart/cart_bloc.dart';
 import 'package:laza/blocs/line_item/line_item_bloc.dart';
 import 'package:laza/blocs/products/products_bloc.dart';
@@ -34,9 +35,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(
+        BlocProvider<AuthenticationBloc>(
           lazy: false,
-          create: (_) => AuthBloc(),
+          create: (_) => getIt<AuthenticationBloc>(),
         ),
         BlocProvider<ProductsBloc>(
           create: (_) => getIt<ProductsBloc>()..add(const ProductsEvent.getProducts()),
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             routerConfig: _router.config(),
+            builder: EasyLoading.init(),
           );
         },
       ),

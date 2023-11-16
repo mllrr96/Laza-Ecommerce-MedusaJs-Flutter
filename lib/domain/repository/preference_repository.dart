@@ -33,7 +33,7 @@ class PreferenceRepository {
   Region? get region => _region;
   String get currencyCode => _region?.currencyCode?.toUpperCase() ?? 'USD';
 
-  void setGuest() => _prefs.setBool(_guestKey, true);
+  void setGuest({bool? value}) => _prefs.setBool(_guestKey, value ?? true);
   Future<bool> setCartId(String cartId) async => await _prefs.setString(_cartKey, cartId);
 
   Future<bool> setCountry(Country country) async {
