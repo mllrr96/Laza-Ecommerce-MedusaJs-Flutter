@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import 'package:medusa_store_flutter/store_models/products/product.dart';
 
+import '../../../di/di.dart';
+import '../../../domain/repository/preference_repository.dart';
 import '../../routes/app_router.dart';
 import '../../theme/theme.dart';
 import 'colors.dart';
@@ -32,7 +34,7 @@ class ProductCard extends StatelessWidget {
             .first;
       }
 
-      final formatCurrency = NumberFormat.simpleCurrency(name: 'USD');
+      final formatCurrency = NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode);
 
       num lowestPriceNum = price ?? 0;
       if (formatCurrency.decimalDigits! > 0) {

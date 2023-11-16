@@ -613,7 +613,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: fe605fa6cb7006594496b566ad9eafa91a045f61
+      resolved-ref: "80352603118b4b4d1b58fc5132fd158a5cd15d5f"
       url: "https://github.com/mllrr96/Medusa_Store_API_Flutter.git"
     source: git
     version: "0.0.1"

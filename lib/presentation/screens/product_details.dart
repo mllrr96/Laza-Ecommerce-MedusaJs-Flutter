@@ -69,8 +69,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     final product = widget.product;
     final bottomPadding = context.bottomViewPadding == 0.0 ? 30.0 : context.bottomViewPadding;
     num getPrice() {
-      final formatCurrency = NumberFormat.simpleCurrency(name: 'USD');
-      final amount = selectedVariant?.prices?.where((price) => price.currencyCode == 'USD').firstOrNull?.amount;
+      final formatCurrency = NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode);
+      final amount = selectedVariant?.prices
+          ?.where((price) => price.currencyCode == getIt<PreferenceRepository>().currencyCode)
+          .firstOrNull
+          ?.amount;
       if (amount != null) {
         price = amount;
       }
@@ -86,7 +89,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     }
 
     String getPriceText(int? price) {
-      final formatCurrency = NumberFormat.simpleCurrency(name: 'USD');
+      final formatCurrency = NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode);
       num priceFormatted = price ?? 0;
       final symbol = formatCurrency.currencySymbol;
       if (formatCurrency.decimalDigits! > 0) {
@@ -179,6 +182,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ],
                           ),
                         ),
+                        Container(
+                          height: context.bottomViewPadding,
+                          color: ColorConstant.primary,
+                        )
                       ],
                     );
                   }
@@ -288,9 +295,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       const Gap(5.0),
                       AnimatedDigitWidget(
                           value: getPrice(),
-                          prefix: NumberFormat.simpleCurrency(name: 'USD').currencySymbol,
+                          prefix: NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode)
+                              .currencySymbol,
                           textStyle: context.headlineSmall,
-                          fractionDigits: NumberFormat.simpleCurrency(name: 'USD').decimalDigits ?? 0),
+                          fractionDigits: NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode)
+                                  .decimalDigits ??
+                              0),
                       // Text(getPriceText(), style: context.headlineSmall),
                     ],
                   ),

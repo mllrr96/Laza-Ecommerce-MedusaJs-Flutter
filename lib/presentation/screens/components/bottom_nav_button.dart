@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:laza/common/extensions/context_extension.dart';
 
 import 'colors.dart';
 
@@ -8,7 +9,7 @@ class BottomNavButton extends StatelessWidget {
   final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
-    final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
+    final bottomPadding = context.bottomViewPadding;
     final buttonColor = onTap == null ? ColorConstant.primary.withOpacity(0.6) : ColorConstant.primary;
     return Column(
       mainAxisSize: MainAxisSize.min,
