@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +7,13 @@ import 'package:intl/intl.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import 'package:medusa_store_flutter/store_models/products/product.dart';
 
-import '../../../di/di.dart';
-import '../../../domain/repository/preference_repository.dart';
-import '../../routes/app_router.dart';
-import '../../theme/theme.dart';
-import 'colors.dart';
-import 'laza_icons.dart';
+import '../../../../common/colors.dart';
+import '../../../../di/di.dart';
+import '../../../../domain/repository/preference_repository.dart';
+import '../../../components/index.dart';
+import '../../../routes/app_router.dart';
+import '../../../theme/theme.dart';
+
 
 class ProductCard extends StatelessWidget {
   const ProductCard({

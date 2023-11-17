@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:animated_digit/animated_digit.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,17 +8,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import 'package:laza/blocs/line_item/line_item_bloc.dart';
+import 'package:laza/presentation/screens/cart/bloc/line_item/line_item_bloc.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/domain/repository/preference_repository.dart';
-import '../../blocs/cart/cart_bloc.dart';
-import '../routes/app_router.dart';
+import 'package:laza/presentation/components/index.dart';
+import 'bloc/cart/cart_bloc.dart';
+import '../../../common/colors.dart';
+import '../../routes/app_router.dart';
 
-import 'components/bottom_nav_button.dart';
-import 'components/colors.dart';
-import 'components/custom_appbar.dart';
-import 'components/laza_icons.dart';
 
 @RoutePage()
 class CartScreen extends StatelessWidget {

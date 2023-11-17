@@ -4,6 +4,9 @@ import 'package:laza/domain/model/index.dart';
 import 'package:laza/presentation/screens/index.dart';
 import 'package:medusa_store_flutter/store_models/products/product.dart';
 
+import '../screens/home/home_screen.dart';
+import '../screens/orders/orders_screen.dart';
+
 part 'app_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen,Route')
@@ -24,6 +27,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: BrandProductsRoute.page),
         AutoRoute(page: AddReviewRoute.page),
         AutoRoute(page: CartRoute.page),
+        AutoRoute(page: OrdersRoute.page),
         AutoRoute(
           page: DashboardRoute.page,
           children: [

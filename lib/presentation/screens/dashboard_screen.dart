@@ -7,12 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/presentation/components/index.dart';
+import '../../common/colors.dart';
 import '../routes/app_router.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
-import 'components/colors.dart';
-import 'components/drawer.dart';
-import 'components/laza_icons.dart';
 
 var dashboardScaffoldKey = GlobalKey<ScaffoldState>();
 

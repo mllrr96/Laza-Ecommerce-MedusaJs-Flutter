@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 
-import 'components/bottom_nav_button.dart';
-import 'components/custom_appbar.dart';
+import '../components/index.dart';
+
 
 @RoutePage()
 class OrderConfirmedScreen extends StatelessWidget {

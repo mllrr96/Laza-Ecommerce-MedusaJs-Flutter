@@ -3,7 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:medusa_store_flutter/store_models/products/product.dart';
 
-import '../../domain/usecase/get_home_product_usecase.dart';
+import '../../../../../domain/usecase/get_home_product_usecase.dart';
+
 
 part 'products_event.dart';
 part 'products_state.dart';

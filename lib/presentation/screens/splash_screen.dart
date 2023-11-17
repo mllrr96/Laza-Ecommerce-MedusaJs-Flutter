@@ -1,33 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../di/di.dart';
-import '../../domain/repository/preference_repository.dart';
+import 'package:laza/blocs/auth/authentication_bloc.dart';
+import 'package:laza/common/colors.dart';
 import '../routes/app_router.dart';
 
-import 'components/colors.dart';
-
 @RoutePage()
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    final isGuest = getIt.get<PreferenceRepository>().isGuest;
-    if (isGuest) {
-      Future.delayed(const Duration(seconds: 2)).then((value) => context.router.replaceAll([const DashboardRoute()]));
-    } else {
-      Future.delayed(const Duration(seconds: 2)).then((value) => context.router.replace(const SignInRoute()));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -36,10 +18,18 @@ class _SplashScreenState extends State<SplashScreen> {
         systemNavigationBarColor: ColorConstant.primary,
         statusBarIconBrightness: Brightness.light,
       ),
-      child: Scaffold(
-        backgroundColor: ColorConstant.primary,
-        body: Center(
-          child: SvgPicture.asset('assets/images/Logo.svg'),
+      child: BlocListener<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+          state.whenOrNull(
+              guest: () => context.router.replaceAll([const DashboardRoute()]),
+              loggedOut: () => context.router.replace(const SignInRoute()),
+              loggedIn: (_) => context.router.replace(const DashboardRoute()));
+        },
+        child: Scaffold(
+          backgroundColor: ColorConstant.primary,
+          body: Center(
+            child: SvgPicture.asset('assets/images/Logo.svg'),
+          ),
         ),
       ),
     );

@@ -15,8 +15,10 @@ part 'authentication_bloc.freezed.dart';
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc(this._authUsecase) : super(const _Loading()) {
     on<_Init>(_onInitialize);
-    on<_Login>(_onLogin);
-    on<_Logout>(_onLogout);
+    on<_LoginCustomer>(_onLogin);
+    on<_LogoutCustomer>(_onLogout);
+    on<_SignUpCustomer>(_onSignUp);
+    on<_LoginAsGuest>(_onLoginAsGuest);
     add(const _Init());
   }
 
@@ -29,25 +31,25 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       emit(const _Guest());
     } else {
       final result = await _authUsecase.getCurrentCustomer();
-      result.when((customer) => _LoggedIn(customer), (error) => emit(const _LoggedOut()));
+      result.when((customer) => emit( _LoggedIn(customer)), (error) => emit(_Error(error.message)));
     }
   }
 
   Future<void> _onLogin(
-    _Login event,
+    _LoginCustomer event,
     Emitter<AuthenticationState> emit,
   ) async {
     emit(const _Loading());
     final result = await _authUsecase.login(email: event.email, password: event.password);
-    result.when((customer) => emit(_LoggedIn(customer)), (error) => emit(const _LoggedOut()));
+    result.when((customer) => emit(_LoggedIn(customer)), (error) => emit(_Error(error.message)));
   }
 
   Future<void> _onLogout(
-    _Logout event,
+    _LogoutCustomer event,
     Emitter<AuthenticationState> emit,
   ) async {
     emit(const _Loading());
-    final result = await _authUsecase.logout();
+    final result = await _authUsecase.logoutCustomer();
     if (result) {
       emit(const _LoggedOut());
     } else {
@@ -55,5 +57,23 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     }
   }
 
-  final AuthUsecase _authUsecase;
+  Future<void> _onSignUp(
+    _SignUpCustomer event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    emit(const _Loading());
+    final result = await _authUsecase.signUp(
+        email: event.email, password: event.password, firstName: event.firstName, lastName: event.lastName, phone: '');
+    result.when((customer) => emit(_LoggedIn(customer)), (error) => emit(_Error(error.message)));
+  }
+
+  Future<void> _onLoginAsGuest(
+    _LoginAsGuest event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    getIt<PreferenceRepository>().setGuest();
+    emit(const _Guest());
+  }
+
+  final AuthenticationUsecase _authUsecase;
 }

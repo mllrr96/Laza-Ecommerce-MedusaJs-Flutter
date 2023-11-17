@@ -1,8 +1,7 @@
 export 'add_review_screen.dart';
 export 'brand_products_screen.dart';
-export 'cart_screen.dart';
+export 'cart/cart_screen.dart';
 export 'dashboard_screen.dart';
-export 'home_screen.dart';
 export 'my_cards_screen.dart';
 export 'order_confirmed_screen.dart';
 export 'product_details.dart';

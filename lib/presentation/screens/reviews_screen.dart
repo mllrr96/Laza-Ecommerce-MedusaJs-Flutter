@@ -1,12 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:laza/common/colors.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import 'package:laza/presentation/screens/product_details.dart';
+import '../components/index.dart';
 import '../routes/app_router.dart';
-import 'components/colors.dart';
-import 'components/custom_appbar.dart';
-import 'components/laza_icons.dart';
 
 @RoutePage()
 class ReviewsScreen extends StatelessWidget {

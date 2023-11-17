@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:laza/common/colors.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 
-import 'colors.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({super.key, required this.labelText, this.controller, this.textInputAction, this.validator});

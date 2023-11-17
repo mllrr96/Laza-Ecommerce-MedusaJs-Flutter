@@ -390,6 +390,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.2.0"
+  flutter_staggered_grid_view:
+    dependency: transitive
+    description:
+      name: flutter_staggered_grid_view
+      sha256: "19e7abb550c96fbfeb546b23f3ff356ee7c59a019a651f8f102a4ba9b7349395"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -520,6 +528,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  infinite_scroll_pagination:
+    dependency: "direct main"
+    description:
+      name: infinite_scroll_pagination
+      sha256: b68bce20752fcf36c7739e60de4175494f74e99e9a69b4dd2fe3a1dd07a7f16a
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   injectable:
     dependency: "direct main"
     description:
@@ -629,7 +645,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "80352603118b4b4d1b58fc5132fd158a5cd15d5f"
+      resolved-ref: "92b484f1c2f3552d3fab3337504e7dee764e1ca6"
       url: "https://github.com/mllrr96/Medusa_Store_API_Flutter.git"
     source: git
     version: "0.0.1"
@@ -910,6 +926,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0+4"
+  sliver_tools:
+    dependency: transitive
+    description:
+      name: sliver_tools
+      sha256: eae28220badfb9d0559207badcbbc9ad5331aac829a88cb0964d330d2a4636a6
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.12"
   source_gen:
     dependency: transitive
     description:

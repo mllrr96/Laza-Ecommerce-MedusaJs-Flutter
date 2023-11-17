@@ -7,17 +7,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import 'package:laza/blocs/line_item/line_item_bloc.dart';
+import 'package:laza/presentation/screens/cart/bloc/line_item/line_item_bloc.dart';
+import 'package:laza/common/colors.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import 'package:laza/di/di.dart';
+import 'package:laza/presentation/components/index.dart';
 import 'package:medusa_store_flutter/store_models/store/index.dart';
-import '../../blocs/cart/cart_bloc.dart';
+import 'cart/bloc/cart/cart_bloc.dart';
 import '../../domain/repository/preference_repository.dart';
 import '../routes/app_router.dart';
 import '../theme/theme.dart';
-import 'components/bottom_nav_button.dart';
-import 'components/colors.dart';
-import 'components/laza_icons.dart';
 
 @RoutePage()
 class ProductDetailsScreen extends StatefulWidget {

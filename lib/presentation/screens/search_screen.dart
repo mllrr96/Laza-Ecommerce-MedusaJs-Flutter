@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 
-import 'components/colors.dart';
-import 'components/laza_icons.dart';
+import '../../common/colors.dart';
+import '../components/index.dart';
+
 
 @RoutePage()
 class SearchScreen extends StatelessWidget {

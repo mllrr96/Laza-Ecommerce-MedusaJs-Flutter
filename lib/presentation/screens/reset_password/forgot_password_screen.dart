@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/presentation/components/index.dart';
 
+import '../../../common/colors.dart';
 import '../../routes/app_router.dart';
-import '../components/bottom_nav_button.dart';
-import '../components/colors.dart';
-import '../components/custom_appbar.dart';
-import '../components/custom_text_field.dart';
 
 @RoutePage()
 class ForgotPasswordScreen extends StatelessWidget {

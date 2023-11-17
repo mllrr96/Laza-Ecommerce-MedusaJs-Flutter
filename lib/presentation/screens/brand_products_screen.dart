@@ -1,12 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:laza/common/colors.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import '../../domain/model/brand.dart';
+import '../components/index.dart';
 import '../routes/app_router.dart';
-
-import 'components/colors.dart';
-import 'components/laza_icons.dart';
-import 'components/product_card.dart';
+import 'home/widgets/product_card.dart';
 
 @RoutePage()
 class BrandProductsScreen extends StatelessWidget {

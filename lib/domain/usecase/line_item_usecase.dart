@@ -7,7 +7,7 @@ import 'package:multiple_result/multiple_result.dart';
 
 import '../../common/exception.dart';
 
-@Injectable()
+@injectable
 class LineItemUsecase {
   Future<Result<Cart, Failure>> add({required String cartId, required String variantId, required int quantity}) async {
     try {

@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:gap/gap.dart';
 import 'package:laza/blocs/auth/authentication_bloc.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/domain/repository/preference_repository.dart';
+import '../../common/colors.dart';
+import '../components/index.dart';
 import '../routes/app_router.dart';
-import 'components/bottom_nav_button.dart';
-import 'components/colors.dart';
-import 'components/custom_appbar.dart';
-import 'components/custom_text_field.dart';
 
 @RoutePage()
 class SignInWithEmailScreen extends StatefulWidget {
@@ -63,7 +62,7 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
                   if (!formKey.currentState!.validate()) return;
                   context
                       .read<AuthenticationBloc>()
-                      .add(AuthenticationEvent.login(email: emailCtrl.text, password: passwordCtrl.text));
+                      .add(AuthenticationEvent.loginCustomer(email: emailCtrl.text, password: passwordCtrl.text));
                 },
               ),
               body: SafeArea(
@@ -119,7 +118,7 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
                                   return null;
                                 },
                                 textInputAction: TextInputAction.done),
-                            const SizedBox(height: 10),
+                            const Gap(10),
                             Align(
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
@@ -128,7 +127,7 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
                                       'Forget Password?',
                                       style: TextStyle(color: Colors.red),
                                     ))),
-                            const SizedBox(height: 10),
+                            const Gap(10),
                             SwitchListTile.adaptive(
                                 activeColor: Platform.isIOS ? ColorConstant.primary : null,
                                 contentPadding: EdgeInsets.zero,
@@ -161,7 +160,7 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const Gap(10),
                   ],
                 ),
               ),
