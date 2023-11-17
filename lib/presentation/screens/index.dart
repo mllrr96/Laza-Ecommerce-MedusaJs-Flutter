@@ -2,7 +2,6 @@ export 'add_review_screen.dart';
 export 'collection_screen.dart';
 export 'cart/cart_screen.dart';
 export 'dashboard_screen.dart';
-export 'my_cards_screen.dart';
 export 'order_confirmed_screen.dart';
 export 'product_details.dart';
 export 'reviews_screen.dart';

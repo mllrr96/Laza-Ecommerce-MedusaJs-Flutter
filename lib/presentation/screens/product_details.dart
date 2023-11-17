@@ -344,10 +344,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             child: Ink(
                               height: 80,
                               width: 80,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                                image: DecorationImage(
-                                    image: CachedNetworkImageProvider(image.url!), fit: BoxFit.fitWidth),
+                              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                              child: CachedNetworkImage(
+                                imageUrl: image.url!,
+                                fit: BoxFit.fitWidth,
+                                placeholder: (_, __) => const Center(child: CircularProgressIndicator.adaptive()),
+                                errorWidget: (_, __, ___) => const Icon(Icons.error, size: 30, color: Colors.amber),
                               ),
                             ),
                           ),

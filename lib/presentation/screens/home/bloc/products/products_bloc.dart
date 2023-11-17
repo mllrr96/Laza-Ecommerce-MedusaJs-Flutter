@@ -16,9 +16,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       final result = await _usecase(queryParameters: event.queryParameters);
       result.when(
         (response) {
-          if (response.products!.isEmpty) {
-            emit(const _Empty());
-          } else {
+          if (response.products != null) {
             emit(_Loaded(response.products!, count: response.count, limit: response.limit, offset: response.offset));
           }
         },

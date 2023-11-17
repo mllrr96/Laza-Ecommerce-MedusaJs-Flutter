@@ -22,6 +22,7 @@ class AppTheme {
       bodySmall: bodySmall,
     ),
     appBarTheme: const AppBarTheme(
+      surfaceTintColor: Colors.transparent,
       backgroundColor: Colors.white,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -53,6 +54,7 @@ class AppTheme {
       bodySmall: bodySmall.dark(),
     ),
     appBarTheme: AppBarTheme(
+      surfaceTintColor: Colors.transparent,
       backgroundColor: ColorConstant.scaffoldDark,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

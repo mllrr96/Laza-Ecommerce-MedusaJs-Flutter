@@ -213,8 +213,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     await prefRepo.setCountry(country);
                                     await prefRepo.setRegion(region).then((_) {
                                       context.read<ProductsBloc>().add(const ProductsEvent.loadProducts());
-                                      context.read<CartBloc>().add(CartEvent.updateCart(
-                                          cartId: prefRepo.cartId!, req: StorePostCartsCartReq(regionId: region.id)));
+                                      if (prefRepo.cartId != null) {
+                                        context.read<CartBloc>().add(CartEvent.updateCart(
+                                            cartId: prefRepo.cartId!, req: StorePostCartsCartReq(regionId: region.id)));
+                                      }
                                     });
                                   }
                                   setState(() {});

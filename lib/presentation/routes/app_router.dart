@@ -32,9 +32,9 @@ class AppRouter extends _$AppRouter {
           page: DashboardRoute.page,
           children: [
             AutoRoute(page: HomeRoute.page),
+            AutoRoute(page: SearchRoute.page),
             AutoRoute(page: WishlistRoute.page),
             AutoRoute(page: CartRoute.page),
-            AutoRoute(page: MyCardsRoute.page),
           ],
         ),
       ];

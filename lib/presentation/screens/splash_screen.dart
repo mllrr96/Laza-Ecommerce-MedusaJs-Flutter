@@ -21,11 +21,11 @@ class SplashScreen extends StatelessWidget {
       child: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
           state.whenOrNull(
-              guest: () => context.router.replaceAll([const DashboardRoute()]),
-              loggedOut: () => context.router.replace(const SignInRoute()),
-              loggedIn: (_) => context.router.replace(const DashboardRoute()),
-          // Should push to error signing in page maybe ??
-          error: (_) =>  context.router.replace(const SignInRoute()),
+            guest: () => context.router.replaceAll([const DashboardRoute()]),
+            loggedIn: (_) => context.router.replace(const DashboardRoute()),
+            loggedOut: () => context.router.replace(const SignInRoute()),
+            // Should push to error signing in page maybe ??
+            error: (_) => context.router.replace(const SignInRoute()),
           );
         },
         child: Scaffold(

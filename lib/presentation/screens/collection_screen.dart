@@ -47,6 +47,9 @@ class CollectionScreen extends StatelessWidget {
                 builder: (context, state) {
                   return state.map(
                       loaded: (data) {
+                        if (data.products.isEmpty) {
+                          return const Center(child: Text('No products here'));
+                        }
                         return Column(
                           children: [
                             const Gap(10),
@@ -93,7 +96,6 @@ class CollectionScreen extends StatelessWidget {
                         );
                       },
                       loading: (_) => const Center(child: CircularProgressIndicator.adaptive()),
-                      empty: (_) => const Center(child: Text('No products here')),
                       error: (error) => Center(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,

@@ -12,7 +12,6 @@ import '../../common/colors.dart';
 import '../routes/app_router.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
-
 var dashboardScaffoldKey = GlobalKey<ScaffoldState>();
 
 @RoutePage()
@@ -29,7 +28,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     final bottomBarBgColor = context.theme.bottomNavigationBarTheme.backgroundColor;
     final systemOverlay = context.theme.appBarTheme.systemOverlayStyle;
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: systemOverlay!.copyWith(systemNavigationBarColor: bottomBarBgColor),
       child: WillPopScope(
@@ -50,9 +48,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: AutoTabsRouter(
           routes: const [
             HomeRoute(),
+            SearchRoute(),
             WishlistRoute(),
             CartRoute(),
-            MyCardsRoute(),
           ],
           builder: (context, child) {
             final tabsRouter = AutoTabsRouter.of(context);
@@ -82,22 +80,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       inactiveColor: const Color(0xff8F959E),
                       selectedIndex: tabsRouter.activeIndex,
                       barItems: [
-                        BarItem(
-                          icon: LazaIcons.home,
-                          title: 'Home',
-                        ),
-                        BarItem(
-                          icon: LazaIcons.heart,
-                          title: 'Wishlist',
-                        ),
-                        BarItem(
-                          icon: LazaIcons.bag,
-                          title: 'Cart',
-                        ),
-                        BarItem(
-                          icon: LazaIcons.wallet,
-                          title: 'My Cards',
-                        ),
+                        BarItem(icon: LazaIcons.home, title: 'Home'),
+                        BarItem(icon: LazaIcons.search, title: 'Search'),
+                        BarItem(icon: LazaIcons.heart, title: 'Wishlist'),
+                        BarItem(icon: LazaIcons.bag, title: 'Cart'),
                       ],
                     ),
                   ),

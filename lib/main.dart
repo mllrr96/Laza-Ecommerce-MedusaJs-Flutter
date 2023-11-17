@@ -37,21 +37,22 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthenticationBloc>(
-          lazy: false,
           create: (_) => getIt<AuthenticationBloc>(),
+          lazy: false,
         ),
         BlocProvider<ThemeCubit>(
           create: (_) => getIt<ThemeCubit>()..loadTheme(),
           lazy: false,
         ),
         BlocProvider<ProductsBloc>(
-          create: (_) => getIt<ProductsBloc>()..add(const ProductsEvent.loadProducts()),
+          create: (_) => getIt<ProductsBloc>(),
         ),
         BlocProvider<CollectionsBloc>(
           create: (_) => getIt<CollectionsBloc>()..add(const CollectionsEvent.retrieveCollections(queryParameters: {'limit' : 5 })),
         ),
         BlocProvider<RegionBloc>(
           create: (_) => getIt<RegionBloc>()..add(const RegionEvent.retrieveRegions()),
+          lazy: false,
         ),
         BlocProvider<CartBloc>(
           create: (_) => getIt<CartBloc>()..add(const CartEvent.loadCart()),
@@ -59,9 +60,6 @@ class MyApp extends StatelessWidget {
         BlocProvider<LineItemBloc>(
           create: (_) => getIt<LineItemBloc>(),
         ),
-        // BlocProvider<OrdersBloc>(
-        //   create: (_) => getIt<OrdersBloc>(),
-        // ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {

@@ -14,7 +14,6 @@ import '../../../components/index.dart';
 import '../../../routes/app_router.dart';
 import '../../../theme/theme.dart';
 
-
 class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,
@@ -60,42 +59,71 @@ class ProductCard extends StatelessWidget {
                 child: Placeholder(),
               ),
             if (product.thumbnail != null)
-              Container(
-                height: 150,
-                decoration: BoxDecoration(
-                  image: DecorationImage(image: CachedNetworkImageProvider(product.thumbnail!), fit: BoxFit.fitHeight),
-                ),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 4, top: 4),
-                      child: InkWell(
-                        borderRadius: const BorderRadius.all(Radius.circular(50)),
-                        onTap: () {},
-                        child: Ink(
-                          width: 35,
-                          height: 35,
-                          decoration: ShapeDecoration(
-                            color: AppTheme.lightTheme.cardColor,
-                            shape: const CircleBorder(),
+              Stack(
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: product.thumbnail!,
+                    fit: BoxFit.fitHeight,
+                    height: 150,
+                    placeholder: (_, __) => const Center(child: CircularProgressIndicator.adaptive()),
+                    errorWidget: (_, __, ___) => Center(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.error, color: Colors.amber, size: 30),
+                              const Gap(10),
+                              Flexible(
+                                  child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                child: Text(
+                                  'Error loading image',
+                                  style: context.bodyExtraSmall,
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
+                            ],
                           ),
-                          child: Icon(
-                            LazaIcons.heart,
-                            color: ColorConstant.manatee,
-                            size: 16,
+                          const Placeholder(),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 4, top: 4),
+                        child: InkWell(
+                          borderRadius: const BorderRadius.all(Radius.circular(50)),
+                          onTap: () {},
+                          child: Ink(
+                            width: 35,
+                            height: 35,
+                            decoration: ShapeDecoration(
+                              color: AppTheme.lightTheme.cardColor,
+                              shape: const CircleBorder(),
+                            ),
+                            child: Icon(
+                              LazaIcons.heart,
+                              color: ColorConstant.manatee,
+                              size: 16,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
             const Gap(10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
                     child: Text(
@@ -104,8 +132,13 @@ class ProductCard extends StatelessWidget {
                       maxLines: 4,
                     ),
                   ),
-                  const Spacer(),
-                  Text(getPriceText(), style: context.bodyMedium),
+                  // const Spacer(),
+                  Column(
+                    children: [
+                      Text(getPriceText(), style: context.bodyMedium),
+                      const Gap(5),
+                    ],
+                  )
                 ],
               ),
             ),
