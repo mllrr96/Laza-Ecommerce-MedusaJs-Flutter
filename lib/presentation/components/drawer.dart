@@ -154,7 +154,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                     ListTile(
                       leading: const Icon(LazaIcons.bag),
-                      onTap: () {},
+                      onTap: () => context.pushRoute(const OrdersRoute()),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
                       title: const Text('Orders'),
                       horizontalTitleGap: 10.0,
@@ -212,7 +212,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   if (country.id != savedCountry?.id) {
                                     await prefRepo.setCountry(country);
                                     await prefRepo.setRegion(region).then((_) {
-                                      context.read<ProductsBloc>().add(const ProductsEvent.getProducts());
+                                      context.read<ProductsBloc>().add(const ProductsEvent.loadProducts());
                                       context.read<CartBloc>().add(CartEvent.updateCart(
                                           cartId: prefRepo.cartId!, req: StorePostCartsCartReq(regionId: region.id)));
                                     });

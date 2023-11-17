@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:laza/domain/model/index.dart';
 import 'package:laza/presentation/screens/index.dart';
 import 'package:medusa_store_flutter/store_models/products/product.dart';
+import 'package:medusa_store_flutter/store_models/products/product_collection.dart';
 
 import '../screens/home/home_screen.dart';
 import '../screens/orders/orders_screen.dart';
@@ -24,7 +24,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: ReviewsRoute.page),
         AutoRoute(page: ProductDetailsRoute.page),
         AutoRoute(page: OrderConfirmedRoute.page),
-        AutoRoute(page: BrandProductsRoute.page),
+        AutoRoute(page: CollectionRoute.page),
         AutoRoute(page: AddReviewRoute.page),
         AutoRoute(page: CartRoute.page),
         AutoRoute(page: OrdersRoute.page),

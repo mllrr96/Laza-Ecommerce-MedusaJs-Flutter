@@ -21,20 +21,20 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AddReviewScreen(),
       );
     },
-    BrandProductsRoute.name: (routeData) {
-      final args = routeData.argsAs<BrandProductsRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: BrandProductsScreen(
-          key: args.key,
-          brand: args.brand,
-        ),
-      );
-    },
     CartRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const CartScreen(),
+      );
+    },
+    CollectionRoute.name: (routeData) {
+      final args = routeData.argsAs<CollectionRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: CollectionScreen(
+          key: args.key,
+          collection: args.collection,
+        ),
       );
     },
     DashboardRoute.name: (routeData) {
@@ -155,44 +155,6 @@ class AddReviewRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [BrandProductsScreen]
-class BrandProductsRoute extends PageRouteInfo<BrandProductsRouteArgs> {
-  BrandProductsRoute({
-    Key? key,
-    required Brand brand,
-    List<PageRouteInfo>? children,
-  }) : super(
-          BrandProductsRoute.name,
-          args: BrandProductsRouteArgs(
-            key: key,
-            brand: brand,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'BrandProductsRoute';
-
-  static const PageInfo<BrandProductsRouteArgs> page =
-      PageInfo<BrandProductsRouteArgs>(name);
-}
-
-class BrandProductsRouteArgs {
-  const BrandProductsRouteArgs({
-    this.key,
-    required this.brand,
-  });
-
-  final Key? key;
-
-  final Brand brand;
-
-  @override
-  String toString() {
-    return 'BrandProductsRouteArgs{key: $key, brand: $brand}';
-  }
-}
-
-/// generated route for
 /// [CartScreen]
 class CartRoute extends PageRouteInfo<void> {
   const CartRoute({List<PageRouteInfo>? children})
@@ -204,6 +166,44 @@ class CartRoute extends PageRouteInfo<void> {
   static const String name = 'CartRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CollectionScreen]
+class CollectionRoute extends PageRouteInfo<CollectionRouteArgs> {
+  CollectionRoute({
+    Key? key,
+    required ProductCollection collection,
+    List<PageRouteInfo>? children,
+  }) : super(
+          CollectionRoute.name,
+          args: CollectionRouteArgs(
+            key: key,
+            collection: collection,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'CollectionRoute';
+
+  static const PageInfo<CollectionRouteArgs> page =
+      PageInfo<CollectionRouteArgs>(name);
+}
+
+class CollectionRouteArgs {
+  const CollectionRouteArgs({
+    this.key,
+    required this.collection,
+  });
+
+  final Key? key;
+
+  final ProductCollection collection;
+
+  @override
+  String toString() {
+    return 'CollectionRouteArgs{key: $key, collection: $collection}';
+  }
 }
 
 /// generated route for

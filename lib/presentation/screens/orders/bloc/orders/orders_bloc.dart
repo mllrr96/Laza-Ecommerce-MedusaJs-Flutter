@@ -12,7 +12,6 @@ part 'orders_bloc.freezed.dart';
 class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
   OrdersBloc(this._usecase) : super(const _Loading()) {
     on<_LoadOrders>((event, emit) async {
-      emit(const _Loading());
       final result = await _usecase();
       result.when((orders) => emit(_Loaded(orders)), (error) => emit(_Error(error.message)));
     });

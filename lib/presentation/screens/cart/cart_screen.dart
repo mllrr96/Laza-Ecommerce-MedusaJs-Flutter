@@ -57,9 +57,6 @@ class CartScreen extends StatelessWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: context.theme.appBarTheme.systemOverlayStyle!,
       child: BlocBuilder<CartBloc, CartState>(
-        buildWhen: (prevState, state) {
-          return true;
-        },
         builder: (context, state) {
           return state.maybeMap(
               loaded: (cart) => cart.cart.items?.isEmpty ?? false

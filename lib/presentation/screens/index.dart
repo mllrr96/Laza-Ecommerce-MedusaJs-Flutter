@@ -1,5 +1,5 @@
 export 'add_review_screen.dart';
-export 'brand_products_screen.dart';
+export 'collection_screen.dart';
 export 'cart/cart_screen.dart';
 export 'dashboard_screen.dart';
 export 'my_cards_screen.dart';

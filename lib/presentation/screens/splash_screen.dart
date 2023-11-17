@@ -23,7 +23,10 @@ class SplashScreen extends StatelessWidget {
           state.whenOrNull(
               guest: () => context.router.replaceAll([const DashboardRoute()]),
               loggedOut: () => context.router.replace(const SignInRoute()),
-              loggedIn: (_) => context.router.replace(const DashboardRoute()));
+              loggedIn: (_) => context.router.replace(const DashboardRoute()),
+          // Should push to error signing in page maybe ??
+          error: (_) =>  context.router.replace(const SignInRoute()),
+          );
         },
         child: Scaffold(
           backgroundColor: ColorConstant.primary,

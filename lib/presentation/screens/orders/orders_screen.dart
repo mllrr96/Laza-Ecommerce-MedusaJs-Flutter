@@ -20,7 +20,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   final PagingController<int, Order> _pagingController = PagingController(firstPageKey: 0);
   final ordersBloc = getIt<OrdersBloc>();
-  List<Order> orders = [];
+  List<Order> loadedOrders = [];
+
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
@@ -32,36 +33,41 @@ class _OrdersScreenState extends State<OrdersScreen> {
     super.initState();
   }
 
+  void _loaded(List<Order> orders) {
+    final newItems = orders;
+    loadedOrders.addAll(orders);
+    final isLastPage = newItems.length < _pageSize;
+    if (isLastPage) {
+      _pagingController.appendLastPage(newItems);
+    } else {
+      final nextPageKey = 1 + loadedOrders.length;
+      _pagingController.appendPage(newItems, nextPageKey);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Orders'),
       body: BlocProvider(
-        create: (context) => getIt<OrdersBloc>(),
-        child: BlocListener<OrdersBloc, OrdersState>(
+        create: (context) => ordersBloc,
+        child: BlocConsumer<OrdersBloc, OrdersState>(
           listener: (context, state) {
             state.whenOrNull(
-                loaded: (orders) {
-                  final newItems = orders;
-                  orders.addAll(orders);
-                  final isLastPage = newItems.length < _pageSize;
-                  if (isLastPage) {
-                    _pagingController.appendLastPage(newItems);
-                  } else {
-                    final nextPageKey = 1 + orders.length;
-                    _pagingController.appendPage(newItems, nextPageKey);
-                  }
-                },
-                error: (error) => _pagingController.error = error);
+              loaded: _loaded,
+              error: (error) => _pagingController.error = error,
+            );
           },
-          child: PagedListView<int, Order>(
-            pagingController: _pagingController,
-            builderDelegate: PagedChildBuilderDelegate<Order>(
-              itemBuilder: (context, order, index) => ListTile(
-                title: Text('Order id: ${order.id ?? ''}'),
+          builder: (context, state) {
+            return PagedListView<int, Order>(
+              pagingController: _pagingController,
+              builderDelegate: PagedChildBuilderDelegate<Order>(
+                itemBuilder: (context, order, index) => ListTile(
+                  title: Text('Order id: ${order.id ?? ''}'),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

@@ -5,27 +5,24 @@ import 'package:medusa_store_flutter/store_models/products/product.dart';
 
 import '../../../../../domain/usecase/get_home_product_usecase.dart';
 
-
 part 'products_event.dart';
 part 'products_state.dart';
 part 'products_bloc.freezed.dart';
 
 @injectable
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
-  ProductsBloc(this._usecase) : super(const ProductsState.initial()) {
-    on<_GetProducts>((event, emit) async {
-      emit(const ProductsState.loading());
-      final result = await _usecase();
-
+  ProductsBloc(this._usecase) : super(const _Loading()) {
+    on<_LoadProducts>((event, emit) async {
+      final result = await _usecase(queryParameters: event.queryParameters);
       result.when(
-        (products) {
-          if (products.isEmpty) {
-            emit(const ProductsState.empty());
+        (response) {
+          if (response.products!.isEmpty) {
+            emit(const _Empty());
           } else {
-            emit(ProductsState.loaded(products));
+            emit(_Loaded(response.products!, count: response.count, limit: response.limit, offset: response.offset));
           }
         },
-        (error) => emit(ProductsState.error(error.message)),
+        (error) => emit(_Error(error.message)),
       );
     });
   }

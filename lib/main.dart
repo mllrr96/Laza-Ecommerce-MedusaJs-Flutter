@@ -8,6 +8,7 @@ import 'package:laza/blocs/region/region_bloc.dart';
 import 'package:laza/cubits/theme/theme_cubit.dart';
 import 'package:laza/domain/repository/preference_repository.dart';
 import 'package:laza/presentation/routes/app_router.dart';
+import 'package:laza/presentation/screens/home/bloc/collections/collections_bloc.dart';
 import 'package:laza/presentation/screens/home/bloc/products/products_bloc.dart';
 import 'package:laza/presentation/theme/theme.dart';
 import 'di/di.dart';
@@ -44,7 +45,10 @@ class MyApp extends StatelessWidget {
           lazy: false,
         ),
         BlocProvider<ProductsBloc>(
-          create: (_) => getIt<ProductsBloc>()..add(const ProductsEvent.getProducts()),
+          create: (_) => getIt<ProductsBloc>()..add(const ProductsEvent.loadProducts()),
+        ),
+        BlocProvider<CollectionsBloc>(
+          create: (_) => getIt<CollectionsBloc>()..add(const CollectionsEvent.retrieveCollections(queryParameters: {'limit' : 5 })),
         ),
         BlocProvider<RegionBloc>(
           create: (_) => getIt<RegionBloc>()..add(const RegionEvent.retrieveRegions()),

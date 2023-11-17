@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import 'package:laza/presentation/screens/home/widgets/product_card.dart';
+import 'package:medusa_store_flutter/store_models/products/product_collection.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../common/colors.dart';
-import '../../../domain/model/index.dart';
 import '../../components/index.dart';
 import '../../routes/app_router.dart';
 import '../dashboard_screen.dart';
+import 'bloc/collections/collections_bloc.dart';
 import 'bloc/products/products_bloc.dart';
 
 @RoutePage()
@@ -17,13 +19,6 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    const brands = [
-      Brand('Adidas', LazaIcons.adidas_logo),
-      Brand('Nike', LazaIcons.nike_logo),
-      Brand('Puma', LazaIcons.puma_logo),
-      Brand('Fila', LazaIcons.fila_logo),
-    ];
-
     const inputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         borderSide: BorderSide(width: 0, color: Colors.transparent));
@@ -96,60 +91,113 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const Gap(10),
-          Headline(
-            headline: 'Choose Brand',
-            onViewAllTap: () {},
-          ),
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              separatorBuilder: (_, __) => const Gap(10),
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: brands.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                final brand = brands[index];
-                return BrandTile(brand: brand);
-              },
-            ),
+          BlocBuilder<CollectionsBloc, CollectionsState>(
+            builder: (context, state) {
+              return state.map(
+                  loading: (_) => Skeletonizer(
+                        enabled: true,
+                        child: Column(
+                          children: [
+                            Headline(
+                              headline: 'Collections',
+                              onViewAllTap: () {},
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 50,
+                              child: ListView.separated(
+                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                separatorBuilder: (_, __) => const Gap(10),
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: 4,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  return CollectionTile(collection: ProductCollection(title: 'Shorts'));
+                                  // return CollectionTile(collection: collection);
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                  loaded: (data) {
+                    if (data.collections.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+                    return Column(
+                      children: [
+                        Headline(
+                          headline: 'Collections',
+                          onViewAllTap: () {},
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ListView.separated(
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            separatorBuilder: (_, __) => const Gap(10),
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: data.collections.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              final collection = data.collections[index];
+                              return CollectionTile(collection: collection);
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                  error: (_) => Column(
+                        children: [
+                          Headline(
+                            headline: 'Collections',
+                            onViewAllTap: () {},
+                          ),
+                          const SizedBox(
+                            height: 50,
+                            child: Text('Error loading collections'),
+                          ),
+                        ],
+                      ));
+            },
           ),
           const Gap(10),
           Headline(headline: 'New Arrival', onViewAllTap: () {}),
           BlocBuilder<ProductsBloc, ProductsState>(
             builder: (context, state) {
-              return state.maybeMap(
-                  empty: (_) => const SizedBox.shrink(),
-                  orElse: () => const Text('Loading..'),
-                  error: (error) => Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(error.message ?? ''),
-                          OutlinedButton(
-                              onPressed: () {
-                                context.read<ProductsBloc>().add(const ProductsEvent.getProducts());
-                              },
-                              child: const Text('Retry'))
-                        ],
-                      ),
-                  loading: (_) => const CircularProgressIndicator.adaptive(),
-                  loaded: (data) => GridView.builder(
-                      shrinkWrap: true,
-                      itemCount: data.products.length,
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisExtent: 250,
-                        crossAxisSpacing: 15.0,
-                        mainAxisSpacing: 15.0,
-                      ),
-                      itemBuilder: (context, index) {
-                        final product = data.products[index];
-                        return ProductCard(product: product);
-                      }));
+              return state.map(
+                empty: (_) => const SizedBox.shrink(),
+                error: (error) => Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(error.message ?? ''),
+                    OutlinedButton(
+                        onPressed: () {
+                          context.read<ProductsBloc>().add(const ProductsEvent.loadProducts());
+                        },
+                        child: const Text('Retry'))
+                  ],
+                ),
+                loading: (_) => const CircularProgressIndicator.adaptive(),
+                loaded: (data) => GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: data.products.length,
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisExtent: 250,
+                      crossAxisSpacing: 15.0,
+                      mainAxisSpacing: 15.0,
+                    ),
+                    itemBuilder: (context, index) {
+                      final product = data.products[index];
+                      return ProductCard(product: product);
+                    }),
+              );
             },
           ),
         ],
@@ -254,14 +302,14 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class BrandTile extends StatelessWidget {
-  const BrandTile({super.key, required this.brand, this.onTap});
-  final Brand brand;
+class CollectionTile extends StatelessWidget {
+  const CollectionTile({super.key, required this.collection, this.onTap});
+  final ProductCollection collection;
   final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.router.push(BrandProductsRoute(brand: brand)),
+      onTap: () => context.router.push(CollectionRoute(collection: collection)),
       borderRadius: const BorderRadius.all(Radius.circular(10.0)),
       child: Ink(
         height: 50,
@@ -272,22 +320,22 @@ class BrandTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              height: 40,
-              width: 40,
-              margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: context.theme.scaffoldBackgroundColor,
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-              ),
-              child: Icon(
-                brand.iconData,
-                size: brand.name == 'Fila' ? 12 : 18,
-              ),
-            ),
+            // Container(
+            //   height: 40,
+            //   width: 40,
+            //   margin: const EdgeInsets.all(5),
+            //   decoration: BoxDecoration(
+            //     color: context.theme.scaffoldBackgroundColor,
+            //     borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            //   ),
+            //   child: Icon(
+            //     brand.iconData,
+            //     size: brand.name == 'Fila' ? 12 : 18,
+            //   ),
+            // ),
             Expanded(
                 child: Text(
-              brand.name,
+              collection.title ?? '',
               style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
               textAlign: TextAlign.center,
             )),
