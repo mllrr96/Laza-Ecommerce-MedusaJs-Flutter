@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:laza/common/extensions/context_extension.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/colors.dart';
 
@@ -100,45 +99,4 @@ class AppTheme {
   // Body 3
   // 13px Medium
   static const bodySmall = TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black);
-}
-
-// A theme notifier to change and save theme mode (light/dark)
-class ThemeNotifier extends ChangeNotifier {
-  final String key = "themeMode";
-  SharedPreferences? prefs;
-  late ThemeMode _themeMode;
-
-  ThemeMode get themeMode => _themeMode;
-
-  ThemeNotifier() {
-    _themeMode = ThemeMode.system;
-    loadFromPrefs();
-  }
-
-  toggleTheme(ThemeMode themeMode) async {
-    await _initPrefs();
-    prefs?.setString(key, themeMode.name);
-    _themeMode = themeMode;
-    notifyListeners();
-  }
-
-  _initPrefs() async {
-    prefs ??= await SharedPreferences.getInstance();
-  }
-
-  loadFromPrefs() async {
-    await _initPrefs();
-
-    switch (prefs?.getString(key)) {
-      case 'system':
-        _themeMode = ThemeMode.system;
-      case 'light':
-        _themeMode = ThemeMode.light;
-      case 'dark':
-        _themeMode = ThemeMode.light;
-      default:
-        _themeMode = ThemeMode.system;
-    }
-    notifyListeners();
-  }
 }

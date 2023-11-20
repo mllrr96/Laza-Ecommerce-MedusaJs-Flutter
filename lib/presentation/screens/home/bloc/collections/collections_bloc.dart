@@ -12,7 +12,7 @@ part 'collections_bloc.freezed.dart';
 class CollectionsBloc extends Bloc<CollectionsEvent, CollectionsState> {
   CollectionsBloc(this._usecase) : super(const _Loading()) {
     on<_RetrieveCollections>((event, emit) async {
-      final result = await _usecase();
+      final result = await _usecase(queryParameters: event.queryParameters);
       result.when((collections) => emit(_Loaded(collections)), (error) => emit(_Error(error.message)));
     });
   }

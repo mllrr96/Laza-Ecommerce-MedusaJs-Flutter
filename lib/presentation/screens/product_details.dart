@@ -70,6 +70,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
     final product = widget.product;
     final bottomPadding = context.bottomViewPadding == 0.0 ? 30.0 : context.bottomViewPadding;
+    final currencyCode = getIt<PreferenceRepository>().currencyCode;
     num getPrice() {
       final formatCurrency = NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode);
       final amount = selectedVariant?.prices
@@ -88,19 +89,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         return 0.0;
       }
       return formatCurrency.parse(formatCurrency.format(priceFormatted));
-    }
-
-    String getPriceText(int? price) {
-      final formatCurrency = NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode);
-      num priceFormatted = price ?? 0;
-      final symbol = formatCurrency.currencySymbol;
-      if (formatCurrency.decimalDigits! > 0) {
-        priceFormatted /= pow(10, formatCurrency.decimalDigits!);
-      }
-      if (price == null) {
-        return '$symbol 0.0';
-      }
-      return formatCurrency.format(priceFormatted);
     }
 
     return Scaffold(
@@ -138,7 +126,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       style: context.bodyExtraSmall?.copyWith(color: ColorConstant.manatee)),
                                 ],
                               ),
-                              Text(getPriceText(lineItem?.total), style: context.bodyLargeW600)
+                              Text(lineItem?.total.formatAsPrice(currencyCode) ?? '', style: context.bodyLargeW600)
                             ],
                           ),
                         ),

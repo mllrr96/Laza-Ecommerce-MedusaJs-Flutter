@@ -1,6 +1,5 @@
-
+import 'dart:developer';
 import 'package:injectable/injectable.dart';
-import 'package:laza/common/exception.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/domain/model/failure.dart';
 import 'package:medusa_store_flutter/medusa_store_flutter.dart';
@@ -16,19 +15,14 @@ class GetHomeCategoryUsecase {
       final result = await storeApi.collections.list();
 
       if (result?.collections?.isEmpty ?? true) {
-        throw NoRecordsException;
+        return Error(Failure(message: 'No collections found.'));
       } else {
         return Success(result!.collections!);
       }
-    } on Exception catch (e) {
-      if (e is NoRecordsException) {
-        return Error(
-          Failure(message: 'No collections found.'),
-        );
-      }
-      return Error(
-        Failure(message: 'Failed to load collection, please try again.'),
-      );
+    } catch (e, stack) {
+      log(stack.toString());
+      log(e.toString());
+      return Error(Failure.from(e));
     }
   }
 }

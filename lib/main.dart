@@ -48,7 +48,8 @@ class MyApp extends StatelessWidget {
           create: (_) => getIt<ProductsBloc>(),
         ),
         BlocProvider<CollectionsBloc>(
-          create: (_) => getIt<CollectionsBloc>()..add(const CollectionsEvent.retrieveCollections(queryParameters: {'limit' : 5 })),
+          create: (_) =>
+              getIt<CollectionsBloc>()..add(const CollectionsEvent.retrieveCollections(queryParameters: {'limit': 4})),
         ),
         BlocProvider<RegionBloc>(
           create: (_) => getIt<RegionBloc>()..add(const RegionEvent.retrieveRegions()),

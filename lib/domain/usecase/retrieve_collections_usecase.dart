@@ -23,7 +23,7 @@ class RetrieveCollectionsUsecase {
     } catch (e, stack) {
       log(stack.toString());
       log(e.toString());
-      return Error(Failure(message: 'Error loading collections'));
+      return Error(Failure.from(e));
     }
   }
 }

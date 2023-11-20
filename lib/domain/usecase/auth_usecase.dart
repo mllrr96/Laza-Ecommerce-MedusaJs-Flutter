@@ -23,7 +23,7 @@ class AuthenticationUsecase {
     } catch (e, stack) {
       log(stack.toString());
       log(e.toString());
-      return Error(Failure(message: 'Failed to customer profile'));
+      return Error(Failure.from(e));
     }
   }
 
@@ -40,13 +40,13 @@ class AuthenticationUsecase {
               email: email, password: password, firstName: firstName, lastName: lastName, phone: phone));
 
       if (result?.customer == null) {
-        return Error(Failure(message: 'Error creating account'));
+        return Error(Failure(message: 'Error, received customer is null'));
       } else {
         return Success(result!.customer!);
       }
     } on Exception catch (e) {
       log(e.toString());
-      return Error(Failure(message: 'Error creating account'));
+      return Error(Failure.from(e));
     }
   }
 
@@ -73,7 +73,7 @@ class AuthenticationUsecase {
     } catch (e, stack) {
       log(stack.toString());
       log(e.toString());
-      return Error(Failure(message: 'Failed to customer profile'));
+      return Error(Failure.from(e));
     }
   }
 }

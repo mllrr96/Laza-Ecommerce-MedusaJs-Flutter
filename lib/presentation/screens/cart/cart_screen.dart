@@ -21,19 +21,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String getPrice(int? total) {
-      final formatCurrency = NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode);
-
-      if (total == null) {
-        return '';
-      }
-
-      num priceFormatted = total;
-      if (formatCurrency.decimalDigits! > 0) {
-        priceFormatted /= pow(10, formatCurrency.decimalDigits!);
-      }
-      return formatCurrency.format(priceFormatted).toString();
-    }
+    final currencyCode = getIt<PreferenceRepository>().currencyCode;
 
     num getPriceInt(int? total) {
       final formatCurrency = NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode);
@@ -215,7 +203,7 @@ class CartScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Subtotal', style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
-                                Text(getPrice(cart.cart.subTotal), style: context.bodyMediumW500),
+                                Text(cart.cart.subTotal.formatAsPrice(currencyCode), style: context.bodyMediumW500),
                               ],
                             ),
                             const Gap(10),
@@ -224,7 +212,7 @@ class CartScreen extends StatelessWidget {
                               children: [
                                 Text('Shipping cost',
                                     style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
-                                Text(getPrice(cart.cart.shippingTotal), style: context.bodyMediumW500),
+                                Text(cart.cart.shippingTotal.formatAsPrice(currencyCode), style: context.bodyMediumW500),
                               ],
                             ),
                             const Gap(10),
@@ -232,7 +220,7 @@ class CartScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Taxes', style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
-                                Text(getPrice(cart.cart.taxTotal), style: context.bodyMediumW500),
+                                Text(cart.cart.taxTotal.formatAsPrice(currencyCode), style: context.bodyMediumW500),
                               ],
                             ),
                             const Gap(15),

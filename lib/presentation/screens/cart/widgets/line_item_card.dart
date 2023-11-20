@@ -1,11 +1,8 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import 'package:medusa_store_flutter/store_models/store/line_item.dart';
 
@@ -23,23 +20,9 @@ class LineItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final invQuantity = lineItem.variant?.inventoryQuantity;
-
     final shouldAdd =
         (invQuantity ?? 1) > (lineItem.quantity?.toInt() ?? 0) || (lineItem.variant?.allowBackorder ?? false);
-
-    String getPrice(int? total) {
-      final formatCurrency = NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode);
-
-      if (total == null) {
-        return '';
-      }
-
-      num priceFormatted = total;
-      if (formatCurrency.decimalDigits! > 0) {
-        priceFormatted /= pow(10, formatCurrency.decimalDigits!);
-      }
-      return formatCurrency.format(priceFormatted).toString();
-    }
+    final currencyCode = getIt<PreferenceRepository>().currencyCode;
 
     return Container(
       height: 130,
@@ -83,7 +66,7 @@ class LineItemCard extends StatelessWidget {
                     ),
                     const Gap(5),
                     Text(
-                      getPrice(lineItem.total),
+                      lineItem.total.formatAsPrice(currencyCode),
                       style: context.bodyExtraSmall?.copyWith(color: ColorConstant.manatee),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,

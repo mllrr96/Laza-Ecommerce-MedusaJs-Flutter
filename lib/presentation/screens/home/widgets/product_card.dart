@@ -1,9 +1,7 @@
-import 'dart:math';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 import 'package:laza/common/extensions/context_extension.dart';
 import 'package:medusa_store_flutter/store_models/products/product.dart';
 
@@ -24,6 +22,8 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currencyCode = getIt<PreferenceRepository>().currencyCode;
+
     String getPriceText() {
       num? price;
       if (product.variants?.isNotEmpty ?? false) {
@@ -32,17 +32,7 @@ class ProductCard extends StatelessWidget {
             .map((b) => b?.map((e) => e.amount).reduce((curr, next) => curr! < next! ? curr : next))
             .first;
       }
-
-      final formatCurrency = NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode);
-
-      num lowestPriceNum = price ?? 0;
-      if (formatCurrency.decimalDigits! > 0) {
-        lowestPriceNum /= pow(10, formatCurrency.decimalDigits!);
-      }
-      if (price == null) {
-        return '';
-      }
-      return formatCurrency.format(lowestPriceNum);
+      return price.formatAsPrice(currencyCode);
     }
 
     return InkWell(

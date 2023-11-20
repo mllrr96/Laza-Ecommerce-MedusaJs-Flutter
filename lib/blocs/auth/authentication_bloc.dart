@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:laza/domain/model/failure.dart';
 import 'package:laza/domain/usecase/auth_usecase.dart';
 import 'package:medusa_store_flutter/store_models/store/customer.dart';
 
@@ -31,7 +32,13 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       emit(const _Guest());
     } else {
       final result = await _authUsecase.getCurrentCustomer();
-      result.when((customer) => emit( _LoggedIn(customer)), (error) => emit(_Error(error.message)));
+      result.when((customer) => emit(_LoggedIn(customer)), (error) {
+        if (error.code == 401) {
+          emit(const _LoggedOut());
+        } else {
+          emit(_Error(error));
+        }
+      });
     }
   }
 
@@ -41,7 +48,14 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   ) async {
     emit(const _Loading());
     final result = await _authUsecase.login(email: event.email, password: event.password);
-    result.when((customer) => emit(_LoggedIn(customer)), (error) => emit(_Error(error.message)));
+    result.when((customer) => emit(_LoggedIn(customer)), (error) {
+      final isGuest = getIt<PreferenceRepository>().isGuest;
+      if (isGuest) {
+        emit(_Guest(failure: error));
+      } else {
+        emit(_LoggedOut(failure: error));
+      }
+    });
   }
 
   Future<void> _onLogout(
@@ -53,7 +67,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     if (result) {
       emit(const _LoggedOut());
     } else {
-      emit(const _LoggedOut());
+      emit(_Error(Failure(message: 'Error signing out')));
     }
   }
 
@@ -64,7 +78,14 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     emit(const _Loading());
     final result = await _authUsecase.signUp(
         email: event.email, password: event.password, firstName: event.firstName, lastName: event.lastName, phone: '');
-    result.when((customer) => emit(_LoggedIn(customer)), (error) => emit(_Error(error.message)));
+    result.when((customer) => emit(_LoggedIn(customer)), (error) {
+      final isGuest = getIt<PreferenceRepository>().isGuest;
+      if (isGuest) {
+        emit(_Guest(failure: error));
+      } else {
+        emit(_LoggedOut(failure: error));
+      }
+    });
   }
 
   Future<void> _onLoginAsGuest(

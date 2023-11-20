@@ -120,7 +120,7 @@ class HomeScreen extends StatelessWidget {
                               separatorBuilder: (_, __) => const Gap(10),
                               physics: const BouncingScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: 4,
+                              itemCount: 5,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
                                 return CollectionTile(collection: ProductCollection(title: 'Shorts'));
@@ -142,9 +142,16 @@ class HomeScreen extends StatelessWidget {
                           separatorBuilder: (_, __) => const Gap(10),
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: data.collections.length,
+                          itemCount: data.collections.length + 1,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
+                            if (index == data.collections.length) {
+                              if (data.collections.length > 3) {
+                                return CollectionTile(collection: ProductCollection(title: 'More'), onTap: () {});
+                              } else {
+                                return const SizedBox.shrink();
+                              }
+                            }
                             final collection = data.collections[index];
                             return CollectionTile(collection: collection);
                             // return CollectionTile(collection: collection);
@@ -180,8 +187,7 @@ class NewArrival extends StatefulWidget {
 class _NewArrivalState extends State<NewArrival> {
   static const _pageSize = 10;
 
-  final PagingController<int, Product> _pagingController =
-      PagingController(firstPageKey: 0);
+  final PagingController<int, Product> _pagingController = PagingController(firstPageKey: 0);
   late ProductsBloc productsBloc;
   List<Product> loadedProducts = [];
 
@@ -276,7 +282,7 @@ class CollectionTile extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () => context.router.push(CollectionRoute(collection: collection)),
+        onTap: onTap ?? () => context.router.push(CollectionRoute(collection: collection)),
         borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         child: Ink(
           height: 50,

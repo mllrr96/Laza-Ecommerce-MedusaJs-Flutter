@@ -29,15 +29,18 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
+    const contentPadding = EdgeInsets.symmetric(horizontal: 20.0);
     return BlocConsumer<AuthenticationBloc, AuthenticationState>(
       listener: (BuildContext context, AuthenticationState state) {
-        state.whenOrNull(loggedOut: () {
+        state.whenOrNull(loggedOut: (_) {
           // When signing out clear shared prefs
           getIt<SharedPreferences>().clear();
           context.router.replaceAll([const SignInRoute()]);
         });
       },
       builder: (context, state) {
+        final loggedIn = state.maybeMap(loggedIn: (_) => true, orElse: () => false);
+        final color = loggedIn ? null : ColorConstant.manatee;
         return Drawer(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
@@ -68,7 +71,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     const Gap(30),
                     state.maybeMap(
                         loggedIn: (data) => Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              padding: contentPadding,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -132,51 +135,58 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               // themeNotifier.toggleTheme(result);
                             });
                           },
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          contentPadding: contentPadding,
                           title: const Text('Appearance'),
                           horizontalTitleGap: 10.0,
                         );
                       },
                     ),
                     ListTile(
-                      leading: const Icon(LazaIcons.info_circle),
-                      onTap: () {},
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      title: const Text('Account Information'),
+                      leading: Icon(LazaIcons.info_circle, color: loggedIn ? null : ColorConstant.manatee),
+                      onTap: loggedIn ? () {} : null,
+                      contentPadding: contentPadding,
+                      title: Text(
+                        'Account Information',
+                        style: TextStyle(color: loggedIn ? null : ColorConstant.manatee),
+                      ),
                       horizontalTitleGap: 10.0,
                     ),
                     ListTile(
-                      leading: const Icon(LazaIcons.lock),
-                      onTap: () {},
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      title: const Text('Password'),
+                      leading: Icon(LazaIcons.lock, color: color),
+                      onTap: loggedIn ? () {} : null,
+                      contentPadding: contentPadding,
+                      title: Text('Password', style: TextStyle(color: color)),
+                      horizontalTitleGap: 10.0,
+                    ),
+                    state.maybeMap(orElse: () => const SizedBox.shrink()),
+                    ListTile(
+                      leading: Icon(LazaIcons.bag, color: color),
+                      onTap: loggedIn ? () => context.pushRoute(const OrdersRoute()) : null,
+                      contentPadding: contentPadding,
+                      title: Text('Orders', style: TextStyle(color: color)),
                       horizontalTitleGap: 10.0,
                     ),
                     ListTile(
-                      leading: const Icon(LazaIcons.bag),
-                      onTap: () => context.pushRoute(const OrdersRoute()),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      title: const Text('Orders'),
-                      horizontalTitleGap: 10.0,
-                    ),
-                    ListTile(
-                      leading: const Icon(LazaIcons.wallet),
-                      onTap: () {},
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      title: const Text('My Cards'),
+                      leading: Icon(LazaIcons.wallet, color: color),
+                      onTap: loggedIn ? () {} : null,
+                      contentPadding: contentPadding,
+                      title: Text(
+                        'My Cards',
+                        style: TextStyle(color: color),
+                      ),
                       horizontalTitleGap: 10.0,
                     ),
                     ListTile(
                       leading: const Icon(LazaIcons.heart),
                       onTap: () {},
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      contentPadding: contentPadding,
                       title: const Text('Whislist'),
                       horizontalTitleGap: 10.0,
                     ),
                     ListTile(
                       leading: const Icon(LazaIcons.settings),
                       onTap: () {},
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      contentPadding: contentPadding,
                       title: const Text('Settings'),
                       horizontalTitleGap: 10.0,
                     ),
@@ -197,7 +207,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             return ListTile(
                               leading: const Icon(Icons.local_shipping_outlined),
                               onTap: () async {
-                                final prefRepo = getIt<PreferenceRepository>();
                                 final savedCountry = getIt<PreferenceRepository>().country;
                                 final countryId = await showConfirmationDialog<int?>(
                                     context: context,
@@ -206,23 +215,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     actions: countries
                                         .map((e) => AlertDialogAction<int?>(key: e.id, label: e.name ?? ''))
                                         .toList());
-                                if (countryId != null) {
-                                  final country = countries.where((element) => element.id == countryId).first;
-                                  final region = loaded.regions.firstWhere((element) => element.id == country.regionId);
-                                  if (country.id != savedCountry?.id) {
-                                    await prefRepo.setCountry(country);
-                                    await prefRepo.setRegion(region).then((_) {
-                                      context.read<ProductsBloc>().add(const ProductsEvent.loadProducts());
-                                      if (prefRepo.cartId != null) {
-                                        context.read<CartBloc>().add(CartEvent.updateCart(
-                                            cartId: prefRepo.cartId!, req: StorePostCartsCartReq(regionId: region.id)));
-                                      }
-                                    });
-                                  }
-                                  setState(() {});
-                                }
+
+                                await onShippingTap(countries, loaded.regions, countryId);
                               },
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              contentPadding: contentPadding,
                               title: const Text('Shipping to:'),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -265,7 +261,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   }
                                 });
                               },
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              contentPadding: contentPadding,
                               title: const Text('Logout'),
                               horizontalTitleGap: 10.0,
                             ),
@@ -274,7 +270,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               onTap: () async {
                                 context.pushRoute(const SignInRoute());
                               },
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              contentPadding: contentPadding,
                               title: const Text('Sign in'),
                               horizontalTitleGap: 10.0,
                             ),
@@ -283,7 +279,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               onTap: () async {
                                 context.pushRoute(const SignInRoute());
                               },
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              contentPadding: contentPadding,
                               title: const Text('Sign in'),
                               horizontalTitleGap: 10.0,
                             ),
@@ -297,5 +293,26 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         );
       },
     );
+  }
+
+  Future<void> onShippingTap(List<Country> countries, List<Region> regions, int? countryId) async {
+    final prefRepo = getIt<PreferenceRepository>();
+    final savedCountry = getIt<PreferenceRepository>().country;
+    if (countryId != null) {
+      final country = countries.where((element) => element.id == countryId).first;
+      final region = regions.firstWhere((element) => element.id == country.regionId);
+      if (country.id != savedCountry?.id) {
+        await prefRepo.setCountry(country);
+        await prefRepo.setRegion(region).then((_) {
+          context.read<ProductsBloc>().add(const ProductsEvent.loadProducts());
+          if (prefRepo.cartId != null) {
+            context
+                .read<CartBloc>()
+                .add(CartEvent.updateCart(cartId: prefRepo.cartId!, req: StorePostCartsCartReq(regionId: region.id)));
+          }
+        });
+      }
+      setState(() {});
+    }
   }
 }

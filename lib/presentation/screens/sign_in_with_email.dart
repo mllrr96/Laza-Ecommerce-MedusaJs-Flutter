@@ -49,6 +49,8 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
         );
       },
       builder: (context, state) {
+        final error = state.mapOrNull(
+            error: (_) => _.failure.message, guest: (_) => _.failure?.message, loggedOut: (_) => _.failure?.message);
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: context.theme.appBarTheme.systemOverlayStyle!,
           child: GestureDetector(
@@ -94,30 +96,68 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              height: error != null ? 50.0 : 0.0,
+                              margin: EdgeInsets.only(bottom: error != null ? 0 : 50),
+                              decoration: const BoxDecoration(
+                                color: Color(0xffFFE9E9),
+                                borderRadius: BorderRadius.all(Radius.circular(4)),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.error,
+                                      color: Colors.redAccent,
+                                      size: error != null ? 25 : 0,
+                                    ),
+                                    const Gap(5),
+                                    Expanded(
+                                      child: Text(
+                                        error ?? '',
+                                        style: context.bodyMedium?.copyWith(color: Colors.redAccent),
+                                        overflow: TextOverflow.fade,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const Gap(10),
                             CustomTextField(
                               controller: emailCtrl,
                               labelText: 'Email Address',
+                              keyboardType: TextInputType.emailAddress,
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
                                   return 'Field is required';
                                 }
-
                                 return null;
                               },
                             ),
                             CustomTextField(
-                                controller: passwordCtrl,
-                                labelText: 'Password',
-                                validator: (val) {
-                                  if (val == null || val.isEmpty) {
-                                    return 'Field is required';
-                                  }
-                                  if (val.length < 8) {
-                                    return 'Password should be 8 characters long';
-                                  }
-                                  return null;
-                                },
-                                textInputAction: TextInputAction.done),
+                              controller: passwordCtrl,
+                              labelText: 'Password',
+                              keyboardType: TextInputType.text,
+                              obscureText: true,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Field is required';
+                                }
+                                if (val.length < 8) {
+                                  return 'Password should be 8 characters long';
+                                }
+                                return null;
+                              },
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) {
+                                if (!formKey.currentState!.validate()) return;
+                                context.read<AuthenticationBloc>().add(AuthenticationEvent.loginCustomer(
+                                    email: emailCtrl.text, password: passwordCtrl.text));
+                              },
+                            ),
                             const Gap(10),
                             Align(
                                 alignment: Alignment.centerRight,

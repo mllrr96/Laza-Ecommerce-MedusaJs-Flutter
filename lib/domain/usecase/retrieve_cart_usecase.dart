@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:injectable/injectable.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/domain/model/failure.dart';
@@ -7,7 +8,6 @@ import 'package:medusa_store_flutter/response_models/cart.dart';
 import 'package:medusa_store_flutter/store_models/store/index.dart';
 import 'package:multiple_result/multiple_result.dart';
 
-import '../../common/exception.dart';
 
 @injectable
 class RetrieveCartUsecase {
@@ -30,13 +30,10 @@ class RetrieveCartUsecase {
       } else {
         return Success(result!.cart!);
       }
-    } on Exception catch (e) {
-      if (e is NoRecordsException) {
-        return Error(
-          Failure(message: 'No cart found.'),
-        );
-      }
-      return Error(Failure(message: 'Failed to load cart, please try again.'));
+    }  catch (e, stack) {
+      log(stack.toString());
+      log(e.toString());
+      return Error(Failure.from(e));
     }
   }
 }

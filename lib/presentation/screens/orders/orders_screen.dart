@@ -65,6 +65,18 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 itemBuilder: (context, order, index) => ListTile(
                   title: Text('Order id: ${order.id ?? ''}'),
                 ),
+                firstPageErrorIndicatorBuilder: (context) {
+                  return Center(child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(_pagingController.error?.toString() ?? ''),
+                      ElevatedButton(onPressed: (){
+                        _pagingController.refresh();
+                      }, child: const Text('Retry'))
+                    ],
+                  ));
+                }
               ),
             );
           },

@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:injectable/injectable.dart';
 import 'package:medusa_store_flutter/medusa_store_flutter.dart';
 import 'package:medusa_store_flutter/store_models/store/index.dart';
 import 'package:multiple_result/multiple_result.dart';
 
-import '../../common/exception.dart';
 import '../../di/di.dart';
 import '../model/failure.dart';
 
@@ -16,19 +17,14 @@ class RetrieveRegionsUsecase {
       final result = await storeApi.regions.list();
 
       if (result?.regions?.isEmpty ?? true) {
-        throw NoRecordsException;
+        return Error(Failure(message: 'No regions found.'));
       } else {
         return Success(result!.regions!);
       }
-    } on Exception catch (e) {
-      if (e is NoRecordsException) {
-        return Error(
-          Failure(message: 'No regions found.'),
-        );
-      }
-      return Error(
-        Failure(message: 'Failed to load regions, please try again.'),
-      );
+    } catch (e, stack) {
+      log(stack.toString());
+      log(e.toString());
+      return Error(Failure.from(e));
     }
   }
 }

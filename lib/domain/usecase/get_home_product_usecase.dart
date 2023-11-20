@@ -35,9 +35,7 @@ class GetHomeProductUsecase {
       }
     } catch (e, stack) {
       log(stack.toString());
-      return Error(
-        Failure(message: 'Failed to load products, please try again.'),
-      );
+      return Error(Failure.from(e));
     }
   }
 }

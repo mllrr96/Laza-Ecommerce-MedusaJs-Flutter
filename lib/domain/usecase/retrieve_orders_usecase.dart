@@ -23,9 +23,7 @@ class RetrieveOrdersUsecase {
     } on Exception catch (e, stack) {
       log(stack.toString());
       log(e.toString());
-      return Error(
-        Failure(message: 'Failed to load orders'),
-      );
+      return Error(Failure.from(e));
     }
   }
 }

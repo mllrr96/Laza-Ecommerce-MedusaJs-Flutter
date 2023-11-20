@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 
 extension BuildContextEntension<T> on BuildContext {
   // text styles
@@ -28,6 +31,11 @@ extension BuildContextEntension<T> on BuildContext {
   double get bottomViewPadding => MediaQuery.of(this).viewPadding.bottom;
   EdgeInsets get viewInsets => MediaQuery.of(this).viewInsets;
   EdgeInsets get padding => MediaQuery.of(this).padding;
+
+
+  // Directionality
+  bool get isRTL => Directionality.of(this) == TextDirection.rtl;
+
 }
 
 extension TextStyleColor on TextStyle {
@@ -41,5 +49,28 @@ extension Unique<E, Id> on List<E> {
     var list = inplace ? this : List<E>.from(this);
     list.retainWhere((x) => ids.add(id != null ? id(x) : x as Id));
     return list;
+  }
+}
+
+extension FormatPrice on num? {
+  String formatAsPrice(String? currencyCode, {bool includeSymbol = true, bool space = true, bool symbolAtEnd = false}) {
+    if (this == null || currencyCode == null) {
+      return this?.toString() ?? '';
+    }
+    num value = this!;
+    final formatter = NumberFormat.simpleCurrency(name: currencyCode.toUpperCase());
+    if (formatter.decimalDigits! > 0) {
+      value /= pow(10, formatter.decimalDigits!);
+    }
+    final currencySymbol = formatter.currencySymbol;
+
+    if (includeSymbol) {
+      return (!symbolAtEnd ? currencySymbol : '') +
+          (space && !symbolAtEnd ? ' ' : '') +
+          formatter.format(value).replaceAll(currencySymbol, '') +
+          (space && symbolAtEnd ? ' ' : '') +
+          (symbolAtEnd ? currencySymbol : '');
+    }
+    return formatter.format(value).replaceAll(currencySymbol, '');
   }
 }
