@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:medusa_store_flutter/store_models/products/product.dart';
 
 import '../../../../common/colors.dart';
@@ -22,18 +22,11 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currencyCode = getIt<PreferenceRepository>().currencyCode;
-
-    String getPriceText() {
-      num? price;
-      if (product.variants?.isNotEmpty ?? false) {
-        price = product.variants
-            ?.map((e) => e.prices)
-            .map((b) => b?.map((e) => e.amount).reduce((curr, next) => curr! < next! ? curr : next))
-            .first;
-      }
-      return price.formatAsPrice(currencyCode);
-    }
+    final currencyCode = PreferenceRepository.currencyCode;
+    num? price = product.variants
+        ?.map((e) => e.prices)
+        .map((b) => b?.map((e) => e.amount).reduce((curr, next) => curr! < next! ? curr : next))
+        .first;
 
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(10.0)),
@@ -125,7 +118,7 @@ class ProductCard extends StatelessWidget {
                   // const Spacer(),
                   Column(
                     children: [
-                      Text(getPriceText(), style: context.bodyMedium),
+                      Text(price.formatAsPrice(currencyCode), style: context.bodyMedium),
                       const Gap(5),
                     ],
                   )

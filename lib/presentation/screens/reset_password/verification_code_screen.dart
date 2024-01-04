@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:laza/presentation/components/index.dart';
 import '../../../common/colors.dart';
 import '../../routes/app_router.dart';

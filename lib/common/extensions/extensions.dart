@@ -73,4 +73,22 @@ extension FormatPrice on num? {
     }
     return formatter.format(value).replaceAll(currencySymbol, '');
   }
+
+  num formatAsPriceNum(String? currencyCode) {
+    if (this == null || currencyCode == null) {
+      return this ?? 0.0;
+    }
+    var value = this!;
+    final formatter =
+    NumberFormat.simpleCurrency(name: currencyCode.toUpperCase());
+    if (formatter.decimalDigits! > 0) {
+      value /= pow(10, formatter.decimalDigits!);
+    }
+    final currencySymbol = formatter.currencySymbol;
+
+    return formatter
+        .parse(formatter.format(value).replaceAll(currencySymbol, ''));
+  }
+
+
 }

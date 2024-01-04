@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:laza/blocs/auth/authentication_bloc.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import '../../common/colors.dart';
 import '../../di/di.dart';
 import '../../domain/repository/preference_repository.dart';

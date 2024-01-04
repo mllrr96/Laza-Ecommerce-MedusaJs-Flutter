@@ -21,7 +21,8 @@ class SplashScreen extends StatelessWidget {
       child: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
           state.map(
-            guest: (_) => context.router.replaceAll([const DashboardRoute()]),
+            loggedInAsGuest: (_) =>
+                context.router.replaceAll([const DashboardRoute()]),
             loggedIn: (_) => context.router.replace(const DashboardRoute()),
             loggedOut: (_) => context.router.replace(const SignInRoute()),
             // Should push to error signing in page maybe ??

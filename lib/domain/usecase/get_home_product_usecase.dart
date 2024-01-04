@@ -20,7 +20,7 @@ class GetHomeProductUsecase {
 
       Map<String, dynamic> queryParams = {
         'is_giftcard': false,
-        'currency_code': prefRepo.currencyCode,
+        'currency_code': PreferenceRepository.currencyCode,
         if (regionId != null) 'region_id': regionId
       };
 

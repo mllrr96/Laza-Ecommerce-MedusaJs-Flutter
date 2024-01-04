@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:laza/presentation/screens/home/widgets/index.dart';
 import 'package:medusa_store_flutter/store_models/store/index.dart';
 import 'package:skeletonizer/skeletonizer.dart';

@@ -6,7 +6,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:laza/presentation/components/index.dart';
 import '../../common/colors.dart';
 import '../routes/app_router.dart';
@@ -26,10 +26,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool pop = false;
   @override
   Widget build(BuildContext context) {
-    final bottomBarBgColor = context.theme.bottomNavigationBarTheme.backgroundColor;
+    final bottomBarBgColor =
+        context.theme.bottomNavigationBarTheme.backgroundColor;
     final systemOverlay = context.theme.appBarTheme.systemOverlayStyle;
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: systemOverlay!.copyWith(systemNavigationBarColor: bottomBarBgColor),
+      value:
+          systemOverlay!.copyWith(systemNavigationBarColor: bottomBarBgColor),
       child: WillPopScope(
         onWillPop: () async {
           if (Platform.isIOS) {
@@ -48,7 +50,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: AutoTabsRouter(
           routes: const [
             HomeRoute(),
-            SearchRoute(),
+            // SearchRoute(),
             WishlistRoute(),
             CartRoute(),
           ],
@@ -64,6 +66,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 child: const DrawerWidget(),
               ),
+              drawerEdgeDragWidth: MediaQuery.of(context).size.width / 4,
               body: child,
               bottomNavigationBar: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -81,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       selectedIndex: tabsRouter.activeIndex,
                       barItems: [
                         BarItem(icon: LazaIcons.home, title: 'Home'),
-                        BarItem(icon: LazaIcons.search, title: 'Search'),
+                        // BarItem(icon: LazaIcons.search, title: 'Search'),
                         BarItem(icon: LazaIcons.heart, title: 'Wishlist'),
                         BarItem(icon: LazaIcons.bag, title: 'Cart'),
                       ],

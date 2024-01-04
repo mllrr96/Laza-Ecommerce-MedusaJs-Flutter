@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:animated_digit/animated_digit.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,7 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:laza/presentation/screens/cart/bloc/line_item/line_item_bloc.dart';
 import 'package:laza/common/colors.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/presentation/components/index.dart';
 import 'package:medusa_store_flutter/store_models/store/index.dart';
@@ -38,14 +37,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     if (widget.product.options?.length == 1 &&
         widget.product.options?.first.values?.length == 1 &&
         widget.product.variants?.length == 1) {
-      optionsSelected.addAll({widget.product.options!.first.id!: widget.product.options!.first.values!.first.value!});
+      optionsSelected.addAll({
+        widget.product.options!.first.id!:
+            widget.product.options!.first.values!.first.value!
+      });
       selectedVariant = widget.product.variants?.first;
     }
 
     if (widget.product.variants?.isNotEmpty ?? false) {
       price = widget.product.variants
               ?.map((e) => e.prices)
-              .map((b) => b?.map((e) => e.amount).reduce((curr, next) => curr! < next! ? curr : next))
+              .map((b) => b
+                  ?.map((e) => e.amount)
+                  .reduce((curr, next) => curr! < next! ? curr : next))
               .first ??
           0.0;
     }
@@ -59,7 +63,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     }
     final values = optionsSelected.values.toList();
     widget.product.variants?.forEach((variant) {
-      List<String>? titleList = variant.title?.split('/').toList().map((e) => e.replaceAll(' ', '')).toList();
+      List<String>? titleList = variant.title
+          ?.split('/')
+          .toList()
+          .map((e) => e.replaceAll(' ', ''))
+          .toList();
       if (titleList != null && titleList.toSet().containsAll(values.toSet())) {
         selectedVariant = variant;
       }
@@ -69,33 +77,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
-    final bottomPadding = context.bottomViewPadding == 0.0 ? 30.0 : context.bottomViewPadding;
-    final currencyCode = getIt<PreferenceRepository>().currencyCode;
-    num getPrice() {
-      final formatCurrency = NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode);
-      final amount = selectedVariant?.prices
-          ?.where((price) => price.currencyCode == getIt<PreferenceRepository>().currencyCode)
-          .firstOrNull
-          ?.amount;
-      if (amount != null) {
-        price = amount;
-      }
-
-      num priceFormatted = price ?? 0;
-      if (formatCurrency.decimalDigits! > 0) {
-        priceFormatted /= pow(10, formatCurrency.decimalDigits!);
-      }
-      if (price == null) {
-        return 0.0;
-      }
-      return formatCurrency.parse(formatCurrency.format(priceFormatted));
-    }
+    final bottomPadding =
+        context.bottomViewPadding == 0.0 ? 30.0 : context.bottomViewPadding;
+    final currencyCode = PreferenceRepository.currencyCode;
+    final amount = selectedVariant?.prices
+        ?.where((price) =>
+    price.currencyCode == PreferenceRepository.currencyCode)
+        .firstOrNull
+        ?.amount;
 
     return Scaffold(
       bottomNavigationBar: BlocListener<LineItemBloc, LineItemState>(
         listener: (context, state) {
           state.whenOrNull(
-            success: (_) => context.read<CartBloc>().add(CartEvent.refreshCart(_)),
+            success: (_) =>
+                context.read<CartBloc>().add(CartEvent.refreshCart(_)),
             failure: (message) => Fluttertoast.showToast(msg: message),
           );
         },
@@ -103,10 +99,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           builder: (context, state) {
             return state.maybeMap(
                 loaded: (loaded) {
-                  final inCart =
-                      loaded.cart.items?.map((e) => e.variantId).toList().contains(selectedVariant?.id) ?? false;
-                  final lineItem =
-                      loaded.cart.items?.where((element) => element.variantId == selectedVariant?.id).firstOrNull;
+                  final inCart = loaded.cart.items
+                          ?.map((e) => e.variantId)
+                          .toList()
+                          .contains(selectedVariant?.id) ??
+                      false;
+                  final lineItem = loaded.cart.items
+                      ?.where(
+                          (element) => element.variantId == selectedVariant?.id)
+                      .firstOrNull;
                   if (inCart) {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
@@ -114,62 +115,112 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         const Divider(height: 0),
                         Container(
                           color: context.theme.scaffoldBackgroundColor,
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Total Price', style: context.bodyMediumW600),
+                                  Text('Total Price',
+                                      style: context.bodyMediumW600),
                                   Text('with VAT,SD',
-                                      style: context.bodyExtraSmall?.copyWith(color: ColorConstant.manatee)),
+                                      style: context.bodyExtraSmall?.copyWith(
+                                          color: ColorConstant.manatee)),
                                 ],
                               ),
-                              Text(lineItem?.total.formatAsPrice(currencyCode) ?? '', style: context.bodyLargeW600)
+                              Text(
+                                  lineItem?.total.formatAsPrice(currencyCode) ??
+                                      '',
+                                  style: context.bodyLargeW600)
                             ],
                           ),
                         ),
                         Container(
                           color: ColorConstant.primary,
                           height: 50,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: Material(
-                                  child: InkWell(
-                                    onTap: () {
-                                      context.read<LineItemBloc>().add(
-                                          LineItemEvent.update(loaded.cart.id!, lineItem!.id!, lineItem.quantity! - 1));
-                                    },
-                                    child: Ink(
-                                      height: 50,
-                                      color: ColorConstant.primary,
-                                      child: const Center(child: Icon(Icons.remove)),
+                          child: BlocBuilder<LineItemBloc, LineItemState>(
+                            builder: (context, state) {
+                              return state.map(loading: (_) {
+                                return const Center(
+                                    child:
+                                        CircularProgressIndicator.adaptive());
+                              }, success: (cart) {
+                                return Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Material(
+                                        child: InkWell(
+                                          onTap: () {
+                                            context.read<LineItemBloc>().add(
+                                                LineItemEvent.update(
+                                                    loaded.cart.id!,
+                                                    lineItem!.id!,
+                                                    lineItem.quantity! - 1));
+                                          },
+                                          child: Ink(
+                                            height: 50,
+                                            color: ColorConstant.primary,
+                                            child: const Center(
+                                                child: Icon(Icons.remove)),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(child: Center(child: Text(lineItem?.quantity?.toString() ?? ''))),
-                              Expanded(
-                                flex: 2,
-                                child: Material(
-                                  child: InkWell(
-                                    onTap: () {
-                                      context.read<LineItemBloc>().add(
-                                          LineItemEvent.update(loaded.cart.id!, lineItem!.id!, lineItem.quantity! + 1));
-                                    },
-                                    child: Ink(
-                                      height: 50,
-                                      color: ColorConstant.primary,
-                                      child: const Center(child: Icon(Icons.add)),
+                                    Expanded(
+                                        child: Center(
+                                            child: Text(lineItem?.quantity
+                                                    ?.toString() ??
+                                                ''))),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Material(
+                                        child: InkWell(
+                                          onTap: () {
+                                            context.read<LineItemBloc>().add(
+                                                LineItemEvent.update(
+                                                    loaded.cart.id!,
+                                                    lineItem!.id!,
+                                                    lineItem.quantity! + 1));
+                                          },
+                                          child: Ink(
+                                            height: 50,
+                                            color: ColorConstant.primary,
+                                            child: const Center(
+                                                child: Icon(Icons.add)),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                                  ],
+                                );
+                              }, failure: (error) {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text('Error adding item'),
+                                    TextButton(
+                                        onPressed: () {
+                                          if (optionsSelected.length !=
+                                                  product.options!.length &&
+                                              selectedVariant == null) {
+                                            return;
+                                          }
+                                          context.read<LineItemBloc>().add(
+                                              LineItemEvent.add(
+                                                  getIt<PreferenceRepository>()
+                                                      .cartId!,
+                                                  selectedVariant!.id!,
+                                                  1));
+                                        },
+                                        child: const Text('Retry')),
+                                  ],
+                                );
+                              });
+                            },
                           ),
                         ),
                         Container(
@@ -181,12 +232,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   }
                   return BottomNavButton(
                       label: 'Add to Cart',
-                      onTap: optionsSelected.length != product.options!.length && selectedVariant == null
-                          ? null
-                          : () {
-                              context.read<LineItemBloc>().add(
-                                  LineItemEvent.add(getIt<PreferenceRepository>().cartId!, selectedVariant!.id!, 1));
-                            });
+                      onTap:
+                          optionsSelected.length != product.options!.length &&
+                                  selectedVariant == null
+                              ? null
+                              : () {
+                                  context.read<LineItemBloc>().add(
+                                      LineItemEvent.add(
+                                          getIt<PreferenceRepository>().cartId!,
+                                          selectedVariant!.id!,
+                                          1));
+                                });
                 },
                 orElse: () => const SizedBox.shrink());
           },
@@ -251,11 +307,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             flexibleSpace: FlexibleSpaceBar(
               background: selectedImage != null
                   ? SafeArea(
-                      child: CachedNetworkImage(imageUrl: selectedImage!, fit: BoxFit.fitHeight),
+                      child: CachedNetworkImage(
+                          imageUrl: selectedImage!, fit: BoxFit.fitHeight),
                     )
                   : null,
             ),
-            systemOverlayStyle: context.theme.appBarTheme.systemOverlayStyle!.copyWith(
+            systemOverlayStyle:
+                context.theme.appBarTheme.systemOverlayStyle!.copyWith(
               statusBarIconBrightness: Brightness.dark,
               statusBarBrightness: Brightness.light,
             ),
@@ -272,7 +330,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (product.collection?.title != null)
-                          Text(product.collection!.title!, style: context.bodySmall),
+                          Text(product.collection!.title!,
+                              style: context.bodySmall),
                         if (product.collection?.title != null) const Gap(5.0),
                         Text(product.title ?? '', style: context.headlineSmall),
                       ],
@@ -284,14 +343,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       Text('Price', style: context.bodySmall),
                       const Gap(5.0),
                       AnimatedDigitWidget(
-                          value: getPrice(),
-                          prefix: NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode)
+                          value: amount.formatAsPriceNum(currencyCode),
+                          prefix: NumberFormat.simpleCurrency(
+                                  name: currencyCode)
                               .currencySymbol,
                           textStyle: context.headlineSmall,
-                          fractionDigits: NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode)
+                          fractionDigits: NumberFormat.simpleCurrency(
+                                      name: currencyCode)
                                   .decimalDigits ??
                               0),
-                      // Text(getPriceText(), style: context.headlineSmall),
                     ],
                   ),
                 ],
@@ -306,7 +366,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(product.description!, style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
+                    Text(product.description!,
+                        style: context.bodyMedium
+                            ?.copyWith(color: ColorConstant.manatee)),
                     const Gap(20),
                   ],
                 ),
@@ -327,17 +389,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           InkWell(
-                            onTap: () => setState(() => selectedImage = image.url),
-                            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                            onTap: () =>
+                                setState(() => selectedImage = image.url),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10.0)),
                             child: Ink(
                               height: 80,
                               width: 80,
-                              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                              decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0))),
                               child: CachedNetworkImage(
                                 imageUrl: image.url!,
                                 fit: BoxFit.fitWidth,
-                                placeholder: (_, __) => const Center(child: CircularProgressIndicator.adaptive()),
-                                errorWidget: (_, __, ___) => const Icon(Icons.error, size: 30, color: Colors.amber),
+                                placeholder: (_, __) => const Center(
+                                    child:
+                                        CircularProgressIndicator.adaptive()),
+                                errorWidget: (_, __, ___) => const Icon(
+                                    Icons.error,
+                                    size: 30,
+                                    color: Colors.amber),
                               ),
                             ),
                           ),
@@ -348,7 +419,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             width: selectedImage == image.url ? 40 : 0,
                             decoration: BoxDecoration(
                                 color: ColorConstant.primary,
-                                borderRadius: const BorderRadius.all(Radius.circular(10.0))),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10.0))),
                           )
                         ],
                       );
@@ -376,38 +448,55 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Text(productOption.title ?? '', style: context.bodyLargeW600),
+                        child: Text(productOption.title ?? '',
+                            style: context.bodyLargeW600),
                       ),
                       const Gap(10),
                       SizedBox(
                         height: 70,
                         width: double.infinity,
                         child: ListView.separated(
-                            separatorBuilder: (_, __) => const SizedBox(width: 10.0),
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            separatorBuilder: (_, __) =>
+                                const SizedBox(width: 10.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
                             physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
-                            itemCount: productOption.values!.map((e) => e.value).toSet().toList().length,
+                            itemCount: productOption.values!
+                                .map((e) => e.value)
+                                .toSet()
+                                .toList()
+                                .length,
                             itemBuilder: (context, index) {
-                              final productOptionValue =
-                                  productOption.values!.map((e) => e.value).toSet().toList()[index];
-                              final bool isSelected = optionsSelected.containsKey(productOption.id) &&
-                                  optionsSelected.containsValue(productOptionValue);
+                              final productOptionValue = productOption.values!
+                                  .map((e) => e.value)
+                                  .toSet()
+                                  .toList()[index];
+                              final bool isSelected = optionsSelected
+                                      .containsKey(productOption.id) &&
+                                  optionsSelected
+                                      .containsValue(productOptionValue);
                               return InkWell(
-                                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10.0)),
                                 onTap: () => setState(() {
-                                  optionsSelected.addAll({productOption.id!: productOptionValue!});
+                                  optionsSelected.addAll(
+                                      {productOption.id!: productOptionValue!});
                                   selectVariant();
                                 }),
                                 child: Ink(
                                   height: 70,
                                   // width: 70,
-                                  padding: const EdgeInsets.symmetric(horizontal: 70 / 2),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 70 / 2),
                                   decoration: BoxDecoration(
                                       color: context.theme.cardColor,
-                                      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                                      border:
-                                          Border.all(color: isSelected ? ColorConstant.manatee : Colors.transparent)),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10.0)),
+                                      border: Border.all(
+                                          color: isSelected
+                                              ? ColorConstant.manatee
+                                              : Colors.transparent)),
                                   child: Center(
                                     child: Text(
                                       productOptionValue ?? '',
@@ -439,7 +528,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         style: context.bodyLargeW600,
                       ),
                       TextButton(
-                          onPressed: () => context.router.push(const ReviewsRoute()), child: const Text('View All')),
+                          onPressed: () =>
+                              context.router.push(const ReviewsRoute()),
+                          child: const Text('View All')),
                     ],
                   ),
                 ),
@@ -489,7 +580,8 @@ class ReviewCard extends StatelessWidget {
                         const Gap(5),
                         Text(
                           '13 Sep, 2020',
-                          style: context.bodyExtraSmall?.copyWith(color: ColorConstant.manatee),
+                          style: context.bodyExtraSmall
+                              ?.copyWith(color: ColorConstant.manatee),
                         )
                       ],
                     )
@@ -507,7 +599,8 @@ class ReviewCard extends StatelessWidget {
                     ),
                     Text(
                       ' rating',
-                      style: context.bodyExtraSmall?.copyWith(color: ColorConstant.manatee),
+                      style: context.bodyExtraSmall
+                          ?.copyWith(color: ColorConstant.manatee),
                     )
                   ],
                 ),
@@ -517,8 +610,10 @@ class ReviewCard extends StatelessWidget {
                     const Icon(Icons.star, size: 14, color: Color(0xffFF981F)),
                     const Icon(Icons.star, size: 14, color: Color(0xffFF981F)),
                     const Icon(Icons.star, size: 14, color: Color(0xffFF981F)),
-                    Icon(Icons.star_border, size: 14, color: ColorConstant.manatee),
-                    Icon(Icons.star_border, size: 14, color: ColorConstant.manatee)
+                    Icon(Icons.star_border,
+                        size: 14, color: ColorConstant.manatee),
+                    Icon(Icons.star_border,
+                        size: 14, color: ColorConstant.manatee)
                   ],
                 ),
               ],
@@ -526,7 +621,8 @@ class ReviewCard extends StatelessWidget {
           ],
         ),
         const Gap(10),
-        const Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque malesuada eget vitae amet...')
+        const Text(
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque malesuada eget vitae amet...')
       ],
     );
   }

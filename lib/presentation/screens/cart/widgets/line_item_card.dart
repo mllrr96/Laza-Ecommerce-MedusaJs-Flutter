@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:medusa_store_flutter/store_models/store/line_item.dart';
 
 import '../../../../common/colors.dart';
-import '../../../../di/di.dart';
 import '../../../../domain/repository/preference_repository.dart';
 import '../../../components/laza_icons.dart';
 import '../bloc/cart/cart_bloc.dart';
@@ -22,7 +21,7 @@ class LineItemCard extends StatelessWidget {
     final invQuantity = lineItem.variant?.inventoryQuantity;
     final shouldAdd =
         (invQuantity ?? 1) > (lineItem.quantity?.toInt() ?? 0) || (lineItem.variant?.allowBackorder ?? false);
-    final currencyCode = getIt<PreferenceRepository>().currencyCode;
+    final currencyCode = PreferenceRepository.currencyCode;
 
     return Container(
       height: 130,

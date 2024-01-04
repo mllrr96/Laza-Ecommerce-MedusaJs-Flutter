@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/presentation/routes/app_router.dart';
 
@@ -68,7 +68,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
             if (canPop) const Gap(15),
             Expanded(
               child: Hero(
-                tag: canPop ? 'search' : '',
+                tag: 'search',
                 child: Material(
                   color: Colors.transparent,
                   child: TextField(

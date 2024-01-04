@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:animated_digit/animated_digit.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/domain/repository/preference_repository.dart';
 import 'package:laza/presentation/components/index.dart';
@@ -21,24 +20,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currencyCode = getIt<PreferenceRepository>().currencyCode;
-
-    num getPriceInt(int? total) {
-      final formatCurrency = NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode);
-
-      if (total == null) {
-        return 0;
-      }
-
-      num priceFormatted = total;
-      if (formatCurrency.decimalDigits! > 0) {
-        priceFormatted /= pow(10, formatCurrency.decimalDigits!);
-      }
-      final result = formatCurrency.parse(formatCurrency.format(priceFormatted));
-
-      return result;
-    }
-
+    final currencyCode = PreferenceRepository.currencyCode;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: context.theme.appBarTheme.systemOverlayStyle!,
       child: BlocBuilder<CartBloc, CartState>(
@@ -47,7 +29,10 @@ class CartScreen extends StatelessWidget {
             appBar: const CustomAppBar(title: 'Cart'),
             bottomNavigationBar: state.whenOrNull(
                 loaded: (cart) => cart.items?.isNotEmpty ?? false
-                    ? BottomNavButton(label: 'Checkout', onTap: () => context.router.push(const OrderConfirmedRoute()))
+                    ? BottomNavButton(
+                        label: 'Checkout',
+                        onTap: () =>
+                            context.router.push(const OrderConfirmedRoute()))
                     : null),
             body: state.maybeMap(
               loaded: (cart) => cart.cart.items?.isEmpty ?? false
@@ -59,12 +44,15 @@ class CartScreen extends StatelessWidget {
                         children: [
                           const Text('Your shopping bag is empty.'),
                           const Gap(10),
-                          ElevatedButton(onPressed: () {}, child: const Text('Explore products'))
+                          ElevatedButton(
+                              onPressed: () {},
+                              child: const Text('Explore products'))
                         ],
                       ),
                     ))
                   : ListView(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 25.0),
                       children: [
                         if (cart.cart.items?.isNotEmpty ?? false)
                           // Cart Item
@@ -75,7 +63,8 @@ class CartScreen extends StatelessWidget {
                             separatorBuilder: (_, __) => const Gap(10),
                             itemBuilder: (context, index) {
                               final item = cart.cart.items?[index];
-                              return LineItemCard(lineItem: item!, cartId: cart.cart.id!);
+                              return LineItemCard(
+                                  lineItem: item!, cartId: cart.cart.id!);
                             },
                           ),
                         const Gap(20),
@@ -85,7 +74,8 @@ class CartScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Delivery Address', style: context.bodyLargeW500),
+                                Text('Delivery Address',
+                                    style: context.bodyLargeW500),
                                 const Icon(
                                   Icons.arrow_forward_ios_sharp,
                                   size: 15,
@@ -94,7 +84,8 @@ class CartScreen extends StatelessWidget {
                             ),
                             const Gap(15),
                             InkWell(
-                              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10.0)),
                               onTap: () {},
                               child: Ink(
                                 padding: const EdgeInsets.only(right: 15.0),
@@ -103,7 +94,8 @@ class CartScreen extends StatelessWidget {
                                     Stack(
                                       alignment: Alignment.center,
                                       children: [
-                                        Image.asset('assets/images/address.png', height: 50, width: 50),
+                                        Image.asset('assets/images/address.png',
+                                            height: 50, width: 50),
                                         const Icon(
                                           Icons.location_on_rounded,
                                           color: Colors.red,
@@ -114,20 +106,28 @@ class CartScreen extends StatelessWidget {
                                     const Gap(15),
                                     Flexible(
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Flexible(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text('Chhatak, Sunamgonj 12/8AB', style: context.bodyMedium),
+                                                Text(
+                                                    'Chhatak, Sunamgonj 12/8AB',
+                                                    style: context.bodyMedium),
                                                 const Gap(10),
                                                 Text('Sylhet',
-                                                    style: context.bodySmall?.copyWith(color: ColorConstant.manatee)),
+                                                    style: context.bodySmall
+                                                        ?.copyWith(
+                                                            color: ColorConstant
+                                                                .manatee)),
                                               ],
                                             ),
                                           ),
-                                          const Icon(LazaIcons.verified_badge, color: Colors.green)
+                                          const Icon(LazaIcons.verified_badge,
+                                              color: Colors.green)
                                         ],
                                       ),
                                     ),
@@ -144,7 +144,8 @@ class CartScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Payment Method', style: context.bodyLargeW500),
+                                Text('Payment Method',
+                                    style: context.bodyLargeW500),
                                 const Icon(
                                   Icons.arrow_forward_ios_sharp,
                                   size: 15,
@@ -157,7 +158,8 @@ class CartScreen extends StatelessWidget {
                                 Stack(
                                   alignment: Alignment.center,
                                   children: [
-                                    Image.asset('assets/images/address.png', height: 50, width: 50),
+                                    Image.asset('assets/images/address.png',
+                                        height: 50, width: 50),
                                     const Icon(
                                       Icons.location_on_rounded,
                                       color: Colors.red,
@@ -168,20 +170,27 @@ class CartScreen extends StatelessWidget {
                                 const Gap(15),
                                 Flexible(
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Flexible(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Text('Visa Classic', style: context.bodyMedium),
+                                            Text('Visa Classic',
+                                                style: context.bodyMedium),
                                             const Gap(10),
                                             Text('**** 7690',
-                                                style: context.bodySmall?.copyWith(color: ColorConstant.manatee)),
+                                                style: context.bodySmall
+                                                    ?.copyWith(
+                                                        color: ColorConstant
+                                                            .manatee)),
                                           ],
                                         ),
                                       ),
-                                      const Icon(LazaIcons.verified_badge, color: Colors.green)
+                                      const Icon(LazaIcons.verified_badge,
+                                          color: Colors.green)
                                     ],
                                   ),
                                 ),
@@ -202,8 +211,13 @@ class CartScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Subtotal', style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
-                                Text(cart.cart.subTotal.formatAsPrice(currencyCode), style: context.bodyMediumW500),
+                                Text('Subtotal',
+                                    style: context.bodyMedium?.copyWith(
+                                        color: ColorConstant.manatee)),
+                                Text(
+                                    cart.cart.subTotal
+                                        .formatAsPrice(currencyCode),
+                                    style: context.bodyMediumW500),
                               ],
                             ),
                             const Gap(10),
@@ -211,32 +225,44 @@ class CartScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Shipping cost',
-                                    style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
-                                Text(cart.cart.shippingTotal.formatAsPrice(currencyCode), style: context.bodyMediumW500),
+                                    style: context.bodyMedium?.copyWith(
+                                        color: ColorConstant.manatee)),
+                                Text(
+                                    cart.cart.shippingTotal
+                                        .formatAsPrice(currencyCode),
+                                    style: context.bodyMediumW500),
                               ],
                             ),
                             const Gap(10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Taxes', style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
-                                Text(cart.cart.taxTotal.formatAsPrice(currencyCode), style: context.bodyMediumW500),
+                                Text('Taxes',
+                                    style: context.bodyMedium?.copyWith(
+                                        color: ColorConstant.manatee)),
+                                Text(
+                                    cart.cart.taxTotal
+                                        .formatAsPrice(currencyCode),
+                                    style: context.bodyMediumW500),
                               ],
                             ),
                             const Gap(15),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Total', style: context.bodyMedium?.copyWith(color: ColorConstant.manatee)),
+                                Text('Total',
+                                    style: context.bodyMedium?.copyWith(
+                                        color: ColorConstant.manatee)),
                                 AnimatedDigitWidget(
-                                  prefix: NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode)
+                                  prefix: NumberFormat.simpleCurrency(
+                                          name: currencyCode)
                                       .currencySymbol,
-                                  value: getPriceInt(cart.cart.total),
+                                  value: cart.cart.total?.formatAsPriceNum(currencyCode),
                                   textStyle: context.bodyMediumW500,
-                                  fractionDigits:
-                                      NumberFormat.simpleCurrency(name: getIt<PreferenceRepository>().currencyCode)
-                                              .decimalDigits ??
-                                          0,
+                                  fractionDigits: NumberFormat.simpleCurrency(
+                                              name: currencyCode)
+                                          .decimalDigits ??
+                                      0,
                                 )
                               ],
                             ),
@@ -256,7 +282,9 @@ class CartScreen extends StatelessWidget {
                     if (error.message != null) Text(error.message ?? ''),
                     ElevatedButton(
                         onPressed: () {
-                          context.read<CartBloc>().add(const CartEvent.loadCart());
+                          context
+                              .read<CartBloc>()
+                              .add(const CartEvent.loadCart());
                         },
                         child: const Text('Retry'))
                   ],
@@ -270,7 +298,9 @@ class CartScreen extends StatelessWidget {
                     const Text('Something went wrong'),
                     ElevatedButton(
                         onPressed: () {
-                          context.read<CartBloc>().add(const CartEvent.loadCart());
+                          context
+                              .read<CartBloc>()
+                              .add(const CartEvent.loadCart());
                         },
                         child: const Text('Retry'))
                   ],

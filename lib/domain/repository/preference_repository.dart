@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:injectable/injectable.dart';
+import 'package:laza/di/di.dart';
 import 'package:medusa_store_flutter/store_models/store/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PreferenceRepository {
   PreferenceRepository(this._prefs);
   final SharedPreferences _prefs;
+  static PreferenceRepository get instance => getIt<PreferenceRepository>();
 
   void init() {
     if (_prefs.getString(_countryKey) != null) {
@@ -31,7 +33,7 @@ class PreferenceRepository {
   Region? _region;
   Country? get country => _country;
   Region? get region => _region;
-  String get currencyCode => _region?.currencyCode?.toUpperCase() ?? 'USD';
+  static String get currencyCode => instance._region?.currencyCode?.toUpperCase() ?? 'USD';
 
   void setGuest({bool? value}) => _prefs.setBool(_guestKey, value ?? true);
   Future<bool> setCartId(String cartId) async => await _prefs.setString(_cartKey, cartId);

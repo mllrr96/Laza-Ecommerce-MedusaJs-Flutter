@@ -9,7 +9,7 @@ import 'package:laza/presentation/screens/cart/bloc/cart/cart_bloc.dart';
 import 'package:laza/blocs/region/region_bloc.dart';
 import 'package:laza/cubits/theme/theme_cubit.dart';
 import 'package:laza/di/di.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:medusa_store_flutter/request_models/index.dart';
 import 'package:medusa_store_flutter/store_models/store/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -274,7 +274,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               title: const Text('Sign in'),
                               horizontalTitleGap: 10.0,
                             ),
-                        guest: (_) => ListTile(
+                        loggedInAsGuest: (_) => ListTile(
                               leading: const Icon(Icons.login),
                               onTap: () async {
                                 context.pushRoute(const SignInRoute());

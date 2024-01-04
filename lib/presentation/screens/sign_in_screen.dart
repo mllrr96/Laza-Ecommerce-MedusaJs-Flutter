@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:laza/blocs/auth/authentication_bloc.dart';
 import 'package:laza/common/colors.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 import '../../di/di.dart';
 import '../../domain/repository/preference_repository.dart';

@@ -42,4 +42,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-/lib/routes/app_router.gr.dart
+/lib/presentation/routes/app_router.gr.dart
+/lib/common/exception.freezed.dart
+/lib/di/di.config.dart

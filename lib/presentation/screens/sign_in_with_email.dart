@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:laza/blocs/auth/authentication_bloc.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/domain/repository/preference_repository.dart';
 import '../../common/colors.dart';
@@ -50,7 +50,7 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
       },
       builder: (context, state) {
         final error = state.mapOrNull(
-            error: (_) => _.failure.message, guest: (_) => _.failure?.message, loggedOut: (_) => _.failure?.message);
+            error: (_) => _.failure.message, loggedInAsGuest: (_) => _.failure?.message, loggedOut: (_) => _.failure?.message);
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: context.theme.appBarTheme.systemOverlayStyle!,
           child: GestureDetector(

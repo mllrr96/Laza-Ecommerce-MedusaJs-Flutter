@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:laza/common/extensions/context_extension.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/presentation/screens/home/bloc/products/products_bloc.dart';
 import 'package:medusa_store_flutter/store_models/products/product_collection.dart';
