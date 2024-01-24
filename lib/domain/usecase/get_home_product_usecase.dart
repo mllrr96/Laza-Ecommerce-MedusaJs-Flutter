@@ -3,8 +3,7 @@ import 'dart:developer';
 import 'package:injectable/injectable.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/domain/repository/preference_repository.dart';
-import 'package:medusa_store_flutter/medusa_store_flutter.dart';
-import 'package:medusa_store_flutter/response_models/products.dart';
+import 'package:medusa_store_flutter/medusa_store.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../model/failure.dart';

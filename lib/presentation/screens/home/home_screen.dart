@@ -5,8 +5,9 @@ import 'package:gap/gap.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:laza/common/extensions/extensions.dart';
 import 'package:laza/presentation/screens/home/widgets/index.dart';
-import 'package:medusa_store_flutter/store_models/store/index.dart';
+import 'package:medusa_store_flutter/medusa_store.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 import '../../../common/colors.dart';
 import '../../components/index.dart';
@@ -50,7 +51,8 @@ class HomeScreen extends StatelessWidget {
                         focusedBorder: inputBorder,
                         hintStyle: TextStyle(color: ColorConstant.manatee),
                         fillColor: context.theme.cardColor,
-                        prefixIcon: Icon(LazaIcons.search, color: ColorConstant.manatee)),
+                        prefixIcon: Icon(LazaIcons.search,
+                            color: ColorConstant.manatee)),
                   ),
                 ),
               ),
@@ -100,33 +102,38 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SliverGap(10),
-          SliverToBoxAdapter(
-            child: Headline(
-              headline: 'Collections',
-              onViewAllTap: () {},
-            ),
-          ),
           BlocBuilder<CollectionsBloc, CollectionsState>(
             builder: (context, state) {
               return state.map(
                   loading: (_) => SliverToBoxAdapter(
                         child: Skeletonizer(
                           enabled: true,
-                          child: SizedBox(
-                            width: double.infinity,
-                            height: 50,
-                            child: ListView.separated(
-                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                              separatorBuilder: (_, __) => const Gap(10),
-                              physics: const BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: 5,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return CollectionTile(collection: ProductCollection(title: 'Shorts'));
-                                // return CollectionTile(collection: collection);
-                              },
-                            ),
+                          child: Column(
+                            children: [
+                              Headline(
+                                headline: 'Collections',
+                                onViewAllTap: () {},
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: ListView.separated(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  separatorBuilder: (_, __) => const Gap(10),
+                                  physics: const BouncingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: 5,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return CollectionTile(
+                                        collection:
+                                            ProductCollection(title: 'Shorts'));
+                                    // return CollectionTile(collection: collection);
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -135,41 +142,74 @@ class HomeScreen extends StatelessWidget {
                       return const SliverToBoxAdapter(child: SizedBox.shrink());
                     }
                     return SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: 50,
-                        child: ListView.separated(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          separatorBuilder: (_, __) => const Gap(10),
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: data.collections.length + 1,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            if (index == data.collections.length) {
-                              if (data.collections.length > 3) {
-                                return CollectionTile(collection: ProductCollection(title: 'More'), onTap: () {});
-                              } else {
-                                return const SizedBox.shrink();
-                              }
-                            }
-                            final collection = data.collections[index];
-                            return CollectionTile(collection: collection);
-                            // return CollectionTile(collection: collection);
-                          },
-                        ),
+                      child: Column(
+                        children: [
+                          Headline(
+                            headline: 'Collections',
+                            onViewAllTap: () {},
+                          ),
+                          SizedBox(
+                            height: 50,
+                            child: ListView.separated(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              separatorBuilder: (_, __) => const Gap(10),
+                              physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: data.collections.length + 1,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                if (index == data.collections.length) {
+                                  if (data.collections.length > 3) {
+                                    return CollectionTile(
+                                        collection:
+                                            ProductCollection(title: 'More'),
+                                        onTap: () {});
+                                  } else {
+                                    return const SizedBox.shrink();
+                                  }
+                                }
+                                final collection = data.collections[index];
+                                return CollectionTile(collection: collection);
+                                // return CollectionTile(collection: collection);
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
-                  error: (_) => const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 50,
-                          child: Text('Error loading collections'),
+                  error: (_) => SliverToBoxAdapter(
+                        child: Column(
+                          children: [
+                            const Headline(
+                              headline: 'Collections',
+                              onViewAllTap: null,
+                            ),
+                            SizedBox(
+                              height: 50,
+                              width: double.infinity,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text('Error loading collections'),
+                                  TextButton(
+                                      onPressed: () {
+                                        context.read<CollectionsBloc>().add(
+                                            const CollectionsEvent
+                                                .retrieveCollections(
+                                                queryParameters: {'limit': 4}));
+                                      },
+                                      child: const Text('Retry')),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ));
             },
           ),
           const SliverGap(10),
-          SliverToBoxAdapter(child: Headline(headline: 'New Arrival', onViewAllTap: () {})),
           const NewArrival()
         ],
       )),
@@ -187,9 +227,10 @@ class NewArrival extends StatefulWidget {
 class _NewArrivalState extends State<NewArrival> {
   static const _pageSize = 10;
 
-  final PagingController<int, Product> _pagingController = PagingController(firstPageKey: 0);
+  final PagingController<int, Product> _pagingController =
+      PagingController(firstPageKey: 0);
   late ProductsBloc productsBloc;
-  List<Product> loadedProducts = [];
+  int loadedProductsCount = 0;
 
   @override
   void initState() {
@@ -198,6 +239,12 @@ class _NewArrivalState extends State<NewArrival> {
       productsBloc.add(ProductsEvent.loadProducts(queryParameters: {
         'offset': pageKey,
         'limit': _pageSize,
+        // // get the products that are created in the last 7 days from now
+        // 'created_at[gte]':
+        //     DateTime.now().subtract(const Duration(days: 7)).toString(),
+        // // get the products that are updated in the last 7 days from now
+        // 'updated_at[gte]':
+        //     DateTime.now().subtract(const Duration(days: 7)).toString(),
       }));
     });
     super.initState();
@@ -205,12 +252,12 @@ class _NewArrivalState extends State<NewArrival> {
 
   void _loaded(List<Product> products, int? limit, int? count, int? offset) {
     final newItems = products;
-    loadedProducts.addAll(products);
+    loadedProductsCount += newItems.length;
     final isLastPage = newItems.length < _pageSize;
     if (isLastPage) {
       _pagingController.appendLastPage(newItems);
     } else {
-      final nextPageKey = 1 + loadedProducts.length;
+      final nextPageKey = 1 + loadedProductsCount;
       _pagingController.appendPage(newItems, nextPageKey);
     }
   }
@@ -225,20 +272,53 @@ class _NewArrivalState extends State<NewArrival> {
         );
       },
       builder: (context, state) {
-        return SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-          sliver: PagedSliverGrid(
-            pagingController: _pagingController,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisExtent: 250,
-              crossAxisSpacing: 15.0,
-              mainAxisSpacing: 15.0,
+        String newArrivalText = loadedProductsCount != 0
+            ? 'New Arrival ($loadedProductsCount)'
+            : 'New Arrival';
+        return MultiSliver(
+          children: [
+            SliverToBoxAdapter(
+                child: Headline(headline: newArrivalText, onViewAllTap: () {})),
+            SliverPadding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+              sliver: PagedSliverGrid(
+                pagingController: _pagingController,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisExtent: 250,
+                  crossAxisSpacing: 15.0,
+                  mainAxisSpacing: 15.0,
+                ),
+                builderDelegate: PagedChildBuilderDelegate<Product>(
+                    itemBuilder: (_, product, __) =>
+                        ProductCard(product: product),
+                    firstPageProgressIndicatorBuilder: (_) {
+                      const product = Product(
+                        title: 'Medusa Product',
+                      );
+                      return const Skeletonizer(
+                        enabled: true,
+                        child: Wrap(
+                          spacing: 4,
+                          alignment: WrapAlignment.spaceBetween,
+                          children: [
+                            ProductCard(product: product, shimmer: true),
+                            ProductCard(product: product, shimmer: true),
+                            ProductCard(product: product, shimmer: true),
+                            ProductCard(product: product, shimmer: true),
+                            ProductCard(product: product, shimmer: true),
+                            ProductCard(product: product, shimmer: true),
+                            ProductCard(product: product, shimmer: true),
+                            ProductCard(product: product, shimmer: true),
+                            ProductCard(product: product, shimmer: true),
+                          ],
+                        ),
+                      );
+                    }),
+              ),
             ),
-            builderDelegate: PagedChildBuilderDelegate<Product>(
-              itemBuilder: (context, product, index) => ProductCard(product: product),
-            ),
-          ),
+          ],
         );
       },
     );
@@ -282,7 +362,8 @@ class CollectionTile extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onTap ?? () => context.router.push(CollectionRoute(collection: collection)),
+        onTap: onTap ??
+            () => context.router.push(CollectionRoute(collection: collection)),
         borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         child: Ink(
           height: 50,
@@ -309,7 +390,8 @@ class CollectionTile extends StatelessWidget {
               Expanded(
                   child: Text(
                 collection.title ?? '',
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center,
               )),
             ],

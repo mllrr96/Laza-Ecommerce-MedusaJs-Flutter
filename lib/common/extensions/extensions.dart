@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
+import 'package:laza/common/enums.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 extension BuildContextEntension<T> on BuildContext {
   // text styles
@@ -91,4 +93,28 @@ extension FormatPrice on num? {
   }
 
 
+}
+
+
+extension FormatDate on DateTime? {
+  String formatDate() {
+    if (this == null) {
+      return '';
+    }
+    return DateFormat(DateFormatOptions.eighth.toPattern()).format(this!);
+  }
+
+  String formatTime() {
+    if (this == null) {
+      return '';
+    }
+    return DateFormat(DateFormatOptions.eighth.toPattern()).format(this!);
+  }
+
+  String timeAgo() {
+    if (this == null) {
+      return '';
+    }
+    return timeago.format(this!);
+  }
 }

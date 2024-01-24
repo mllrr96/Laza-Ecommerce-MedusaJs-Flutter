@@ -1,8 +1,7 @@
 import 'dart:developer';
 
 import 'package:injectable/injectable.dart';
-import 'package:medusa_store_flutter/medusa_store_flutter.dart';
-import 'package:medusa_store_flutter/store_models/store/index.dart';
+import 'package:medusa_store_flutter/medusa_store.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../di/di.dart';

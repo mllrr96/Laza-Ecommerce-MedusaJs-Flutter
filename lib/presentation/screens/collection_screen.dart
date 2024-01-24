@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:laza/common/extensions/extensions.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/presentation/screens/home/bloc/products/products_bloc.dart';
-import 'package:medusa_store_flutter/store_models/products/product_collection.dart';
+import 'package:medusa_store_flutter/medusa_store.dart';
 import '../components/index.dart';
 import '../routes/app_router.dart';
 import 'home/widgets/product_card.dart';

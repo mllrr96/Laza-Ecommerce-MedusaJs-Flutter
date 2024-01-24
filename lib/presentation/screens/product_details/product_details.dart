@@ -2,20 +2,17 @@ import 'package:animated_digit/animated_digit.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import 'package:laza/presentation/screens/cart/bloc/line_item/line_item_bloc.dart';
+import 'package:laza/domain/repository/preference_repository.dart';
+import 'package:laza/presentation/routes/app_router.dart';
 import 'package:laza/common/colors.dart';
 import 'package:laza/common/extensions/extensions.dart';
-import 'package:laza/di/di.dart';
 import 'package:laza/presentation/components/index.dart';
-import 'package:medusa_store_flutter/store_models/store/index.dart';
-import 'cart/bloc/cart/cart_bloc.dart';
-import '../../domain/repository/preference_repository.dart';
-import '../routes/app_router.dart';
-import '../theme/theme.dart';
+import 'package:laza/presentation/theme/theme.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:medusa_store_flutter/medusa_store.dart';
+import 'widgets/bottom_nav_button.dart';
 
 @RoutePage()
 class ProductDetailsScreen extends StatefulWidget {
@@ -69,7 +66,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           .map((e) => e.replaceAll(' ', ''))
           .toList();
       if (titleList != null && titleList.toSet().containsAll(values.toSet())) {
-        selectedVariant = variant;
+        setState(() {
+          selectedVariant = variant;
+        });
       }
     });
   }
@@ -80,173 +79,36 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     final bottomPadding =
         context.bottomViewPadding == 0.0 ? 30.0 : context.bottomViewPadding;
     final currencyCode = PreferenceRepository.currencyCode;
-    final amount = selectedVariant?.prices
-        ?.where((price) =>
-    price.currencyCode == PreferenceRepository.currencyCode)
-        .firstOrNull
-        ?.amount;
+
+    num variantPrice() {
+      // in case the customer didn't select any variant then show the lowest price of the product
+      // aka starts from price
+      if (selectedVariant == null) {
+        List<MoneyAmount> prices = [];
+        product.variants?.forEach((variant) {
+          variant.prices?.forEach((price) {
+            if (price.currencyCode?.toUpperCase() == currencyCode) {
+              prices.add(price);
+            }
+          });
+        });
+        final startFromPrice = prices
+            .map((e) => e.amount ?? 0)
+            .reduce((current, next) => current < next ? current : next);
+        return startFromPrice.formatAsPriceNum(currencyCode);
+      }
+      final amount = selectedVariant?.prices
+          ?.where((price) => price.currencyCode?.toUpperCase() == currencyCode)
+          .firstOrNull
+          ?.amount;
+      return amount.formatAsPriceNum(currencyCode);
+    }
 
     return Scaffold(
-      bottomNavigationBar: BlocListener<LineItemBloc, LineItemState>(
-        listener: (context, state) {
-          state.whenOrNull(
-            success: (_) =>
-                context.read<CartBloc>().add(CartEvent.refreshCart(_)),
-            failure: (message) => Fluttertoast.showToast(msg: message),
-          );
-        },
-        child: BlocBuilder<CartBloc, CartState>(
-          builder: (context, state) {
-            return state.maybeMap(
-                loaded: (loaded) {
-                  final inCart = loaded.cart.items
-                          ?.map((e) => e.variantId)
-                          .toList()
-                          .contains(selectedVariant?.id) ??
-                      false;
-                  final lineItem = loaded.cart.items
-                      ?.where(
-                          (element) => element.variantId == selectedVariant?.id)
-                      .firstOrNull;
-                  if (inCart) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Divider(height: 0),
-                        Container(
-                          color: context.theme.scaffoldBackgroundColor,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Total Price',
-                                      style: context.bodyMediumW600),
-                                  Text('with VAT,SD',
-                                      style: context.bodyExtraSmall?.copyWith(
-                                          color: ColorConstant.manatee)),
-                                ],
-                              ),
-                              Text(
-                                  lineItem?.total.formatAsPrice(currencyCode) ??
-                                      '',
-                                  style: context.bodyLargeW600)
-                            ],
-                          ),
-                        ),
-                        Container(
-                          color: ColorConstant.primary,
-                          height: 50,
-                          child: BlocBuilder<LineItemBloc, LineItemState>(
-                            builder: (context, state) {
-                              return state.map(loading: (_) {
-                                return const Center(
-                                    child:
-                                        CircularProgressIndicator.adaptive());
-                              }, success: (cart) {
-                                return Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: Material(
-                                        child: InkWell(
-                                          onTap: () {
-                                            context.read<LineItemBloc>().add(
-                                                LineItemEvent.update(
-                                                    loaded.cart.id!,
-                                                    lineItem!.id!,
-                                                    lineItem.quantity! - 1));
-                                          },
-                                          child: Ink(
-                                            height: 50,
-                                            color: ColorConstant.primary,
-                                            child: const Center(
-                                                child: Icon(Icons.remove)),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                        child: Center(
-                                            child: Text(lineItem?.quantity
-                                                    ?.toString() ??
-                                                ''))),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Material(
-                                        child: InkWell(
-                                          onTap: () {
-                                            context.read<LineItemBloc>().add(
-                                                LineItemEvent.update(
-                                                    loaded.cart.id!,
-                                                    lineItem!.id!,
-                                                    lineItem.quantity! + 1));
-                                          },
-                                          child: Ink(
-                                            height: 50,
-                                            color: ColorConstant.primary,
-                                            child: const Center(
-                                                child: Icon(Icons.add)),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }, failure: (error) {
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text('Error adding item'),
-                                    TextButton(
-                                        onPressed: () {
-                                          if (optionsSelected.length !=
-                                                  product.options!.length &&
-                                              selectedVariant == null) {
-                                            return;
-                                          }
-                                          context.read<LineItemBloc>().add(
-                                              LineItemEvent.add(
-                                                  getIt<PreferenceRepository>()
-                                                      .cartId!,
-                                                  selectedVariant!.id!,
-                                                  1));
-                                        },
-                                        child: const Text('Retry')),
-                                  ],
-                                );
-                              });
-                            },
-                          ),
-                        ),
-                        Container(
-                          height: context.bottomViewPadding,
-                          color: ColorConstant.primary,
-                        )
-                      ],
-                    );
-                  }
-                  return BottomNavButton(
-                      label: 'Add to Cart',
-                      onTap:
-                          optionsSelected.length != product.options!.length &&
-                                  selectedVariant == null
-                              ? null
-                              : () {
-                                  context.read<LineItemBloc>().add(
-                                      LineItemEvent.add(
-                                          getIt<PreferenceRepository>().cartId!,
-                                          selectedVariant!.id!,
-                                          1));
-                                });
-                },
-                orElse: () => const SizedBox.shrink());
-          },
-        ),
+      bottomNavigationBar: ProductDetailsBottomNavButton(
+        selectedVariant: selectedVariant,
+        product: widget.product,
+        optionsSelected: optionsSelected,
       ),
       body: CustomScrollView(
         slivers: [
@@ -340,18 +202,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Price', style: context.bodySmall),
+                      Text(selectedVariant == null ? 'Starts From' : 'Price',
+                          style: context.bodySmall),
                       const Gap(5.0),
                       AnimatedDigitWidget(
-                          value: amount.formatAsPriceNum(currencyCode),
-                          prefix: NumberFormat.simpleCurrency(
-                                  name: currencyCode)
-                              .currencySymbol,
+                          value: variantPrice(),
+                          prefix:
+                              NumberFormat.simpleCurrency(name: currencyCode)
+                                  .currencySymbol,
                           textStyle: context.headlineSmall,
-                          fractionDigits: NumberFormat.simpleCurrency(
-                                      name: currencyCode)
-                                  .decimalDigits ??
-                              0),
+                          fractionDigits:
+                              NumberFormat.simpleCurrency(name: currencyCode)
+                                      .decimalDigits ??
+                                  0),
                     ],
                   ),
                 ],
@@ -402,9 +265,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               child: CachedNetworkImage(
                                 imageUrl: image.url!,
                                 fit: BoxFit.fitWidth,
-                                placeholder: (_, __) => const Center(
-                                    child:
-                                        CircularProgressIndicator.adaptive()),
+                                placeholder: (_, __) => Center(
+                                    child: LoadingAnimationWidget
+                                        .threeArchedCircle(
+                                            color: Colors.grey, size: 24)),
                                 errorWidget: (_, __, ___) => const Icon(
                                     Icons.error,
                                     size: 30,
@@ -476,14 +340,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       .containsKey(productOption.id) &&
                                   optionsSelected
                                       .containsValue(productOptionValue);
+
                               return InkWell(
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(10.0)),
-                                onTap: () => setState(() {
-                                  optionsSelected.addAll(
-                                      {productOption.id!: productOptionValue!});
+                                onTap: () {
+                                  setState(() => optionsSelected.addAll({
+                                        productOption.id!: productOptionValue!
+                                      }));
                                   selectVariant();
-                                }),
+                                },
                                 child: Ink(
                                   height: 70,
                                   // width: 70,
@@ -529,7 +395,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                       TextButton(
                           onPressed: () =>
-                              context.router.push(const ReviewsRoute()),
+                              context.pushRoute(const ReviewsRoute()),
                           child: const Text('View All')),
                     ],
                   ),

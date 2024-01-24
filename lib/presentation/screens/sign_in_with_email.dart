@@ -7,7 +7,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:laza/blocs/auth/authentication_bloc.dart';
 import 'package:laza/common/extensions/extensions.dart';
-import 'package:laza/di/di.dart';
 import 'package:laza/domain/repository/preference_repository.dart';
 import '../../common/colors.dart';
 import '../components/index.dart';
@@ -41,7 +40,7 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
         state.maybeMap(
           loading: (_) => EasyLoading.show(maskType: EasyLoadingMaskType.black),
           loggedIn: (customer) {
-            getIt<PreferenceRepository>().setGuest(value: false);
+            PreferenceRepository.instance.setGuest(value: false);
             EasyLoading.dismiss();
             context.router.replaceAll([const DashboardRoute()]);
           },
@@ -50,7 +49,9 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
       },
       builder: (context, state) {
         final error = state.mapOrNull(
-            error: (_) => _.failure.message, loggedInAsGuest: (_) => _.failure?.message, loggedOut: (_) => _.failure?.message);
+            error: (_) => _.failure.message,
+            loggedInAsGuest: (_) => _.failure?.message,
+            loggedOut: (_) => _.failure?.message);
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: context.theme.appBarTheme.systemOverlayStyle!,
           child: GestureDetector(
@@ -62,9 +63,9 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
                 label: 'Login',
                 onTap: () {
                   if (!formKey.currentState!.validate()) return;
-                  context
-                      .read<AuthenticationBloc>()
-                      .add(AuthenticationEvent.loginCustomer(email: emailCtrl.text, password: passwordCtrl.text));
+                  context.read<AuthenticationBloc>().add(
+                      AuthenticationEvent.loginCustomer(
+                          email: emailCtrl.text, password: passwordCtrl.text));
                 },
               ),
               body: SafeArea(
@@ -83,7 +84,8 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
                           ),
                           Text(
                             'Please enter your data to continue',
-                            style: context.bodyMedium?.copyWith(color: ColorConstant.manatee),
+                            style: context.bodyMedium
+                                ?.copyWith(color: ColorConstant.manatee),
                           ),
                         ],
                       ),
@@ -99,13 +101,16 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
                               height: error != null ? 50.0 : 0.0,
-                              margin: EdgeInsets.only(bottom: error != null ? 0 : 50),
+                              margin: EdgeInsets.only(
+                                  bottom: error != null ? 0 : 50),
                               decoration: const BoxDecoration(
                                 color: Color(0xffFFE9E9),
-                                borderRadius: BorderRadius.all(Radius.circular(4)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4)),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
                                 child: Row(
                                   children: [
                                     Icon(
@@ -117,7 +122,8 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
                                     Expanded(
                                       child: Text(
                                         error ?? '',
-                                        style: context.bodyMedium?.copyWith(color: Colors.redAccent),
+                                        style: context.bodyMedium
+                                            ?.copyWith(color: Colors.redAccent),
                                         overflow: TextOverflow.fade,
                                       ),
                                     )
@@ -154,40 +160,49 @@ class _SignInWithEmailScreenState extends State<SignInWithEmailScreen> {
                               textInputAction: TextInputAction.done,
                               onFieldSubmitted: (_) {
                                 if (!formKey.currentState!.validate()) return;
-                                context.read<AuthenticationBloc>().add(AuthenticationEvent.loginCustomer(
-                                    email: emailCtrl.text, password: passwordCtrl.text));
+                                context.read<AuthenticationBloc>().add(
+                                    AuthenticationEvent.loginCustomer(
+                                        email: emailCtrl.text,
+                                        password: passwordCtrl.text));
                               },
                             ),
                             const Gap(10),
                             Align(
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
-                                    onPressed: () => context.router.push(const ForgotPasswordRoute()),
+                                    onPressed: () => context.router
+                                        .push(const ForgotPasswordRoute()),
                                     child: const Text(
                                       'Forget Password?',
                                       style: TextStyle(color: Colors.red),
                                     ))),
                             const Gap(10),
                             SwitchListTile.adaptive(
-                                activeColor: Platform.isIOS ? ColorConstant.primary : null,
+                                activeColor: Platform.isIOS
+                                    ? ColorConstant.primary
+                                    : null,
                                 contentPadding: EdgeInsets.zero,
                                 title: const Text('Remember me'),
                                 value: rememberMe,
-                                onChanged: (val) => setState(() => rememberMe = val))
+                                onChanged: (val) =>
+                                    setState(() => rememberMe = val))
                           ],
                         ),
                       ),
                     )),
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0, vertical: 8.0),
                         child: InkWell(
                           onTap: () {},
                           child: Ink(
                             child: Text.rich(
                               TextSpan(
-                                  text: 'By connecting your account confirm that you agree with our',
-                                  style: context.bodySmall?.copyWith(color: ColorConstant.manatee),
+                                  text:
+                                      'By connecting your account confirm that you agree with our',
+                                  style: context.bodySmall
+                                      ?.copyWith(color: ColorConstant.manatee),
                                   children: [
                                     TextSpan(
                                       text: ' Term and Condition',

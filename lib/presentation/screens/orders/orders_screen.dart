@@ -1,11 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:laza/common/extensions/extensions.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/presentation/components/index.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:laza/presentation/screens/orders/bloc/orders/orders_bloc.dart';
-import 'package:medusa_store_flutter/store_models/orders/order.dart';
+import 'package:medusa_store_flutter/medusa_store.dart';
 
 @RoutePage()
 class OrdersScreen extends StatefulWidget {
@@ -63,7 +64,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate<Order>(
                 itemBuilder: (context, order, index) => ListTile(
-                  title: Text('Order id: ${order.id ?? ''}'),
+                  onTap: (){},
+                  title: Text('${order.displayId ?? ''}'),
+                  subtitle: Text('Ordered at: ${order.createdAt?.formatDate()}'),
                 ),
                 firstPageErrorIndicatorBuilder: (context) {
                   return Center(child: Column(

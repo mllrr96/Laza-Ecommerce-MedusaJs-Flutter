@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart' hide Order;
 import 'package:laza/domain/usecase/retrieve_orders_usecase.dart';
-import 'package:medusa_store_flutter/store_models/orders/order.dart';
+import 'package:medusa_store_flutter/medusa_store.dart';
 
 part 'orders_event.dart';
 part 'orders_state.dart';

@@ -3,10 +3,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:laza/common/extensions/extensions.dart';
-import 'package:medusa_store_flutter/store_models/products/product.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:medusa_store_flutter/medusa_store.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../common/colors.dart';
-import '../../../../di/di.dart';
 import '../../../../domain/repository/preference_repository.dart';
 import '../../../components/index.dart';
 import '../../../routes/app_router.dart';
@@ -16,16 +17,18 @@ class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,
     required this.product,
+    this.shimmer = false,
   });
 
   final Product product;
+  final bool shimmer;
 
   @override
   Widget build(BuildContext context) {
     final currencyCode = PreferenceRepository.currencyCode;
     num? price = product.variants
         ?.map((e) => e.prices)
-        .map((b) => b?.map((e) => e.amount).reduce((curr, next) => curr! < next! ? curr : next))
+        .map((b) => b?.map((e) => e.amount ?? 0).reduce((curr, next) => curr < next ? curr : next))
         .first;
 
     return InkWell(
@@ -36,7 +39,11 @@ class ProductCard extends StatelessWidget {
         child: Column(
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (product.thumbnail == null)
+            if(shimmer && product.thumbnail == null)
+              const SizedBox(
+                height: 150,
+                child: Bone.square(size: 100,)),
+            if (product.thumbnail == null && !shimmer)
               const SizedBox(
                 height: 150,
                 child: Placeholder(),
@@ -48,7 +55,9 @@ class ProductCard extends StatelessWidget {
                     imageUrl: product.thumbnail!,
                     fit: BoxFit.fitHeight,
                     height: 150,
-                    placeholder: (_, __) => const Center(child: CircularProgressIndicator.adaptive()),
+                    placeholder: (_, __) => Center(child: LoadingAnimationWidget
+                        .threeArchedCircle(
+                        color: Colors.grey, size: 24)),
                     errorWidget: (_, __, ___) => Center(
                       child: Stack(
                         alignment: Alignment.center,

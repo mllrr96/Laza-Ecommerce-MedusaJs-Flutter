@@ -6,18 +6,15 @@ import 'package:medusa_store_flutter/medusa_store.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 @injectable
-class GetHomeCategoryUsecase {
-  Future<Result<List<ProductCollection>, Failure>> call() async {
+class AccountInformationUsecase {
+  static AccountInformationUsecase get instance => AccountInformationUsecase();
+  final _customerResource = getIt<MedusaStore>().customers;
+
+  Future<Result<Customer, Failure>> updateInformation(
+      StorePostCustomersCustomerReq req) async {
     try {
-      final storeApi = getIt<MedusaStore>();
-
-      final result = await storeApi.collections.list();
-
-      if (result?.collections?.isEmpty ?? true) {
-        return Error(Failure(message: 'No collections found.'));
-      } else {
-        return Success(result!.collections!);
-      }
+      final result = await _customerResource.update(req: req);
+      return Success(result!.customer!);
     } catch (e, stack) {
       log(stack.toString());
       log(e.toString());

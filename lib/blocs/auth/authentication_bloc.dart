@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:laza/domain/model/failure.dart';
 import 'package:laza/domain/usecase/auth_usecase.dart';
-import 'package:medusa_store_flutter/store_models/store/customer.dart';
+import 'package:medusa_store_flutter/medusa_store.dart';
 
 import '../../di/di.dart';
 import '../../domain/repository/preference_repository.dart';
@@ -15,13 +15,14 @@ part 'authentication_bloc.freezed.dart';
 @injectable
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
+  static AuthenticationBloc get instance => getIt<AuthenticationBloc>();
   AuthenticationBloc(this._authUsecase) : super(const _Loading()) {
     on<_Init>(_onInitialize);
     on<_LoginCustomer>(_onLogin);
     on<_LogoutCustomer>(_onLogout);
     on<_SignUpCustomer>(_onSignUp);
     on<_LoginAsGuest>(_onLoginAsGuest);
-    // add(const _Init());
+    add(const _Init());
   }
 
   Future<void> _onInitialize(
@@ -46,10 +47,21 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     emit(const _Loading());
-    final result =
-        await _authUsecase.login(email: event.email, password: event.password);
-    result.when((customer) => emit(_LoggedIn(customer)), (error) {
-      final isGuest = getIt<PreferenceRepository>().isGuest;
+    final jwt = await _authUsecase.loginJWT(
+        email: event.email, password: event.password);
+    await jwt.when((jwt) async {
+      await PreferenceRepository.instance.setCookie(jwt);
+      final result = await _authUsecase.getCurrentCustomer();
+      result.when((customer) => emit(_LoggedIn(customer)), (error) {
+        final isGuest = PreferenceRepository.instance.isGuest;
+        if (isGuest) {
+          emit(_LoggedInAsGuest(failure: error));
+        } else {
+          emit(_LoggedOut(failure: error));
+        }
+      });
+    }, (error) {
+      final isGuest = PreferenceRepository.instance.isGuest;
       if (isGuest) {
         emit(_LoggedInAsGuest(failure: error));
       } else {

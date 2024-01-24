@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:laza/common/colors.dart';
 import 'package:laza/common/extensions/extensions.dart';
-import 'package:laza/presentation/screens/product_details.dart';
+import 'package:laza/presentation/screens/product_details/product_details.dart';
 import '../components/index.dart';
 import '../routes/app_router.dart';
 

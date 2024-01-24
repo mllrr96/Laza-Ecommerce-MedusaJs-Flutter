@@ -1,8 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:laza/domain/model/failure.dart';
-import 'package:medusa_store_flutter/medusa_store_flutter.dart';
-import 'package:medusa_store_flutter/request_models/index.dart';
-import 'package:medusa_store_flutter/store_models/store/index.dart';
+import 'package:medusa_store_flutter/medusa_store.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'dart:developer';
 
@@ -19,6 +17,22 @@ class AuthenticationUsecase {
         return Error(Failure(message: 'Received customer is null'));
       } else {
         return Success(result!.customer!);
+      }
+    } catch (e, stack) {
+      log(stack.toString());
+      log(e.toString());
+      return Error(Failure.from(e));
+    }
+  }
+  Future<Result<String, Failure>> loginJWT({required String email, required String password}) async {
+    try {
+      final authResource = getIt<MedusaStore>().auth;
+      final result = await authResource.authenticateJWT(req: StoreAuthRequest(email: email, password: password));
+
+      if (result == null) {
+        return Error(Failure(message: 'Received jwt is null'));
+      } else {
+        return Success(result);
       }
     } catch (e, stack) {
       log(stack.toString());
@@ -76,4 +90,5 @@ class AuthenticationUsecase {
       return Error(Failure.from(e));
     }
   }
+
 }

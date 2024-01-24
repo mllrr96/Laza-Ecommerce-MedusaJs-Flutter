@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:laza/di/di.dart';
 import 'package:laza/domain/usecase/retrieve_regions_usecase.dart';
-import 'package:medusa_store_flutter/store_models/store/region.dart';
+import 'package:medusa_store_flutter/medusa_store.dart';
 
 import '../../domain/repository/preference_repository.dart';
 
@@ -13,6 +13,7 @@ part 'region_bloc.freezed.dart';
 
 @injectable
 class RegionBloc extends Bloc<RegionEvent, RegionState> {
+  static RegionBloc get instance => getIt<RegionBloc>();
   RegionBloc(this._usecase) : super(const RegionState.initial()) {
     on<_RetrieveRegions>(_onRetrieveRegions);
   }
@@ -20,7 +21,7 @@ class RegionBloc extends Bloc<RegionEvent, RegionState> {
   Future<void> _onRetrieveRegions(_RetrieveRegions event, Emitter<RegionState> emit) async {
     emit(const RegionState.loading());
     final result = await _usecase();
-    final prefRepo = getIt<PreferenceRepository>();
+    final prefRepo = PreferenceRepository.instance;
     await result.when((regions) async {
       //
       // Setting country and region automatically, this could be more improved by either let the user choose

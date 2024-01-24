@@ -6,11 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:laza/common/extensions/extensions.dart';
-import 'package:laza/di/di.dart';
 import 'package:laza/domain/repository/preference_repository.dart';
 import 'package:laza/presentation/components/index.dart';
 import 'package:laza/presentation/screens/cart/widgets/line_item_card.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:medusa_store_flutter/medusa_store.dart';
 import 'bloc/cart/cart_bloc.dart';
+import 'dart:math' as math;
 import '../../../common/colors.dart';
 import '../../routes/app_router.dart';
 
@@ -20,7 +22,6 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currencyCode = PreferenceRepository.currencyCode;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: context.theme.appBarTheme.systemOverlayStyle!,
       child: BlocBuilder<CartBloc, CartState>(
@@ -34,8 +35,8 @@ class CartScreen extends StatelessWidget {
                         onTap: () =>
                             context.router.push(const OrderConfirmedRoute()))
                     : null),
-            body: state.maybeMap(
-              loaded: (cart) => cart.cart.items?.isEmpty ?? false
+            body: state.map(
+              loaded: (cart) => cart.cart.items?.isEmpty ?? true
                   ? SafeArea(
                       child: Center(
                       child: Column(
@@ -50,229 +51,13 @@ class CartScreen extends StatelessWidget {
                         ],
                       ),
                     ))
-                  : ListView(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 25.0),
-                      children: [
-                        if (cart.cart.items?.isNotEmpty ?? false)
-                          // Cart Item
-                          ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: cart.cart.items!.length,
-                            separatorBuilder: (_, __) => const Gap(10),
-                            itemBuilder: (context, index) {
-                              final item = cart.cart.items?[index];
-                              return LineItemCard(
-                                  lineItem: item!, cartId: cart.cart.id!);
-                            },
-                          ),
-                        const Gap(20),
-                        // Delivery Address
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Delivery Address',
-                                    style: context.bodyLargeW500),
-                                const Icon(
-                                  Icons.arrow_forward_ios_sharp,
-                                  size: 15,
-                                )
-                              ],
-                            ),
-                            const Gap(15),
-                            InkWell(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10.0)),
-                              onTap: () {},
-                              child: Ink(
-                                padding: const EdgeInsets.only(right: 15.0),
-                                child: Row(
-                                  children: [
-                                    Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Image.asset('assets/images/address.png',
-                                            height: 50, width: 50),
-                                        const Icon(
-                                          Icons.location_on_rounded,
-                                          color: Colors.red,
-                                          size: 30,
-                                        )
-                                      ],
-                                    ),
-                                    const Gap(15),
-                                    Flexible(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Flexible(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                    'Chhatak, Sunamgonj 12/8AB',
-                                                    style: context.bodyMedium),
-                                                const Gap(10),
-                                                Text('Sylhet',
-                                                    style: context.bodySmall
-                                                        ?.copyWith(
-                                                            color: ColorConstant
-                                                                .manatee)),
-                                              ],
-                                            ),
-                                          ),
-                                          const Icon(LazaIcons.verified_badge,
-                                              color: Colors.green)
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        const Gap(20),
-                        // Payment Method
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Payment Method',
-                                    style: context.bodyLargeW500),
-                                const Icon(
-                                  Icons.arrow_forward_ios_sharp,
-                                  size: 15,
-                                )
-                              ],
-                            ),
-                            const Gap(15),
-                            Row(
-                              children: [
-                                Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Image.asset('assets/images/address.png',
-                                        height: 50, width: 50),
-                                    const Icon(
-                                      Icons.location_on_rounded,
-                                      color: Colors.red,
-                                      size: 30,
-                                    )
-                                  ],
-                                ),
-                                const Gap(15),
-                                Flexible(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text('Visa Classic',
-                                                style: context.bodyMedium),
-                                            const Gap(10),
-                                            Text('**** 7690',
-                                                style: context.bodySmall
-                                                    ?.copyWith(
-                                                        color: ColorConstant
-                                                            .manatee)),
-                                          ],
-                                        ),
-                                      ),
-                                      const Icon(LazaIcons.verified_badge,
-                                          color: Colors.green)
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const Gap(20),
-                        // Order Info
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Order Info',
-                              style: context.bodyLargeW500,
-                            ),
-                            const Gap(15),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Subtotal',
-                                    style: context.bodyMedium?.copyWith(
-                                        color: ColorConstant.manatee)),
-                                Text(
-                                    cart.cart.subTotal
-                                        .formatAsPrice(currencyCode),
-                                    style: context.bodyMediumW500),
-                              ],
-                            ),
-                            const Gap(10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Shipping cost',
-                                    style: context.bodyMedium?.copyWith(
-                                        color: ColorConstant.manatee)),
-                                Text(
-                                    cart.cart.shippingTotal
-                                        .formatAsPrice(currencyCode),
-                                    style: context.bodyMediumW500),
-                              ],
-                            ),
-                            const Gap(10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Taxes',
-                                    style: context.bodyMedium?.copyWith(
-                                        color: ColorConstant.manatee)),
-                                Text(
-                                    cart.cart.taxTotal
-                                        .formatAsPrice(currencyCode),
-                                    style: context.bodyMediumW500),
-                              ],
-                            ),
-                            const Gap(15),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Total',
-                                    style: context.bodyMedium?.copyWith(
-                                        color: ColorConstant.manatee)),
-                                AnimatedDigitWidget(
-                                  prefix: NumberFormat.simpleCurrency(
-                                          name: currencyCode)
-                                      .currencySymbol,
-                                  value: cart.cart.total?.formatAsPriceNum(currencyCode),
-                                  textStyle: context.bodyMediumW500,
-                                  fractionDigits: NumberFormat.simpleCurrency(
-                                              name: currencyCode)
-                                          .decimalDigits ??
-                                      0,
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-              loading: (_) => const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
+                  : ItemsView(cart.cart),
+              loading: (_) => Center(
+                  child: LoadingAnimationWidget.threeArchedCircle(
+                      color: ColorConstant.primary, size: 40)),
+              initial: (_) => Center(
+                  child: LoadingAnimationWidget.threeArchedCircle(
+                      color: ColorConstant.primary, size: 40)),
               error: (error) => Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -290,26 +75,238 @@ class CartScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              orElse: () => Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Something went wrong'),
-                    ElevatedButton(
-                        onPressed: () {
-                          context
-                              .read<CartBloc>()
-                              .add(const CartEvent.loadCart());
-                        },
-                        child: const Text('Retry'))
-                  ],
-                ),
-              ),
             ),
           );
         },
       ),
+    );
+  }
+}
+
+class ItemsView extends StatelessWidget {
+  const ItemsView(this.cart, {super.key});
+  final Cart cart;
+  @override
+  Widget build(BuildContext context) {
+    final currencyCode = PreferenceRepository.currencyCode;
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                final item = cart.items?[index ~/ 2];
+                if (index.isEven) {
+                  return LineItemCard(lineItem: item!, cartId: cart.id!);
+                }
+                return const Gap(8.0);
+              },
+              childCount:
+                  math.max(0, cart.items!.length * 2 - 1), // 1000 list items
+            ),
+          ),
+        ),
+        const SliverGap(20),
+        // Delivery Address
+        SliverToBoxAdapter(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Delivery Address', style: context.bodyLargeW500),
+                    const Icon(
+                      Icons.arrow_forward_ios_sharp,
+                      size: 15,
+                    )
+                  ],
+                ),
+                const Gap(15),
+                InkWell(
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                  onTap: () {},
+                  child: Ink(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: Row(
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Image.asset('assets/images/address.png',
+                                height: 50, width: 50),
+                            const Icon(
+                              Icons.location_on_rounded,
+                              color: Colors.red,
+                              size: 30,
+                            )
+                          ],
+                        ),
+                        const Gap(15),
+                        Flexible(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Chhatak, Sunamgonj 12/8AB',
+                                        style: context.bodyMedium),
+                                    const Gap(10),
+                                    Text('Sylhet',
+                                        style: context.bodySmall?.copyWith(
+                                            color: ColorConstant.manatee)),
+                                  ],
+                                ),
+                              ),
+                              const Icon(LazaIcons.verified_badge,
+                                  color: Colors.green)
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        const SliverGap(20),
+        // Payment Method
+        SliverToBoxAdapter(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Payment Method', style: context.bodyLargeW500),
+                    const Icon(
+                      Icons.arrow_forward_ios_sharp,
+                      size: 15,
+                    )
+                  ],
+                ),
+                const Gap(15),
+                Row(
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.asset('assets/images/address.png',
+                            height: 50, width: 50),
+                        const Icon(
+                          Icons.location_on_rounded,
+                          color: Colors.red,
+                          size: 30,
+                        )
+                      ],
+                    ),
+                    const Gap(15),
+                    Flexible(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Visa Classic', style: context.bodyMedium),
+                                const Gap(10),
+                                Text('**** 7690',
+                                    style: context.bodySmall?.copyWith(
+                                        color: ColorConstant.manatee)),
+                              ],
+                            ),
+                          ),
+                          const Icon(LazaIcons.verified_badge,
+                              color: Colors.green)
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SliverGap(20),
+        // Order Info
+        SliverToBoxAdapter(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Order Info',
+                  style: context.bodyLargeW500,
+                ),
+                const Gap(15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Subtotal',
+                        style: context.bodyMedium
+                            ?.copyWith(color: ColorConstant.manatee)),
+                    Text(cart.subTotal.formatAsPrice(currencyCode),
+                        style: context.bodyMediumW500),
+                  ],
+                ),
+                const Gap(10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Shipping cost',
+                        style: context.bodyMedium
+                            ?.copyWith(color: ColorConstant.manatee)),
+                    Text(cart.shippingTotal.formatAsPrice(currencyCode),
+                        style: context.bodyMediumW500),
+                  ],
+                ),
+                const Gap(10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Taxes',
+                        style: context.bodyMedium
+                            ?.copyWith(color: ColorConstant.manatee)),
+                    Text(cart.taxTotal.formatAsPrice(currencyCode),
+                        style: context.bodyMediumW500),
+                  ],
+                ),
+                const Gap(15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Total',
+                        style: context.bodyMedium
+                            ?.copyWith(color: ColorConstant.manatee)),
+                    AnimatedDigitWidget(
+                      prefix: NumberFormat.simpleCurrency(name: currencyCode)
+                          .currencySymbol,
+                      value: cart.total?.formatAsPriceNum(currencyCode),
+                      textStyle: context.bodyMediumW500,
+                      fractionDigits:
+                          NumberFormat.simpleCurrency(name: currencyCode)
+                                  .decimalDigits ??
+                              0,
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

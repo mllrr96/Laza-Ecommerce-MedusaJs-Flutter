@@ -6,6 +6,7 @@ import '../../di/di.dart';
 
 @injectable
 class ThemeRepository {
+  static ThemeRepository get instance => getIt<ThemeRepository>();
   ThemeRepository() : _sharedPreferences = getIt.get<SharedPreferences>();
 
   final SharedPreferences _sharedPreferences;
