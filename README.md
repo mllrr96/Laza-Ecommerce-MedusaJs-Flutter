@@ -37,7 +37,12 @@ To get started with Laza, follow these steps:
    flutter pub get
    ```
 
-4. **Run the App:**
+4. **Generate necessary file:**
+   ```bash
+   flutter pub run build_runner build
+   ```
+
+5. **Run the App:**
    ```bash
    flutter run
    ```
